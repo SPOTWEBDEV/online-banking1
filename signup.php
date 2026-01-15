@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $hasError = false;
 
- 
+
     if (empty($fullname)) {
         $fullnameErr = "Full name is required";
         $hasError = true;
@@ -46,19 +46,19 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $hasError = true;
     }
 
-    // Confirm password
+ 
     if ($password !== $confirmPassword) {
         $confirmPasswordErr = "Passwords do not match";
         $hasError = true;
     }
 
-    // Terms acceptance
+ 
     if (empty($accept_terms)) {
         $termsErr = "Please accept terms and conditions";
         $hasError = true;
     }
 
-  
+
     if (!$hasError) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $sql = "INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)";
@@ -70,10 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
             if (mysqli_stmt_affected_rows($stmt) > 0) {
                 $success = "User registered successfully";
-               
+
                 $fullname = $email = "";
                 $accept_terms = "";
-                 echo  "<script>window.location.href = './signin'</script>";
+                echo  " <script>
+                     setTimeout(() => {
+          window.location.href = './signin.php'
+                 }, 2500);
+                  </script>
+                    ";
             } else {
                 $success = "Registration failed";
             }
@@ -92,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?=  $sitename ?>| Sign Up </title>
+    <title><?= $sitename ?>| Sign Up </title>
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="vendor/toastr/toastr.min.css">

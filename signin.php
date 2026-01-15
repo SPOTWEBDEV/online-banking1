@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $hasError = true;
     }
 
-    // Validate password
+ 
     if (empty($password)) {
         $passwordErr = "Password is required";
         $hasError = true;
