@@ -33,7 +33,7 @@ if ($request === 'https') {
     }
 } elseif ($request === 'http') {
     $sitename = "Zentra Bank";
-    $domain = "https://localhost/zentra-bank";
+    $domain = "http://localhost/zentra-bank";
     define("USER", "root");
     define("PASSWORD", "");
     define("DATABASE", "zentra-bank");
@@ -57,4 +57,8 @@ if ($request === 'https') {
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
-}
+};
+
+
+session_start();
+

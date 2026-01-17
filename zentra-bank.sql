@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2026 at 01:47 PM
+-- Generation Time: Jan 17, 2026 at 02:31 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -20,6 +20,26 @@ SET time_zone = "+00:00";
 --
 -- Database: `zentra-bank`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `name`, `email`, `password`) VALUES
+(1, 'admin', 'admin@admin.com', 'admin@admin.com');
 
 -- --------------------------------------------------------
 
@@ -57,6 +77,33 @@ INSERT INTO `loan_requests` (`id`, `user_id`, `loan_amount`, `loan_duration`, `l
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `payment_account`
+--
+
+CREATE TABLE `payment_account` (
+  `id` int(11) NOT NULL,
+  `type` enum('bank','crypto') NOT NULL,
+  `routing_number` varchar(50) DEFAULT NULL,
+  `account_number` varchar(50) DEFAULT NULL,
+  `bank_name` varchar(255) NOT NULL,
+  `fullname` varchar(150) DEFAULT NULL,
+  `network` varchar(20) DEFAULT NULL,
+  `wallet_address` text DEFAULT NULL,
+  `label` varchar(100) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `payment_account`
+--
+
+INSERT INTO `payment_account` (`id`, `type`, `routing_number`, `account_number`, `bank_name`, `fullname`, `network`, `wallet_address`, `label`, `created_at`) VALUES
+(1, 'crypto', NULL, NULL, '', NULL, 'BTC', 'nfnfnnfjmfmfnndnr345678jnvfgjsmbd', 'My eth wallet', '2026-01-17 13:16:04'),
+(2, 'bank', '12345678909', '22669056778', 'Growth Bank', 'Ezea Ugochukwu', NULL, NULL, NULL, '2026-01-17 13:20:40');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -85,11 +132,23 @@ INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `user_profile`, `cre
 --
 
 --
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `loan_requests`
 --
 ALTER TABLE `loan_requests`
   ADD PRIMARY KEY (`id`),
   ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `payment_account`
+--
+ALTER TABLE `payment_account`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -103,10 +162,22 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `admin`
+--
+ALTER TABLE `admin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
 -- AUTO_INCREMENT for table `loan_requests`
 --
 ALTER TABLE `loan_requests`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `payment_account`
+--
+ALTER TABLE `payment_account`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`
