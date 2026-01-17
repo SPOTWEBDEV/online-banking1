@@ -1,6 +1,6 @@
-//doughut chart
+/doughut chart
 var ctx = document.getElementById("chartjsDonut")
-// ctx.height = 175;
+/ ctx.height = 175;
 new Chart(ctx, {
     type: "doughnut",
     data: {
@@ -12,7 +12,7 @@ new Chart(ctx, {
                     "rgba(22, 82, 240,0.5)",
                     "rgba(22, 82, 240,0.15)",
                 ],
-                // rotation: -25/450*360,
+                / rotation: -25/450*360,
 
 
             }],
@@ -22,16 +22,16 @@ new Chart(ctx, {
             "Google",
         ]
     },
-    // options: {
-    //     responsive: true,
-    //     cutoutPercentage: 80,
-    //     maintainAspectRatio: false,
-    //     animation: {
-    //         animateRotate: true,
-    //         animateScale: true,
-    //     },
-    //     labels: ["Facebook", "Youtube", "Google"],
-    // },
+    / options: {
+    /     responsive: true,
+    /     cutoutPercentage: 80,
+    /     maintainAspectRatio: false,
+    /     animation: {
+    /         animateRotate: true,
+    /         animateScale: true,
+    /     },
+    /     labels: ["Facebook", "Youtube", "Google"],
+    / },
     options: {
         responsive: false,
         cutoutPercentage: 80,
@@ -45,7 +45,7 @@ new Chart(ctx, {
             position: "bottom",
             labels: {
                 usePointStyle: true,
-                // fontFamily: "Segoe UI",
+                / fontFamily: "Segoe UI",
                 fontSize: 12,
                 fontColor: "#464a53",
                 padding: 20,

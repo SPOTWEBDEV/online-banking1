@@ -1,4 +1,4 @@
- //chartjsBalanceOvertime
+ /chartjsBalanceOvertime
  var ctx = document.getElementById("chartjsBalanceOvertime");
  ctx.height = 100;
  var myChart = new Chart(ctx, {
@@ -73,7 +73,7 @@
          }
      }
  });
- //chartjsBalanceOvertime
+ /chartjsBalanceOvertime
  var ctx = document.getElementById("chartjsBalanceOvertime2");
  ctx.height = 100;
  var myChart = new Chart(ctx, {
@@ -148,7 +148,7 @@
          }
      }
  });
- //chartjsBalanceOvertime
+ /chartjsBalanceOvertime
  var ctx = document.getElementById("chartjsBalanceOvertime3");
  ctx.height = 100;
  var myChart = new Chart(ctx, {
@@ -223,7 +223,7 @@
          }
      }
  });
- //chartjsBalanceOvertime
+ /chartjsBalanceOvertime
  var ctx = document.getElementById("chartjsBalanceOvertime4");
  ctx.height = 100;
  var myChart = new Chart(ctx, {

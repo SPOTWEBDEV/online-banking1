@@ -1,4 +1,4 @@
-//Transaction Graph 
+/Transaction Graph 
 var ctx = document.getElementById("chartjsBalanceWallet")
 ctx.height = 100
 var myChart = new Chart(ctx, {
@@ -22,7 +22,7 @@ var myChart = new Chart(ctx, {
                     display: false
                 },
                 ticks: {
-                    display: false, // hide main x-axis line
+                    display: false, / hide main x-axis line
                     beginAtZero: true
                 },
                 barPercentage: 1,
@@ -30,7 +30,7 @@ var myChart = new Chart(ctx, {
             }],
             yAxes: [{
                 gridLines: {
-                    drawBorder: false, // hide main y-axis line
+                    drawBorder: false, / hide main y-axis line
                     display: false
                 },
                 ticks: {

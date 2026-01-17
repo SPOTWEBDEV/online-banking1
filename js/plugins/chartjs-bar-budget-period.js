@@ -1,4 +1,4 @@
-//chartjsBudgetPeriod
+/chartjsBudgetPeriod
 var ctx = document.getElementById("chartjsBudgetPeriod")
 ctx.height = 100
 new Chart(ctx, {
@@ -36,7 +36,7 @@ new Chart(ctx, {
                     display: false
                 },
                 ticks: {
-                    display: true, // hide main x-axis line
+                    display: true, / hide main x-axis line
                     beginAtZero: true
                 },
                 barPercentage: 1.5,
@@ -45,7 +45,7 @@ new Chart(ctx, {
             yAxes: [{
                 stacked: true,
                 gridLines: {
-                    drawBorder: false, // hide main y-axis line
+                    drawBorder: false, / hide main y-axis line
                     display: false
                 },
                 ticks: {
@@ -59,7 +59,7 @@ new Chart(ctx, {
         }
     }
 })
-//chartjsBudgetPeriod
+/chartjsBudgetPeriod
 var ctx = document.getElementById("chartjsBudgetPeriod2")
 ctx.height = 100
 new Chart(ctx, {
@@ -97,7 +97,7 @@ new Chart(ctx, {
                     display: false
                 },
                 ticks: {
-                    display: true, // hide main x-axis line
+                    display: true, / hide main x-axis line
                     beginAtZero: true
                 },
                 barPercentage: 1.5,
@@ -106,7 +106,7 @@ new Chart(ctx, {
             yAxes: [{
                 stacked: true,
                 gridLines: {
-                    drawBorder: false, // hide main y-axis line
+                    drawBorder: false, / hide main y-axis line
                     display: false
                 },
                 ticks: {
@@ -120,7 +120,7 @@ new Chart(ctx, {
         }
     }
 })
-//chartjsBudgetPeriod
+/chartjsBudgetPeriod
 var ctx = document.getElementById("chartjsBudgetPeriod3")
 ctx.height = 100
 new Chart(ctx, {
@@ -158,7 +158,7 @@ new Chart(ctx, {
                     display: false
                 },
                 ticks: {
-                    display: true, // hide main x-axis line
+                    display: true, / hide main x-axis line
                     beginAtZero: true
                 },
                 barPercentage: 1.5,
@@ -167,7 +167,7 @@ new Chart(ctx, {
             yAxes: [{
                 stacked: true,
                 gridLines: {
-                    drawBorder: false, // hide main y-axis line
+                    drawBorder: false, / hide main y-axis line
                     display: false
                 },
                 ticks: {
@@ -181,7 +181,7 @@ new Chart(ctx, {
         }
     }
 })
-//chartjsBudgetPeriod
+/chartjsBudgetPeriod
 var ctx = document.getElementById("chartjsBudgetPeriod4")
 ctx.height = 100
 new Chart(ctx, {
@@ -219,7 +219,7 @@ new Chart(ctx, {
                     display: false
                 },
                 ticks: {
-                    display: true, // hide main x-axis line
+                    display: true, / hide main x-axis line
                     beginAtZero: true
                 },
                 barPercentage: 1.5,
@@ -228,7 +228,7 @@ new Chart(ctx, {
             yAxes: [{
                 stacked: true,
                 gridLines: {
-                    drawBorder: false, // hide main y-axis line
+                    drawBorder: false, / hide main y-axis line
                     display: false
                 },
                 ticks: {

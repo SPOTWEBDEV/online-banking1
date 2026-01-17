@@ -2,7 +2,7 @@
     "use strict"
 
     toastr.success("Complete your profile to make it easier to finance", "Complete your profile!", {
-        // timeOut: 500000,
+        / timeOut: 500000,
         closeButton: !0,
         debug: !1,
         newestOnTop: !0,

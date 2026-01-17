@@ -1,4 +1,4 @@
-//Transaction Graph 
+/Transaction Graph 
 var ctx = document.getElementById("chartjsIncomeVsExpense")
 ctx.height = 100
 new Chart(ctx, {
@@ -29,7 +29,7 @@ new Chart(ctx, {
                     display: false
                 },
                 ticks: {
-                    display: true, // hide main x-axis line
+                    display: true, / hide main x-axis line
                     beginAtZero: true
                 },
                 barPercentage: 1,
@@ -37,7 +37,7 @@ new Chart(ctx, {
             }],
             yAxes: [{
                 gridLines: {
-                    drawBorder: false, // hide main y-axis line
+                    drawBorder: false, / hide main y-axis line
                     display: false
                 },
                 ticks: {

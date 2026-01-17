@@ -18,7 +18,7 @@ if (profileWallet2 !== null) {
             second: [60, 32, 120, 55, 19, 134, 88]
         }
     ]
-    // profileWallet2.height = 100
+    / profileWallet2.height = 100
 
     var config = {
         type: "line",
@@ -48,7 +48,7 @@ if (profileWallet2 !== null) {
                     borderColor: "transparent",
                     data: profileWallet2Data[0].second,
                     lineTension: 0,
-                    // borderDash: [10, 5],
+                    / borderDash: [10, 5],
                     borderWidth: 1,
                     pointRadius: 0,
                 }
@@ -65,7 +65,7 @@ if (profileWallet2 !== null) {
                     gridLines: {
                         display: false,
                         drawBorder: true,
-                        // fontFamily: "Rubik, sans-serif",
+                        / fontFamily: "Rubik, sans-serif",
                     },
                     ticks: {
                         fontColor: "#8a909d",
@@ -77,7 +77,7 @@ if (profileWallet2 !== null) {
                     {
                         gridLines: {
                             fontColor: "#8a909d",
-                            // fontFamily: "Rubik, sans-serif",
+                            / fontFamily: "Rubik, sans-serif",
                             display: false,
                             color: "rgba(0,0,0,0.071)",
                             zeroLineColor: "rgba(0,0,0,0.071)"
@@ -126,4 +126,4 @@ if (profileWallet2 !== null) {
 
 
 
-// profileWallet2
+/ profileWallet2

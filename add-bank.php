@@ -1,18 +1,6 @@
 <!DOCTYPE html>
 
-<!--
- // Name: ekash
- // Description: Personal Finance Management Admin Dashboard App Template
- // Version: 1.0.0
- // Developed on 2024-01-24 16:03:05
- // Email : imsaifun@gmail.com
- // Skype : sporsho9
- // Discord : imsaifun
- // Author: Prexius
- // URL: https://prexius.com
- // Themeforest Profile : https://themeforest.net/user/prexius
- // License: ISC
--->
+
 
 <html lang="en">
 
@@ -30,13 +18,13 @@
 
 <body class="dashboard">
     <div id="preloader" class="preloader-wrapper">
-        <div class="loader">
+        <!-- <div class="loader">
             <div></div>
             <div></div>
             <div></div>
             <div></div>
             <div></div>
-        </div>
+        </div> -->
     </div>
     <div id="main-wrapper">
         <div class="header">
@@ -47,7 +35,7 @@
                             <div class="header-left">
                                 <div class="brand-logo"><a class="mini-logo" href="index.html"><img src="images/logoi.png" alt="" width="40"></a></div>
                                 <div class="search">
-                                    <form action="settings-bank.html#">
+                                    <form action="add-bank.html#">
                                         <div class="input-group">
                                             <input type="text" class="form-control" placeholder="Search Here">
                                             <span class="input-group-text"><i class="fi fi-br-search"></i></span>
@@ -230,75 +218,44 @@
             </div>
         </div>
         <div class="content-body">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title">
-                            <div class="row align-items-center justify-content-between">
-                                <div class="col-xl-4">
-                                    <div class="page-title-content">
-                                        <h3>Bank</h3>
-                                        <p class="mb-2">Welcome Ekash Finance Management</p>
-                                    </div>
+            <div class="verification section-padding">
+                <div class="container h-100">
+                    <div class="row justify-content-center h-100 align-items-center">
+                        <div class="col-xl-5 col-md-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4 class="card-title">Link a bank account</h4>
                                 </div>
-                                <div class="col-auto">
-                                    <div class="breadcrumbs"><a href="settings-bank.html#">Home </a>
-                                        <span><i class="fi fi-rr-angle-small-right"></i></span>
-                                        <a href="settings-bank.html#">Bank</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xxl-12 col-xl-12">
-                        <div class="settings-menu">
-                            <a href="settings.html">Account</a>
-                            <a href="settings-general.html">General</a>
-                            <a href="settings-profile.html">Profile</a>
-                            <a href="settings-bank.html">Add Bank</a>
-                            <a href="settings-security.html">Security</a>
-                            <a href="settings-session.html">Session</a>
-                            <a href="settings-categories.html">Categories</a>
-                            <a href="settings-currencies.html">Currencies</a>
-                            <a href="settings-api.html">Api</a>
-                            <a href="support.html">Support</a>
-                        </div>
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Add Bank Account or Card</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="verify-content">
-                                    <div class="d-flex align-items-center">
-                                        <span class="me-3 icon-circle bg-primary text-white">
-                                            <i class="fi fi-rs-bank"></i></span>
-                                        <div class="primary-number">
-                                            <h5 class="mb-0">Bank of America</h5>
-                                            <small>Bank **************5421</small>
-                                            <br>
-                                            <span class="text-success">Verified</span>
+                                <div class="card-body">
+                                    <form action="https://ekash.vercel.app/bank-add-successful.html">
+                                        <div class="form-row">
+                                            <div class="mb-3 col-xl-12">
+                                                <label class="mr-sm-2">Routing number </label>
+                                                <input type="text" class="form-control" placeholder="25487">
+                                            </div>
+                                            <div class="mb-3 col-xl-12">
+                                                <label class="mr-sm-2">Account number </label>
+                                                <input type="text" class="form-control" placeholder="36475">
+                                            </div>
+                                            <div class="mb-3 col-xl-12">
+                                                <label class="mr-sm-2">Fulll name </label>
+                                                <input type="text" class="form-control" placeholder="Carla Pascle">
+                                            </div>
+                                            <div class="mb-3 col-xl-12">
+                                                <img src="images/routing.png" alt="" class="img-fluid">
+                                            </div>
+                                            <div class="col-12 mt-5">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <a href="add-new-account.html" class="btn btn-primary w-100">Back</a>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <a href="settings-bank.html" class="btn btn-success  w-100">Save</a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <button class=" btn btn-outline-primary">Manage</button>
-                                </div>
-                                <hr class="border opacity-1">
-                                <div class="verify-content">
-                                    <div class="d-flex align-items-center">
-                                        <span class="me-3 icon-circle bg-primary text-white"><i class="fi fi-rr-credit-card"></i></span>
-                                        <div class="primary-number">
-                                            <h5 class="mb-0">Master Card</h5>
-                                            <small>Credit Card *********5478</small>
-                                            <br>
-                                            <span class="text-success">Verified</span>
-                                        </div>
-                                    </div>
-                                    <button class=" btn btn-outline-primary">Manage</button>
-                                </div>
-                                <div class="mt-5">
-                                    <a href="add-bank.html" class="btn btn-primary m-2">Add New Bank</a>
-                                    <a href="add-card.html" class="btn btn-primary m-2">Add New Card</a>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -316,17 +273,17 @@
                                     var CurrentYear = new Date().getFullYear()
                                     document.write(CurrentYear)
                                 </script>
-                                <a href="settings-bank.html#">Ekash</a> I All Rights Reserved
+                                <a href="add-bank.html#">Ekash</a> I All Rights Reserved
                             </p>
                         </div>
                     </div>
                     <div class="col-xl-6">
                         <div class="footer-social">
                             <ul>
-                                <li><a href="settings-bank.html#"><i class="fi fi-brands-facebook"></i></a></li>
-                                <li><a href="settings-bank.html#"><i class="fi fi-brands-twitter"></i></a></li>
-                                <li><a href="settings-bank.html#"><i class="fi fi-brands-linkedin"></i></a></li>
-                                <li><a href="settings-bank.html#"><i class="fi fi-brands-youtube"></i></a></li>
+                                <li><a href="add-bank.html#"><i class="fi fi-brands-facebook"></i></a></li>
+                                <li><a href="add-bank.html#"><i class="fi fi-brands-twitter"></i></a></li>
+                                <li><a href="add-bank.html#"><i class="fi fi-brands-linkedin"></i></a></li>
+                                <li><a href="add-bank.html#"><i class="fi fi-brands-youtube"></i></a></li>
                             </ul>
                         </div>
                     </div>
@@ -336,8 +293,8 @@
     </div>
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!--  -->
-    <!--  -->
+   
+   
     <script src="js/scripts.js"></script>
 </body>
 

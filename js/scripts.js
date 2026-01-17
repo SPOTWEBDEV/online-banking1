@@ -1,4 +1,4 @@
-//  Preloader
+/  Preloader
 jQuery(window).on("load", function () {
     $("#preloader").fadeOut(500)
     $("#main-wrapper").addClass("show")
@@ -7,7 +7,7 @@ jQuery(window).on("load", function () {
 (function ($) {
     "use strict"
 
-    //to keep the current page active
+    /to keep the current page active
     $(function () {
         for (
             var lc = window.location,
@@ -21,7 +21,7 @@ jQuery(window).on("load", function () {
             ;
 
         ) {
-            // console.log(o)
+            / console.log(o)
             if (!o.is("li")) break
             o = o.parent().addClass("show").parent().addClass("active")
         }
@@ -31,9 +31,9 @@ jQuery(window).on("load", function () {
 })(jQuery);
 
 
-// Dark light toggle switch
+/ Dark light toggle switch
 window.addEventListener('load', function () {
-    let onpageLoad = localStorage.getItem("theme") || "light"; // Default to "light" if no theme is set
+    let onpageLoad = localStorage.getItem("theme") || "light"; / Default to "light" if no theme is set
     let element = document.body;
 
     if (onpageLoad) {

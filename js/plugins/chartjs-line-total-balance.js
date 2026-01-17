@@ -1,4 +1,4 @@
-//Transaction Graph 
+/Transaction Graph 
 var ctx = document.getElementById("chartjsTotalBalance")
 ctx.height = 100
 var myChart = new Chart(ctx, {

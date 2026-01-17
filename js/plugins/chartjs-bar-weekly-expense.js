@@ -1,4 +1,4 @@
-//Transaction Graph 
+/Transaction Graph 
 var ctx = document.getElementById("chartjsWeeklyExpenses")
 ctx.height = 100
 new Chart(ctx, {
@@ -30,11 +30,11 @@ new Chart(ctx, {
             data: [20, 5, 14, 10, 16, 12, 2, 17, 8, 7, 4, 11, 15, 9, 18, 19, 13, 6],
             backgroundColor: 'rgba(59, 130, 246, 1)'
         },
-            // {
-            //     label: 'c',
-            //     data: [11, 14, 12, 6, 8, 7, 2, 15, 10, 5, 20, 9, 19, 17, 13, 16, 4, 3],
-            //     backgroundColor: 'rgba(14, 165, 233, 1)'
-            // }
+            / {
+            /     label: 'c',
+            /     data: [11, 14, 12, 6, 8, 7, 2, 15, 10, 5, 20, 9, 19, 17, 13, 16, 4, 3],
+            /     backgroundColor: 'rgba(14, 165, 233, 1)'
+            / }
         ]
     },
     options: {
@@ -51,7 +51,7 @@ new Chart(ctx, {
                     display: false
                 },
                 ticks: {
-                    display: true, // hide main x-axis line
+                    display: true, / hide main x-axis line
                     beginAtZero: true
                 },
                 barPercentage: 2,
@@ -60,7 +60,7 @@ new Chart(ctx, {
             yAxes: [{
                 stacked: true,
                 gridLines: {
-                    drawBorder: false, // hide main y-axis line
+                    drawBorder: false, / hide main y-axis line
                     display: false
                 },
                 ticks: {
