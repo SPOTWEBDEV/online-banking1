@@ -2,13 +2,130 @@
 session_start();
 include("./server/connection.php");
 
+// if (!isset($_SESSION['user_id'])) {
+//     die("Unauthorized access");
+// }
+
+$user_id = (int) ($_SESSION['user_id'] ?? 0);
+$errors = [];
+$success = "";
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
+
+    $which_account  = trim($_POST['which_account'] ?? "");
+    $amount_raw     = trim($_POST['amount'] ?? "");
+    $wallet_address = trim($_POST['wallet_address'] ?? "");
+
+    // Validate selection 
+    $allowedAccounts = [
+        'USDT(TRC20)'          => 'crypto_balance',
+        'BTC'                  => 'crypto_balance',
+        'POLYGON'              => 'crypto_balance',
+        'MAIN BALANCE'         => 'balance',
+        'LOAN BALANCE'         => 'loan_balance',
+        'VIRTUAL CARD BALANCE' => 'virtual_card_balance',
+    ];
+
+    if ($which_account === "") {
+        $errors[] = "Select withdrawal account.";
+    } elseif (!array_key_exists($which_account, $allowedAccounts)) {
+        $errors[] = "Invalid withdrawal account.";
+    } elseif (!is_numeric($amount_raw)) {
+        $errors[] = "Invalid withdrawal amount.";
+    } else {
+        $amount = (float)$amount_raw;
+        if ($amount <= 0) {
+            $errors[] = "Invalid withdrawal amount.";
+        }
+    }
+
+    if ($wallet_address === "") {
+        $errors[] = "Wallet address is required.";
+    } elseif (strlen($wallet_address) < 10 || strlen($wallet_address) > 120) {
+        $errors[] = "Invalid wallet address.";
+    }
+
+    // Stop early (show only one error as you wanted)
+    if (!empty($errors)) {
+        $errors = [$errors[0]];
+    }
+
+    if (empty($errors)) {
+
+        //  Decide which DB column to check
+        $balanceColumn = $allowedAccounts[$which_account]; 
+  
+        mysqli_begin_transaction($connection);
+
+        try {
+            // lock user row so they can't submit multiple withdraws at the same time
+            $sqlBal = "SELECT `$balanceColumn` FROM users WHERE id = ? FOR UPDATE";
+            $stmtBal = mysqli_prepare($connection, $sqlBal);
+            if (!$stmtBal) {
+                throw new Exception("System error (prepare balance).");
+            }
+
+            mysqli_stmt_bind_param($stmtBal, "i", $user_id);
+            mysqli_stmt_execute($stmtBal);
+            $resBal = mysqli_stmt_get_result($stmtBal);
+            $rowBal = mysqli_fetch_assoc($resBal);
+            mysqli_stmt_close($stmtBal);
+
+            if (!$rowBal) {
+                throw new Exception("User not found.");
+            }
+
+            $currentBalance = (float)$rowBal[$balanceColumn];
+
+            if ($amount > $currentBalance) {
+                throw new Exception("Insufficient balance for this account.");
+            }
+
+            // Insert withdrawal request
+            $sqlW = "INSERT INTO withdrawals (user_id, amount, which_account) VALUES (?, ?, ?)";
+            $stmtW = mysqli_prepare($connection, $sqlW);
+            if (!$stmtW) {
+                throw new Exception("System error (prepare withdrawal).");
+            }
+
+            mysqli_stmt_bind_param($stmtW, "ids", $user_id, $amount, $which_account);
+
+            if (!mysqli_stmt_execute($stmtW)) {
+                mysqli_stmt_close($stmtW);
+                throw new Exception("Withdrawal failed. Please try again.");
+            }
+            mysqli_stmt_close($stmtW);
+
+            // Deduct balance immediately 
+            $sqlU = "UPDATE users SET `$balanceColumn` = `$balanceColumn` - ? WHERE id = ?";
+            $stmtU = mysqli_prepare($connection, $sqlU);
+            if (!$stmtU) {
+                throw new Exception("System error (prepare update).");
+            }
+
+            mysqli_stmt_bind_param($stmtU, "di", $amount, $user_id);
+
+            if (!mysqli_stmt_execute($stmtU)) {
+                mysqli_stmt_close($stmtU);
+                throw new Exception("Failed to update balance.");
+            }
+            mysqli_stmt_close($stmtU);
+
+            mysqli_commit($connection);
+            $success = "Withdrawal request submitted successfully. Processing...";
+
+        } catch (Exception $e) {
+            mysqli_rollback($connection);
+            $errors[] = $e->getMessage();
+            $errors = [$errors[0]]; // show one error only
+        }
+    }
+}
+
 
 ?>
 
 
 <!DOCTYPE html>
-
-
 
 <html lang="en">
 
@@ -16,7 +133,7 @@ include("./server/connection.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?= $sitename ?> | loan </title>
+    <title><?= $sitename ?> | Withdrawal </title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <!-- Custom Stylesheet -->
@@ -25,15 +142,6 @@ include("./server/connection.php");
 </head>
 
 <body class="dashboard">
-    <!-- <div id="preloader" class="preloader-wrapper">
-        <div class="loader">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div> -->
     <div id="main-wrapper">
         <div class="header">
             <div class="container">
@@ -145,6 +253,7 @@ include("./server/connection.php");
                 </div>
             </div>
         </div>
+
         <div class="sidebar">
             <div class="brand-logo"><a class="full-logo" href="index.html"><img src="images/logoi.png" alt="" width="30"></a>
             </div>
@@ -152,96 +261,74 @@ include("./server/connection.php");
                 <ul>
                     <li>
                         <a href="index.html">
-                            <span>
-                                <i class="fi fi-rr-dashboard"></i>
-                            </span>
+                            <span><i class="fi fi-rr-dashboard"></i></span>
                             <span class="nav-text">Home</span>
                         </a>
                     </li>
                     <li>
                         <a href="wallets.html">
-                            <span>
-                                <i class="fi fi-rr-wallet"></i>
-                            </span>
+                            <span><i class="fi fi-rr-wallet"></i></span>
                             <span class="nav-text">Wallets</span>
                         </a>
                     </li>
                     <li>
                         <a href="budgets.html">
-                            <span>
-                                <i class="fi fi-rr-donate"></i>
-                            </span>
+                            <span><i class="fi fi-rr-donate"></i></span>
                             <span class="nav-text">Budgets</span>
                         </a>
                     </li>
                     <li>
                         <a href="goals.html">
-                            <span>
-                                <i class="fi fi-sr-bullseye-arrow"></i>
-                            </span>
+                            <span><i class="fi fi-sr-bullseye-arrow"></i></span>
                             <span class="nav-text">Goals</span>
                         </a>
                     </li>
                     <li>
                         <a href="profile.html">
-                            <span>
-                                <i class="fi fi-rr-user"></i>
-                            </span>
+                            <span><i class="fi fi-rr-user"></i></span>
                             <span class="nav-text">Profile</span>
                         </a>
                     </li>
                     <li>
                         <a href="analytics.html">
-                            <span>
-                                <i class="fi fi-rr-chart-histogram"></i>
-                            </span>
+                            <span><i class="fi fi-rr-chart-histogram"></i></span>
                             <span class="nav-text">Analytics</span>
                         </a>
                     </li>
                     <li>
                         <a href="support.html">
-                            <span>
-                                <i class="fi fi-rr-user-headset"></i>
-                            </span>
+                            <span><i class="fi fi-rr-user-headset"></i></span>
                             <span class="nav-text">Support</span>
                         </a>
                     </li>
                     <li>
                         <a href="affiliates.html">
-                            <span>
-                                <i class="fi fi-rs-link-alt"></i>
-                            </span>
+                            <span><i class="fi fi-rs-link-alt"></i></span>
                             <span class="nav-text">Affiliates</span>
                         </a>
                     </li>
                     <li>
                         <a href="settings.html">
-                            <span>
-                                <i class="fi fi-rs-settings"></i>
-                            </span>
+                            <span><i class="fi fi-rs-settings"></i></span>
                             <span class="nav-text">Settings</span>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
+
         <div class="content-body">
             <div class="container">
+
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title">
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-xl-4">
                                     <div class="page-title-content">
-                                        <h3>Loan</h3>
+                                        <h3>Withdrawal</h3>
                                         <p class="mb-2">Welcome To <?= $sitename ?> Management</p>
                                     </div>
-                                </div>
-                                <div class="col-auto">
-                                    <!-- <div class="breadcrumbs"><a href="settings-api.html#">Home </a>
-                                        <span><i class="fi fi-rr-angle-small-right"></i></span>
-                                        <a href="settings-api.html#">Api</a>
-                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -250,155 +337,67 @@ include("./server/connection.php");
 
                 <div class="row">
                     <div class="col-xxl-12 col-xl-12">
+                        <div class="row g-4">
 
-                    
+                            <!-- Error -->
+                            <div class="col-xxl-6 col-xl-6 col-lg-6">
+                                <?php if (!empty($errors)): ?>
+                                    <div class="alert alert-danger">
+                                        <p><?= htmlspecialchars($errors[0]) ?></p>
+                                    </div>
+                                <?php endif; ?>
 
-                        <div class="row">
-                            <div class="col-xxl-12">
-                                <h4 class="card-title mb-3">Apply for loan</h4>
+                                <?php if ($success): ?>
+                                    <div class="alert alert-success">
+                                        <?= htmlspecialchars($success) ?>
+                                    </div>
+                                <?php endif; ?>
+
                                 <div class="card">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h4 class="card-title">Withdrawal Details</h4>
+                                        <span class="badge bg-success">$0</span>
+                                    </div>
+
                                     <div class="card-body">
-                                        <?php if (!empty($errors)) { ?>
-                                            <div class="alert alert-danger mt-3">
-                                                <?php foreach ($errors as $error) { ?>
-                                                    <p><?= $error ?></p>
-                                                <?php } ?>
-                                            </div>
-                                        <?php } ?>
+                                        <form method="post">
 
-                                        <?php if (!empty($success)) { ?>
-                                            <div class="alert alert-success mt-3">
-                                                <?= $success ?>
-                                            </div>
-                                        <?php } ?>
-
-                                        <form action="" method="post">
-                                            <div class="row">
-
-                                                <!-- Loan Amount -->
-                                                <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
-                                                    <label class="form-label">Loan Amount</label>
-                                                    <input name="loan_amount" type="number" step="0.01" class="form-control" placeholder="Enter amount">
-                                                </div>
-
-                                                <!-- Loan Duration -->
-                                                <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
-                                                    <label class="form-label">Loan Duration (Months)</label>
-                                                    <select name="loan_duration" class="form-control">
-                                                        <option value="">Select duration</option>
-                                                        <option value="3">3 Months</option>
-                                                        <option value="6">6 Months</option>
-                                                        <option value="12">12 Months</option>
-                                                        <option value="24">24 Months</option>
-                                                    </select>
-                                                </div>
-
-                                                <!-- Loan Reason -->
-                                                <div class="col-xxl-12 col-xl-12 col-lg-12 mb-3">
-                                                    <label class="form-label">Reason for Loan</label>
-                                                    <textarea name="loan_reason" class="form-control" rows="3"
-                                                        placeholder="Explain why you need this loan"></textarea>
-                                                </div>
-
-                                                <!-- Monthly Income -->
-                                                <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
-                                                    <label class="form-label">Monthly Income</label>
-                                                    <input name="monthly_income" type="number" step="0.01" class="form-control"
-                                                        placeholder="Your monthly income">
-                                                </div>
-
-                                                <!-- Employment Status -->
-                                                <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
-                                                    <label class="form-label">Employment Status</label>
-                                                    <select name="employment_status" class="form-control">
-                                                        <option value="">Select status</option>
-                                                        <option value="employed">Employed</option>
-                                                        <option value="self-employed">Self Employed</option>
-                                                        <option value="business">Business Owner</option>
-                                                        <option value="student">Student</option>
-                                                        <option value="unemployed">Unemployed</option>
-                                                    </select>
-                                                </div>
-
-                                                <!-- Bank Account Number -->
-                                                <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
-                                                    <label class="form-label">Bank Account Number</label>
-                                                    <input name="account_number" type="text" class="form-control"
-                                                        placeholder="Your bank account number">
-                                                </div>
-
-                                                <!-- Bank Name -->
-                                                <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
-                                                    <label class="form-label">Bank Name</label>
-                                                    <input name="bank_name" type="text" class="form-control"
-                                                        placeholder="Your bank name">
-                                                </div>
-
+                                            <div class="mb-3">
+                                                <label class="form-label">Select Account</label>
+                                                <select name="which_account" class="form-select">
+                                                    <option disabled selected hidden value="">Select</option>
+                                                    <option value="USDT(TRC20)">USDT(Trc20)</option>
+                                                    <option value="BTC">BTC</option>
+                                                    <option value="POLYGON">POLYGON</option>
+                                                </select>
                                             </div>
 
-                                            <div class="mt-3">
-                                                <button type="submit" class="btn btn-primary mr-2">Apply for Loan</button>
+                                            <div class="mb-3">
+                                                <label class="form-label">Amount to Withdraw</label>
+                                                <input name="amount" type="number" step="0.01" class="form-control" placeholder="Amount to Withdraw">
                                             </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Withdrawal Wallet Address</label>
+                                                <input name="wallet_address" type="text" class="form-control" placeholder="withdrawal Wallet Address">
+                                            </div>
+
+                                            <button type="submit" name="withdraw" class="btn btn-primary w-100">PLACE WITHDRAWAL</button>
+
                                         </form>
-
                                     </div>
                                 </div>
+
                             </div>
-                            <?php
-
-
-                            $user_id = $_SESSION['user_id'];
-
-                          
-                            $limit = 10;
-                            $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
-                            $offset = ($page - 1) * $limit;
-
-                          
-                            $count_sql = "
-    SELECT COUNT(*) AS total 
-    FROM loan_requests 
-    WHERE user_id = ?
-";
-                            $count_stmt = mysqli_prepare($connection, $count_sql);
-                            mysqli_stmt_bind_param($count_stmt, "i", $user_id);
-                            mysqli_stmt_execute($count_stmt);
-                            $count_result = mysqli_stmt_get_result($count_stmt);
-                            $total_row = mysqli_fetch_assoc($count_result);
-                            $total_records = $total_row['total'];
-                            $total_pages = ceil($total_records / $limit);
-
-
-                            $sql = "
-        SELECT 
-        loan_requests.id,
-        loan_requests.loan_amount,
-        loan_requests.status,
-        loan_requests.created_at,
-        users.fullname
-    FROM loan_requests, users
-    WHERE loan_requests.user_id = users.id
-    AND loan_requests.user_id = ?
-    ORDER BY loan_requests.id DESC
-    LIMIT ? OFFSET ?
-";
-
-                            $stmt = mysqli_prepare($connection, $sql);
-                            mysqli_stmt_bind_param($stmt, "iii", $user_id, $limit, $offset);
-                            mysqli_stmt_execute($stmt);
-                            $result = mysqli_stmt_get_result($stmt);
-                            ?>
-
-
-                            
+                            <!-- End -->
 
                         </div>
                     </div>
                 </div>
 
-
             </div>
         </div>
+
         <div class="footer">
             <div class="container">
                 <div class="row">
@@ -416,21 +415,21 @@ include("./server/connection.php");
                     <div class="col-xl-6">
                         <div class="footer-social">
                             <ul>
-                                <li><a href="settings-api.html#"><i class="fi fi-brands-facebook"></i></a></li>
-                                <li><a href="settings-api.html#"><i class="fi fi-brands-twitter"></i></a></li>
-                                <li><a href="settings-api.html#"><i class="fi fi-brands-linkedin"></i></a></li>
-                                <li><a href="settings-api.html#"><i class="fi fi-brands-youtube"></i></a></li>
+                                <li><a href="#"><i class="fi fi-brands-facebook"></i></a></li>
+                                <li><a href="#"><i class="fi fi-brands-twitter"></i></a></li>
+                                <li><a href="#"><i class="fi fi-brands-linkedin"></i></a></li>
+                                <li><a href="#"><i class="fi fi-brands-youtube"></i></a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </div>
+
     <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!--  -->
-    <!--  -->
     <script src="js/scripts.js"></script>
 </body>
 

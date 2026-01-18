@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2026 at 02:31 PM
+-- Generation Time: Jan 18, 2026 at 01:29 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,6 +40,55 @@ CREATE TABLE `admin` (
 
 INSERT INTO `admin` (`id`, `name`, `email`, `password`) VALUES
 (1, 'admin', 'admin@admin.com', 'admin@admin.com');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `deposits`
+--
+
+CREATE TABLE `deposits` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `method` varchar(50) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `status` enum('pending','approved','failed') DEFAULT 'pending',
+  `date` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `deposits`
+--
+
+INSERT INTO `deposits` (`id`, `user_id`, `method`, `type`, `amount`, `status`, `date`) VALUES
+(1, 1, 'Bank Transfer', 'Charted Bank of Africa', 50000.00, 'approved', '2026-01-17 22:29:37'),
+(2, 1, 'wallet', 'Tron', 120000.00, 'approved', '2026-01-17 22:29:37'),
+(3, 1, 'wallet', 'Bitcion ', 30000.00, 'pending', '2026-01-17 22:29:37'),
+(4, 1, 'Bank Transfer', 'Investment', 80000.00, 'approved', '2026-01-17 22:29:37'),
+(5, 1, 'Ethereum', 'Wallet Funding', 150000.00, 'failed', '2026-01-17 22:29:37'),
+(6, 1, 'USDT', 'Wallet Funding', 45000.00, 'pending', '2026-01-17 22:29:37'),
+(7, 1, 'wallet', 'USDT', 400.00, 'pending', '2026-01-17 23:30:18'),
+(8, 1, 'wallet', 'USDT', 400.00, 'pending', '2026-01-17 23:46:32'),
+(9, 1, 'wallet', 'POLYGON', 20.00, 'pending', '2026-01-17 23:47:04');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `investments`
+--
+
+CREATE TABLE `investments` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `plan_name` varchar(100) NOT NULL,
+  `amount_invested` decimal(10,2) NOT NULL,
+  `daily_profit` decimal(10,2) NOT NULL,
+  `total_profit` decimal(10,2) NOT NULL,
+  `start_date` date NOT NULL,
+  `end_date` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -127,6 +176,28 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `user_profile`, `created_at`, `balance`, `loan_balance`, `crypto_balance`, `virtual_card_balance`) VALUES
 (1, 'Ayogu Chimezie', 'ayoguchimezie00@gmail.com', '$2y$10$3TDQcP9cgdC812dL4L89P.Ih6KRnDso5o27O.ufH5mE2/zThcN1si', '/images/avatar/profile_696a3fcc9a25d0.85272167.jpeg', '2026-01-15 13:11:50', 0.00, 0.00, 0.00, 0.00);
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `withdrawals`
+--
+
+CREATE TABLE `withdrawals` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `which_account` varchar(100) NOT NULL,
+  `status` enum('pending','approved','failed') DEFAULT 'pending',
+  `date` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `withdrawals`
+--
+
+INSERT INTO `withdrawals` (`id`, `user_id`, `amount`, `which_account`, `status`, `date`) VALUES
+(1, 1, 300.00, 'BTC', 'pending', '2026-01-18 00:06:23');
+
 --
 -- Indexes for dumped tables
 --
@@ -135,6 +206,18 @@ INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `user_profile`, `cre
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `deposits`
+--
+ALTER TABLE `deposits`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `investments`
+--
+ALTER TABLE `investments`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -158,6 +241,12 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `email` (`email`);
 
 --
+-- Indexes for table `withdrawals`
+--
+ALTER TABLE `withdrawals`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -166,6 +255,18 @@ ALTER TABLE `users`
 --
 ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `deposits`
+--
+ALTER TABLE `deposits`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT for table `investments`
+--
+ALTER TABLE `investments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `loan_requests`
@@ -183,6 +284,12 @@ ALTER TABLE `payment_account`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `withdrawals`
+--
+ALTER TABLE `withdrawals`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
