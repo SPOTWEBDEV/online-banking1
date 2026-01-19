@@ -25,7 +25,7 @@
 
         // Simple validation
         if (!$plan_name || !$duration || !$profit_per_day || !$total_profit) {
-            die("All fields are required.");
+            
             echo "<script>Swal.fire('You have an input error','Make sure to fill all input','warning')</script>";
             echo "<script> setTimeout(()=> { window.location.href = '$url'},1000) </script>";
         }
@@ -44,11 +44,10 @@
         );
 
         if (mysqli_stmt_execute($stmt)) {
-            // Redirect back
-            header("Location: investment-list.php");
-            exit;
+            echo "<script>Swal.fire('Investment Plan Added Successfully','','success')</script>";
+            echo "<script> setTimeout(()=> { window.location.href = '$domain/admin/investment/'},1000) </script>";
         } else {
-            echo "Database Error: " . mysqli_error($connection);
+           
             echo "<script>Swal.fire('Add Investment Request','','warning')</script>";
             echo "<script> setTimeout(()=> { window.location.href = '$url'},1000) </script>";
         }
