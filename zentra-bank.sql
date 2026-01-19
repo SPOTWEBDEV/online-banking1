@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 18, 2026 at 01:29 AM
+-- Generation Time: Jan 19, 2026 at 11:20 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -82,13 +82,42 @@ CREATE TABLE `investments` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `plan_name` varchar(100) NOT NULL,
-  `amount_invested` decimal(10,2) NOT NULL,
+  `amount_invested` decimal(12,2) NOT NULL,
   `daily_profit` decimal(10,2) NOT NULL,
   `total_profit` decimal(10,2) NOT NULL,
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `investments`
+--
+
+INSERT INTO `investments` (`id`, `user_id`, `plan_name`, `amount_invested`, `daily_profit`, `total_profit`, `start_date`, `end_date`, `created_at`) VALUES
+(1, 1, '', 4000.00, 200.00, 6000.00, '2025-12-30', '2026-01-20', '2026-01-19 09:53:19');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `investment_plans`
+--
+
+CREATE TABLE `investment_plans` (
+  `id` int(11) NOT NULL,
+  `plan_name` varchar(100) NOT NULL,
+  `duration` int(11) NOT NULL,
+  `profit_per_day` decimal(10,2) NOT NULL,
+  `total_profit` decimal(10,2) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `investment_plans`
+--
+
+INSERT INTO `investment_plans` (`id`, `plan_name`, `duration`, `profit_per_day`, `total_profit`, `created_at`) VALUES
+(0, 'GOLD PLAN', 30, 200.00, 1000.00, '2026-01-19 09:41:57');
 
 -- --------------------------------------------------------
 
@@ -121,7 +150,8 @@ INSERT INTO `loan_requests` (`id`, `user_id`, `loan_amount`, `loan_duration`, `l
 (1, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, 'pending', '2026-01-16 11:38:33', '2026-01-16 11:38:33'),
 (2, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, 'pending', '2026-01-16 11:40:15', '2026-01-16 11:40:15'),
 (3, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, 'pending', '2026-01-16 11:42:02', '2026-01-16 11:42:02'),
-(4, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, 'pending', '2026-01-16 14:04:26', '2026-01-16 14:04:26');
+(4, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, 'pending', '2026-01-16 14:04:26', '2026-01-16 14:04:26'),
+(5, 1, 400.00, 6, 'school fess', 40000.00, '0', 'Growth Bank', '22669056778', 3.00, 1400.00, 'pending', '2026-01-19 10:05:50', '2026-01-19 10:05:50');
 
 -- --------------------------------------------------------
 
@@ -266,13 +296,13 @@ ALTER TABLE `deposits`
 -- AUTO_INCREMENT for table `investments`
 --
 ALTER TABLE `investments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `loan_requests`
 --
 ALTER TABLE `loan_requests`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `payment_account`
