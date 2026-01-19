@@ -42,10 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 mysqli_stmt_bind_result($stmt, $id, $fullname, $db_email, $db_password);
                 mysqli_stmt_fetch($stmt);
 
-                if (password_verify($password, $db_password)) {
+                if (password_verify($password, $db_password ?? "")) {
                     $success = "Login successful. Welcome, $fullname!";
 
-                    session_start();
+                    
                     $_SESSION['user_id'] = $id;
                     $_SESSION['fullname'] = $fullname;
                     echo "

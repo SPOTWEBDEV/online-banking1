@@ -1,52 +1,13 @@
 <?php
+session_start();
 include("./server/connection.php");
 
-
-
 // if (!isset($_SESSION['user_id'])) {
-//     die("Unauthorized access");
+//     header("location: ./signin.php");
+//     exit;
 // }
 
-$user_id = (int) $_SESSION['user_id'];
-$errors = [];
-$success = "";
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
-
-    $type   = trim($_POST['type'] ?? "");
-    $amount = trim($_POST['amount'] ?? "");
-
-
-
-    if (empty($type)) {
-        $errors[] = "Deposit type is required.";
-    } elseif (empty($amount)) {
-        $errors[] = "amount is required.";
-    }
-
-    if (empty($errors)) {
-
-        $sql = "INSERT INTO deposits (user_id,  type_id, amount)
-                VALUES (?, ?,  ?)";
-
-        $stmt = mysqli_prepare($connection, $sql);
-        mysqli_stmt_bind_param($stmt, "isd", $user_id, $type, $amount);
-
-        if (mysqli_stmt_execute($stmt)) {
-            $success = "Deposit submitted successfully. Awaiting confirmation.";
-        } else {
-            $errors[] = "Deposit failed. Please try again.";
-        }
-
-        mysqli_stmt_close($stmt);
-    }
-}
-
-
-
-
-
-
+$user_id = $_SESSION['user_id'];
 ?>
 
 
@@ -60,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?= $sitename ?> | Deposit </title>
+    <title><?= $sitename ?> | Deposite-History </title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <!-- Custom Stylesheet -->
@@ -277,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-xl-4">
                                     <div class="page-title-content">
-                                        <h3>Deposit</h3>
+                                        <h3>Deposit History</h3>
                                         <p class="mb-2">Welcome To <?= $sitename ?> Management</p>
                                     </div>
                                 </div>
@@ -292,171 +253,132 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-xxl-12 col-xl-12">
 
-                        <div class="row">
+                        <?php
+                        $limit = 10;
+                        $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
+                        $offset = ($page - 1) * $limit;
 
-                            <div class="row g-4">
+                        /* COUNT TOTAL RECORDS */
+                        $count_sql = "SELECT COUNT(*) AS total FROM deposits WHERE user_id = ?";
+                        $count_stmt = mysqli_prepare($connection, $count_sql);
+                        mysqli_stmt_bind_param($count_stmt, "i", $user_id);
+                        mysqli_stmt_execute($count_stmt);
+                        $count_result = mysqli_stmt_get_result($count_stmt);
+                        $total_row = mysqli_fetch_assoc($count_result);
+                        $total_records = $total_row['total'];
+                        $total_pages = ceil($total_records / $limit);
+                        mysqli_stmt_close($count_stmt);
 
-                                <!-- Error-->
-                                <div class="col-xxl-6 col-xl-6 col-lg-6">
-                                    <?php if (!empty($errors)): ?>
-                                        <div class="alert alert-danger">
-                                            <?php foreach ($errors as $error): ?>
-                                                <p><?= htmlspecialchars($error) ?></p>
-                                            <?php endforeach; ?>
-                                        </div>
-                                    <?php endif; ?>
+                        /* FETCH DEPOSIT HISTORY */
+                        $sql = "
+    SELECT 
+        deposits.amount,
+        deposits.method,
+        deposits.type,
+        deposits.status,
+        deposits.date,
+        users.fullname
+    FROM deposits
+    INNER JOIN users ON deposits.user_id = users.id
+    WHERE deposits.user_id = ?
+    ORDER BY deposits.id DESC
+    LIMIT ? OFFSET ?
+";
 
-                                    <?php if ($success): ?>
-                                        <div class="alert alert-success">
-                                            <?= htmlspecialchars($success) ?>
-                                        </div>
-                                    <?php endif; ?>
+                        $stmt = mysqli_prepare($connection, $sql);
+                        mysqli_stmt_bind_param($stmt, "iii", $user_id, $limit, $offset);
+                        mysqli_stmt_execute($stmt);
+                        $result = mysqli_stmt_get_result($stmt);
+                        ?>
 
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>S/N</th>
+                                                <th>ACCOUNT HOLDER</th>
+                                                <th>METHOD</th>
+                                                <th>TYPE</th>
+                                                <th>AMOUNT</th>
+                                                <th>DATE</th>
+                                                <th>STATUS</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
 
+                                            <?php if (mysqli_num_rows($result) > 0): $count = 0; ?>
+                                                <?php while ($row = mysqli_fetch_assoc($result)): $count++; ?>
+                                                    <tr>
+                                                        <td><?= $count ?></td>
+                                                        <td><?= htmlspecialchars($row['fullname']) ?></td>
+                                                        <td><?= htmlspecialchars($row['method']) ?></td>
+                                                        <td><?= htmlspecialchars($row['type']) ?></td>
+                                                        <td>$<?= number_format($row['amount'], 2) ?></td>
+                                                        <td><?= date("Y-m-d", strtotime($row['date'])) ?></td>
+                                                        <td>
+                                                            <span class="badge 
+        <?php
+                                                    if ($row['status'] === 'approved') echo 'bg-success';
+                                                    elseif ($row['status'] === 'failed') echo 'bg-danger';
+                                                    else echo 'bg-warning';
+        ?>">
+                                                                <?= ucfirst($row['status']) ?>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                <?php endwhile; ?>
+                                            <?php else: ?>
+                                                <tr>
+                                                    <td colspan="7" class="text-center">No deposit history found</td>
+                                                </tr>
+                                            <?php endif; ?>
 
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Select Deposit Method</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form method="post" id="depositForm">
-
-                                              <?php
-                                              $sql_type = "SELECT id,  type FROM payment_account"; 
-                                              $stm_query = mysqli_query($connection, $sql_type);
-                                            
-
-                                              ?>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label">Type</label>
-                                                    <select name="type" class="form-select" id="type">
-                                                        <option disabled selected hidden  value="">Select Type</option>
-                                                        <?php while($result = mysqli_fetch_assoc($stm_query)):  ?>
-                                                        <option value="<?= htmlspecialchars($result['id']) ?>"><?= htmlspecialchars($result['type']) ?></option>
-                                                          <?php endwhile; ?>
-                                                    </select>
-                                                </div>
-
-
-                                        </div>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
 
-                                <!-- RIGHT SIDE -->
-                                <div class="col-xxl-6 col-xl-6 col-lg-6">
-                                    <div class="card">
-                                        <div class="card-header d-flex justify-content-between align-items-center">
-                                            <h4 class="card-title">Payment Address / Account Details</h4>
-                                            <button type="button" class="btn btn-sm btn-primary" onclick="copyWallet()">Copy</button>
-                                        </div>
-                                        <div class="card-body">
-                                            <p><strong>Crypto Type:</strong> <span id="cryptoType"> testing</span></p>
-                                            <p id="walletAddress" class="text-break text-muted"><strong>Wallet Address:</strong> testing</p>
-                                            <!-- <p id="walletAddress" class="text-break text-muted"></p> -->
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- BOTTOM -->
-                                <div class="col-xxl-6 col-xl-6 col-lg-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Submit Payment</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <label class="form-label">Amount Sent</label>
-                                                <input name="amount" type="number" class="form-control" placeholder="Enter amount">
-                                            </div>
-                                            <button type="submit" name="deposit" class="btn btn-primary">Submit</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                </form>
 
                             </div>
-
-
+                        </div>
+                        <div class="footer">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="copyright">
+                                            <p>© Copyright
+                                                <script>
+                                                    var CurrentYear = new Date().getFullYear()
+                                                    document.write(CurrentYear)
+                                                </script>
+                                                <a href="#"><?= $sitename ?></a> I All Rights Reserved
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="footer-social">
+                                            <ul>
+                                                <li><a href="settings-api.html#"><i class="fi fi-brands-facebook"></i></a></li>
+                                                <li><a href="settings-api.html#"><i class="fi fi-brands-twitter"></i></a></li>
+                                                <li><a href="settings-api.html#"><i class="fi fi-brands-linkedin"></i></a></li>
+                                                <li><a href="settings-api.html#"><i class="fi fi-brands-youtube"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- deposite js temporal -->
-
-                <script>
-                    const wallets = {
-                        USDT: "TX8K9xKJdsj2390dsUSDTexample",
-                        BTC: "bc1qexamplebtcaddress123",
-                        POLYGON: "0x2AC3229c7BE5A1bD7F4062d9283BC89Cb8600c5e"
-                    };
-
-                    const method = document.getElementById("method");
-                    const type = document.getElementById("type");
-                    const walletAddress = document.getElementById("walletAddress");
-                    const cryptoType = document.getElementById("cryptoType");
-
-                    function updateWallet() {
-                        if (method.value === "wallet" && wallets[type.value]) {
-                            walletAddress.textContent = wallets[type.value];
-                            cryptoType.textContent = type.value;
-                        } else {
-                            walletAddress.textContent = "---";
-                            cryptoType.textContent = "---";
-                        }
-                    }
-
-                    method.addEventListener("change", updateWallet);
-                    type.addEventListener("change", updateWallet);
-
-                    function copyWallet() {
-                        if (walletAddress.textContent !== "---") {
-                            navigator.clipboard.writeText(walletAddress.textContent);
-                            alert("Wallet address copied!");
-                        }
-                    }
-                </script>
-
-
-            </div>
-        </div>
-        <div class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6">
-                        <div class="copyright">
-                            <p>© Copyright
-                                <script>
-                                    var CurrentYear = new Date().getFullYear()
-                                    document.write(CurrentYear)
-                                </script>
-                                <a href="#"><?= $sitename ?></a> I All Rights Reserved
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="footer-social">
-                            <ul>
-                                <li><a href="settings-api.html#"><i class="fi fi-brands-facebook"></i></a></li>
-                                <li><a href="settings-api.html#"><i class="fi fi-brands-twitter"></i></a></li>
-                                <li><a href="settings-api.html#"><i class="fi fi-brands-linkedin"></i></a></li>
-                                <li><a href="settings-api.html#"><i class="fi fi-brands-youtube"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!--  -->
-    <!--  -->
-    <script src="js/scripts.js"></script>
+                    <script src="vendor/jquery/jquery.min.js"></script>
+                    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                    <!--  -->
+                    <!--  -->
+                    <script src="js/scripts.js"></script>
 </body>
 
 </html>

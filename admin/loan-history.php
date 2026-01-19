@@ -1,52 +1,83 @@
 <?php
+session_start();
 include("./server/connection.php");
 
-
-
-// if (!isset($_SESSION['user_id'])) {
-//     die("Unauthorized access");
-// }
-
-$user_id = (int) $_SESSION['user_id'];
 $errors = [];
 $success = "";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    $type   = trim($_POST['type'] ?? "");
-    $amount = trim($_POST['amount'] ?? "");
-
-
-
-    if (empty($type)) {
-        $errors[] = "Deposit type is required.";
-    } elseif (empty($amount)) {
-        $errors[] = "amount is required.";
+    if (!isset($_SESSION['user_id'])) {
+        header("location: ./signin.php");
     }
+
+    $user_id = $_SESSION['user_id'] ?? null;
+
+    $loan_amount        = trim($_POST['loan_amount'] ?? '');
+    $loan_duration      = trim($_POST['loan_duration'] ?? '');
+    $loan_reason        = trim($_POST['loan_reason'] ?? '');
+    $monthly_income     = trim($_POST['monthly_income'] ?? '');
+    $employment_status  = trim($_POST['employment_status'] ?? '');
+    $account_number     = trim($_POST['account_number'] ?? '');
+    $bank_name          = trim($_POST['bank_name'] ?? '');
+
+    $loan_duration = intval($loan_duration);
+
+
+    if ($loan_amount === '' || $loan_duration === '' || $loan_reason === '' || $monthly_income === '' || $employment_status === '' || $account_number === '' || $bank_name === '') {
+        $errors[] = "All fields are required";
+    }
+
+    if ($loan_amount !== '') {
+        if (!is_numeric($loan_amount) || $loan_amount <= 0) {
+            $errors[] = "Invalid loan amount";
+        }
+    }
+
+
 
     if (empty($errors)) {
 
-        $sql = "INSERT INTO deposits (user_id,  type_id, amount)
-                VALUES (?, ?,  ?)";
+       
+        $interest_rate = 5; // 5% monthly
+        $monthly_interest = ($loan_amount * $interest_rate) / 100;
+        $total_interest = $monthly_interest * $loan_duration;
+        $total_payable = $loan_amount + $total_interest;
+
+        $sql = "INSERT INTO loan_requests 
+            (user_id, loan_amount, interest_rate, loan_duration, total_payable, loan_reason, monthly_income, employment_status, account_number, bank_name)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connection, $sql);
-        mysqli_stmt_bind_param($stmt, "isd", $user_id, $type, $amount);
 
-        if (mysqli_stmt_execute($stmt)) {
-            $success = "Deposit submitted successfully. Awaiting confirmation.";
+        if ($stmt) {
+            mysqli_stmt_bind_param(
+                $stmt,
+                "iddidsdsss",
+                $user_id,
+                $loan_amount,
+                $interest_rate,
+                $loan_duration,
+                $total_payable,
+                $loan_reason,
+                $monthly_income,
+                $employment_status,
+                $account_number,
+                $bank_name
+            );
+
+            if (mysqli_stmt_execute($stmt)) {
+                $success = "Loan applied successfully. Awaiting approval.";
+            } else {
+                $errors[] = "Loan application failed. Please try again.";
+            }
+
+            mysqli_stmt_close($stmt);
         } else {
-            $errors[] = "Deposit failed. Please try again.";
+            $errors[] = "System error. Please contact support.";
         }
-
-        mysqli_stmt_close($stmt);
     }
 }
-
-
-
-
-
-
 ?>
 
 
@@ -60,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?= $sitename ?> | Deposit </title>
+    <title><?= $sitename ?> | loan </title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <!-- Custom Stylesheet -->
@@ -277,7 +308,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                             <div class="row align-items-center justify-content-between">
                                 <div class="col-xl-4">
                                     <div class="page-title-content">
-                                        <h3>Deposit</h3>
+                                        <h3>Loan</h3>
                                         <p class="mb-2">Welcome To <?= $sitename ?> Management</p>
                                     </div>
                                 </div>
@@ -295,131 +326,126 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                 <div class="row">
                     <div class="col-xxl-12 col-xl-12">
 
+                  
+
                         <div class="row">
+             
+                            
+                            <?php
 
-                            <div class="row g-4">
 
-                                <!-- Error-->
-                                <div class="col-xxl-6 col-xl-6 col-lg-6">
-                                    <?php if (!empty($errors)): ?>
-                                        <div class="alert alert-danger">
-                                            <?php foreach ($errors as $error): ?>
-                                                <p><?= htmlspecialchars($error) ?></p>
-                                            <?php endforeach; ?>
+                            $user_id = $_SESSION['user_id'];
+
+                          
+                            $limit = 10;
+                            $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
+                            $offset = ($page - 1) * $limit;
+
+                          
+                            $count_sql = "
+    SELECT COUNT(*) AS total 
+    FROM loan_requests 
+    WHERE user_id = ?
+";
+                            $count_stmt = mysqli_prepare($connection, $count_sql);
+                            mysqli_stmt_bind_param($count_stmt, "i", $user_id);
+                            mysqli_stmt_execute($count_stmt);
+                            $count_result = mysqli_stmt_get_result($count_stmt);
+                            $total_row = mysqli_fetch_assoc($count_result);
+                            $total_records = $total_row['total'];
+                            $total_pages = ceil($total_records / $limit);
+
+
+                            $sql = "
+        SELECT 
+        loan_requests.id,
+        loan_requests.loan_amount,
+        loan_requests.status,
+        loan_requests.created_at,
+        users.fullname
+    FROM loan_requests, users
+    WHERE loan_requests.user_id = users.id
+    AND loan_requests.user_id = ?
+    ORDER BY loan_requests.id DESC
+    LIMIT ? OFFSET ?
+";
+
+                            $stmt = mysqli_prepare($connection, $sql);
+                            mysqli_stmt_bind_param($stmt, "iii", $user_id, $limit, $offset);
+                            mysqli_stmt_execute($stmt);
+                            $result = mysqli_stmt_get_result($stmt);
+                            ?>
+
+
+                            <div class="col-xl-12">
+                                <h4 class="card-title mb-3">Loan History</h4>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="table-responsive api-table">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>S/N</th>
+                                                        <th>ACCOUNT HOLDER</th>
+                                                        <th>AMOUNT</th>
+                                                        <th>APPLIED DATE</th>
+                                                        <th>STATUS</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    <?php if (mysqli_num_rows($result) > 0): $count = 0 ?>
+                                                        <?php while ($row = mysqli_fetch_assoc($result)):  $count++ ?>
+                                                            <tr>
+                                                                <td><?=  $count?></td>
+                                                                <td><?= htmlspecialchars($row['fullname']) ?></td>
+                                                                <td>$<?= number_format($row['loan_amount'], 2) ?></td>
+
+                                                                   <td><?= date("Y-m-d", strtotime($row['created_at'])) ?></td>
+                                                                <td>
+                                                                    <span class="badge 
+                                            <?php
+                                                            if ($row['status'] === 'approved') echo 'bg-success';
+                                                            elseif ($row['status'] === 'rejected') echo 'bg-danger';
+                                                            else echo 'bg-warning';
+                                            ?>">
+                                                                        <?= ucfirst($row['status']) ?>
+                                                                    </span>
+                                                                </td>
+                                                             
+                                                            </tr>
+                                                        <?php endwhile; ?>
+                                                    <?php else: ?>
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">No loan history found</td>
+                                                        </tr>
+                                                    <?php endif; ?>
+
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    <?php endif; ?>
-
-                                    <?php if ($success): ?>
-                                        <div class="alert alert-success">
-                                            <?= htmlspecialchars($success) ?>
-                                        </div>
-                                    <?php endif; ?>
 
 
+                                        <?php if ($total_pages > 1): ?>
+                                            <nav class="mt-3">
+                                                <ul class="pagination">
+                                                    <?php for ($i = 1; $i <= $total_pages; $i++): ?>
+                                                        <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
+                                                            <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                                                        </li>
+                                                    <?php endfor; ?>
+                                                </ul>
+                                            </nav>
+                                        <?php endif; ?>
 
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Select Deposit Method</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form method="post" id="depositForm">
-
-                                              <?php
-                                              $sql_type = "SELECT id,  type FROM payment_account"; 
-                                              $stm_query = mysqli_query($connection, $sql_type);
-                                            
-
-                                              ?>
-
-                                                <div class="mb-3">
-                                                    <label class="form-label">Type</label>
-                                                    <select name="type" class="form-select" id="type">
-                                                        <option disabled selected hidden  value="">Select Type</option>
-                                                        <?php while($result = mysqli_fetch_assoc($stm_query)):  ?>
-                                                        <option value="<?= htmlspecialchars($result['id']) ?>"><?= htmlspecialchars($result['type']) ?></option>
-                                                          <?php endwhile; ?>
-                                                    </select>
-                                                </div>
-
-
-                                        </div>
                                     </div>
                                 </div>
-
-                                <!-- RIGHT SIDE -->
-                                <div class="col-xxl-6 col-xl-6 col-lg-6">
-                                    <div class="card">
-                                        <div class="card-header d-flex justify-content-between align-items-center">
-                                            <h4 class="card-title">Payment Address / Account Details</h4>
-                                            <button type="button" class="btn btn-sm btn-primary" onclick="copyWallet()">Copy</button>
-                                        </div>
-                                        <div class="card-body">
-                                            <p><strong>Crypto Type:</strong> <span id="cryptoType"> testing</span></p>
-                                            <p id="walletAddress" class="text-break text-muted"><strong>Wallet Address:</strong> testing</p>
-                                            <!-- <p id="walletAddress" class="text-break text-muted"></p> -->
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- BOTTOM -->
-                                <div class="col-xxl-6 col-xl-6 col-lg-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Submit Payment</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="mb-3">
-                                                <label class="form-label">Amount Sent</label>
-                                                <input name="amount" type="number" class="form-control" placeholder="Enter amount">
-                                            </div>
-                                            <button type="submit" name="deposit" class="btn btn-primary">Submit</button>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                </form>
-
                             </div>
 
 
                         </div>
                     </div>
                 </div>
-
-                <!-- deposite js temporal -->
-
-                <script>
-                    const wallets = {
-                        USDT: "TX8K9xKJdsj2390dsUSDTexample",
-                        BTC: "bc1qexamplebtcaddress123",
-                        POLYGON: "0x2AC3229c7BE5A1bD7F4062d9283BC89Cb8600c5e"
-                    };
-
-                    const method = document.getElementById("method");
-                    const type = document.getElementById("type");
-                    const walletAddress = document.getElementById("walletAddress");
-                    const cryptoType = document.getElementById("cryptoType");
-
-                    function updateWallet() {
-                        if (method.value === "wallet" && wallets[type.value]) {
-                            walletAddress.textContent = wallets[type.value];
-                            cryptoType.textContent = type.value;
-                        } else {
-                            walletAddress.textContent = "---";
-                            cryptoType.textContent = "---";
-                        }
-                    }
-
-                    method.addEventListener("change", updateWallet);
-                    type.addEventListener("change", updateWallet);
-
-                    function copyWallet() {
-                        if (walletAddress.textContent !== "---") {
-                            navigator.clipboard.writeText(walletAddress.textContent);
-                            alert("Wallet address copied!");
-                        }
-                    }
-                </script>
 
 
             </div>

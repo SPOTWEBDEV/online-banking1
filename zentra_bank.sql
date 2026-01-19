@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 18, 2026 at 11:29 PM
+-- Generation Time: Jan 19, 2026 at 06:35 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `zentra-bank`
+-- Database: `zentra_bank`
 --
 
 -- --------------------------------------------------------
@@ -44,14 +44,44 @@ INSERT INTO `admin` (`id`, `name`, `email`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bank_transfers`
+--
+
+CREATE TABLE `bank_transfers` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `receiver_account_number` varchar(30) NOT NULL,
+  `receiver_email` varchar(150) NOT NULL,
+  `routing_number` varchar(50) DEFAULT NULL,
+  `swift_code` varchar(20) DEFAULT NULL,
+  `amount` decimal(15,2) NOT NULL,
+  `otp_code` varchar(10) NOT NULL,
+  `otp_expires_at` datetime NOT NULL,
+  `status` enum('pending','reversed','completed','failed') NOT NULL DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `narration` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `bank_transfers`
+--
+
+INSERT INTO `bank_transfers` (`id`, `user_id`, `receiver_account_number`, `receiver_email`, `routing_number`, `swift_code`, `amount`, `otp_code`, `otp_expires_at`, `status`, `created_at`, `updated_at`, `narration`) VALUES
+(1, 1, '4444444444444', 'ayoguchimezie00@gmail.com', '5555555555', '333333333333333333', 80000.00, '961661', '2026-01-19 15:17:49', 'pending', '2026-01-19 14:12:49', '2026-01-19 14:12:49', 'sgwrrrrrrrr'),
+(2, 1, '4444444444444', 'ayoguchimezie00@gmail.com', '5555555555', '333333333333333333', 80000.00, '654593', '2026-01-19 15:19:00', 'pending', '2026-01-19 14:14:00', '2026-01-19 14:14:00', 'sgwrrrrrrrr'),
+(3, 1, '4444444444444', 'ayoguchimezie00@gmail.com', '5555555555', '333333333333333333', 80000.00, '544330', '2026-01-19 15:19:20', 'pending', '2026-01-19 14:14:20', '2026-01-19 14:14:20', 'sgwrrrrrrrr');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `deposits`
 --
 
 CREATE TABLE `deposits` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `method` varchar(50) NOT NULL,
-  `type` varchar(50) NOT NULL,
+  `type_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
   `status` enum('pending','approved','failed') DEFAULT 'pending',
   `date` timestamp NOT NULL DEFAULT current_timestamp()
@@ -61,16 +91,17 @@ CREATE TABLE `deposits` (
 -- Dumping data for table `deposits`
 --
 
-INSERT INTO `deposits` (`id`, `user_id`, `method`, `type`, `amount`, `status`, `date`) VALUES
-(1, 1, 'Bank Transfer', 'Charted Bank of Africa', 50000.00, 'approved', '2026-01-17 22:29:37'),
-(2, 1, 'wallet', 'Tron', 120000.00, 'approved', '2026-01-17 22:29:37'),
-(3, 1, 'wallet', 'Bitcion ', 30000.00, 'pending', '2026-01-17 22:29:37'),
-(4, 1, 'Bank Transfer', 'Investment', 80000.00, 'approved', '2026-01-17 22:29:37'),
-(5, 1, 'Ethereum', 'Wallet Funding', 150000.00, 'failed', '2026-01-17 22:29:37'),
-(6, 1, 'USDT', 'Wallet Funding', 45000.00, 'pending', '2026-01-17 22:29:37'),
-(7, 1, 'wallet', 'USDT', 400.00, 'pending', '2026-01-17 23:30:18'),
-(8, 1, 'wallet', 'USDT', 400.00, 'pending', '2026-01-17 23:46:32'),
-(9, 1, 'wallet', 'POLYGON', 20.00, 'pending', '2026-01-17 23:47:04');
+INSERT INTO `deposits` (`id`, `user_id`, `type_id`, `amount`, `status`, `date`) VALUES
+(1, 1, 0, 50000.00, 'approved', '2026-01-17 22:29:37'),
+(2, 1, 0, 120000.00, 'approved', '2026-01-17 22:29:37'),
+(3, 1, 0, 30000.00, 'pending', '2026-01-17 22:29:37'),
+(4, 1, 0, 80000.00, 'approved', '2026-01-17 22:29:37'),
+(5, 1, 0, 150000.00, 'failed', '2026-01-17 22:29:37'),
+(6, 1, 0, 45000.00, 'pending', '2026-01-17 22:29:37'),
+(7, 1, 0, 400.00, 'pending', '2026-01-17 23:30:18'),
+(8, 1, 0, 400.00, 'pending', '2026-01-17 23:46:32'),
+(9, 1, 0, 20.00, 'pending', '2026-01-17 23:47:04'),
+(10, 1, 1, 3000.00, 'pending', '2026-01-19 13:12:47');
 
 -- --------------------------------------------------------
 
@@ -89,6 +120,22 @@ CREATE TABLE `investments` (
   `end_date` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `investments`
+--
+
+INSERT INTO `investments` (`id`, `user_id`, `plan_name`, `amount_invested`, `daily_profit`, `total_profit`, `start_date`, `end_date`, `created_at`) VALUES
+(1, 1, 'BASIC PLAN', 100.00, 50.00, 150.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(2, 1, 'BASIC PLAN', 150.00, 75.00, 225.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(3, 1, 'SILVER PLAN', 200.00, 100.00, 300.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(4, 1, 'SILVER PLAN', 250.00, 125.00, 375.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(5, 1, 'GOLD PLAN', 500.00, 250.00, 750.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(6, 1, 'GOLD PLAN', 600.00, 300.00, 900.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(7, 1, 'PLATINUM PLAN', 1000.00, 500.00, 1500.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(8, 1, 'PLATINUM PLAN', 1200.00, 600.00, 1800.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(9, 1, 'PLATINUM PLAN', 1500.00, 750.00, 2250.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(10, 1, 'GOLD PLAN', 800.00, 400.00, 1200.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13');
 
 -- --------------------------------------------------------
 
@@ -224,6 +271,12 @@ ALTER TABLE `admin`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `bank_transfers`
+--
+ALTER TABLE `bank_transfers`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `deposits`
 --
 ALTER TABLE `deposits`
@@ -278,16 +331,22 @@ ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `bank_transfers`
+--
+ALTER TABLE `bank_transfers`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `deposits`
 --
 ALTER TABLE `deposits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `investments`
 --
 ALTER TABLE `investments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `investment_plans`

@@ -12,7 +12,8 @@ function checkUrlProtocol($url)
     }
 }
 
-$currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : 'http') . ':/' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$currentUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
 
 $request = checkUrlProtocol($currentUrl);
 
@@ -33,10 +34,10 @@ if ($request === 'https') {
     }
 } elseif ($request === 'http') {
     $sitename = "Zentra Bank";
-    $domain = "http://localhost/zentra-bank";
+    $domain = "http://localhost/online-banking1";
     define("USER", "root");
     define("PASSWORD", "");
-    define("DATABASE", "zentra-bank");
+    define("DATABASE", "zentra_bank");
 
 
     $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
@@ -46,12 +47,12 @@ if ($request === 'https') {
     }
 } else {
     $sitename = "Zentra Bank";
-    $domain = "https:///localhost/zentra-bank";
+    $domain = "http://localhost/online-banking1";
     define("USER", "root");
     define("PASSWORD", "");
     define("DATABASE", "zentra_bank");
 
- 
+
     $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
 
     if (!$connection) {
@@ -61,4 +62,3 @@ if ($request === 'https') {
 
 
 session_start();
-
