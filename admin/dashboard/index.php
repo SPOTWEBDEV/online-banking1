@@ -3,6 +3,30 @@
 include("../../server/connection.php");
 
 
+// Total deposit
+$deposit = $conn->query("SELECT SUM(amount) AS total_deposit FROM deposits")->fetch_assoc();
+
+// Total investment
+$investment = $conn->query("SELECT SUM(amount_invested) AS total_investment FROM investments")->fetch_assoc();
+
+// Total withdrawal
+$withdrawal = $conn->query("SELECT SUM(amount) AS total_withdrawal FROM withdrawals")->fetch_assoc();
+
+// Total loan requests
+$loan = $conn->query("SELECT SUM(amount_requested) AS total_loan FROM loan_requests")->fetch_assoc();
+
+echo json_encode([
+    "success" => true,
+    "data" => [
+        "deposit" => $deposit['total_deposit'] ?? 0,
+        "investment" => $investment['total_investment'] ?? 0,
+        "withdrawal" => $withdrawal['total_withdrawal'] ?? 0,
+        "loan" => $loan['total_loan'] ?? 0
+    ]
+]);
+
+
+
 
 ?>
 
@@ -15,10 +39,10 @@ include("../../server/connection.php");
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Ekash : Personal Finance Management Admin Dashboard HTML Template</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php  echo $domain ?>/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
     <!-- Custom Stylesheet -->
-    <link rel="stylesheet" href="<?php  echo $domain ?>/css/style.css">
-    <link rel="stylesheet" href="<?php  echo $domain ?>/vendor/toastr/toastr.min.css">
+    <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
+    <link rel="stylesheet" href="<?php echo $domain ?>/vendor/toastr/toastr.min.css">
 </head>
 
 <body class="dashboard">
@@ -29,7 +53,7 @@ include("../../server/connection.php");
                     <div class="col-xxl-12">
                         <div class="header-content">
                             <div class="header-left">
-                                <div class="brand-logo"><a class="mini-logo" href="index.html"><img src="<?php  echo $domain ?>/images/logoi.png" alt="" width="40"></a></div>
+                                <div class="brand-logo"><a class="mini-logo" href="index.html"><img src="<?php echo $domain ?>/images/logoi.png" alt="" width="40"></a></div>
                                 <div class="search">
                                     <form action="index.html#">
                                         <div class="input-group">
@@ -102,7 +126,7 @@ include("../../server/connection.php");
                                     <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu dropdown-menu-end">
                                         <div class="user-email">
                                             <div class="user">
-                                                <span class="thumb"><img class="rounded-full" src="<?php  echo $domain ?>/images/avatar/3.jpg" alt=""></span>
+                                                <span class="thumb"><img class="rounded-full" src="<?php echo $domain ?>/images/avatar/3.jpg" alt=""></span>
                                                 <div class="user-info">
                                                     <h5>Hafsa Humaira</h5>
                                                     <span>hello@email.com</span>
@@ -133,86 +157,9 @@ include("../../server/connection.php");
                 </div>
             </div>
         </div>
-        <div class="sidebar">
-            <div class="brand-logo"><a class="full-logo" href="index.html"><img src="<?php  echo $domain ?>/images/logoi.png" alt="" width="30"></a>
-            </div>
-            <div class="menu">
-                <ul>
-                    <li>
-                        <a href="index.html">
-                            <span>
-                                <i class="fi fi-rr-dashboard"></i>
-                            </span>
-                            <span class="nav-text">Home</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="wallets.html">
-                            <span>
-                                <i class="fi fi-rr-wallet"></i>
-                            </span>
-                            <span class="nav-text">Wallets</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="budgets.html">
-                            <span>
-                                <i class="fi fi-rr-donate"></i>
-                            </span>
-                            <span class="nav-text">Budgets</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="goals.html">
-                            <span>
-                                <i class="fi fi-sr-bullseye-arrow"></i>
-                            </span>
-                            <span class="nav-text">Goals</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="profile.html">
-                            <span>
-                                <i class="fi fi-rr-user"></i>
-                            </span>
-                            <span class="nav-text">Profile</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="analytics.html">
-                            <span>
-                                <i class="fi fi-rr-chart-histogram"></i>
-                            </span>
-                            <span class="nav-text">Analytics</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="support.html">
-                            <span>
-                                <i class="fi fi-rr-user-headset"></i>
-                            </span>
-                            <span class="nav-text">Support</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="affiliates.html">
-                            <span>
-                                <i class="fi fi-rs-link-alt"></i>
-                            </span>
-                            <span class="nav-text">Affiliates</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="settings.html">
-                            <span>
-                                <i class="fi fi-rs-settings"></i>
-                            </span>
-                            <span class="nav-text">Settings</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
+        <!-- side nav -->
+        <?php include("../include/sidenav.php") ?>
+
         <div class="content-body">
             <div class="container">
                 <div class="row">
@@ -238,47 +185,35 @@ include("../../server/connection.php");
                 <div class="row">
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                         <div class="stat-widget-1">
-                            <h6>Total Balance</h6>
-                            <h3>$ 432568</h3>
-                            <p>
-                                <span class="text-success"><i class="fi fi-rr-arrow-trend-up"></i>2.47%</span>
-                                Last month <strong>$24,478</strong>
-                            </p>
+                            <h6>Total Deposit</h6>
+                            <h3 id="totalDeposit">$ 0</h3>
                         </div>
                     </div>
+
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                         <div class="stat-widget-1">
-                            <h6>Total Period Change</h6>
-                            <h3>$ 245860</h3>
-                            <p>
-                                <span class="text-success"><i class="fi fi-rr-arrow-trend-up"></i>2.47%</span>
-                                Last month <strong>$24,478</strong>
-                            </p>
+                            <h6>Total Investment</h6>
+                            <h3 id="totalInvestment">$ 0</h3>
                         </div>
                     </div>
+
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                         <div class="stat-widget-1">
-                            <h6>Total Period Expenses</h6>
-                            <h3>$ 25.35</h3>
-                            <p>
-                                <span class="text-danger"><i class="fi fi-rr-arrow-trend-down"></i>2.47%</span>
-                                Last month <strong>$24,478</strong>
-                            </p>
+                            <h6>Total Withdrawal</h6>
+                            <h3 id="totalWithdrawal">$ 0</h3>
                         </div>
                     </div>
+
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                         <div class="stat-widget-1">
-                            <h6>Total Period Income</h6>
-                            <h3>$ 22.56</h3>
-                            <p>
-                                <span class="text-success"><i class="fi fi-rr-arrow-trend-up"></i>2.47%</span>
-                                Last month <strong>$24,478</strong>
-                            </p>
+                            <h6>Total Loans</h6>
+                            <h3 id="totalLoan">$ 0</h3>
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
-                    
+
                     <div class="col-xl-4 col-lg-6 col-md-12">
                         <div class="card">
                             <div class="card-header">
@@ -341,7 +276,7 @@ include("../../server/connection.php");
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="col-xl-8">
                         <div class="card">
                             <div class="card-header">
@@ -478,26 +413,26 @@ include("../../server/connection.php");
             </div>
         </div>
     </div>
-    <script src="<?php  echo $domain ?>/vendor/jquery/jquery.min.js"></script>
-    <script src="<?php  echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="<?php  echo $domain ?>/vendor/toastr/toastr.min.js"></script>
-    <script src="<?php  echo $domain ?>/vendor/toastr/toastr-init.js"></script>
-    <script src="<?php  echo $domain ?>/vendor/circle-progress/circle-progress.min.js"></script>
-    <script src="<?php  echo $domain ?>/vendor/circle-progress/circle-progress-init.js"></script>
-    <script src="<?php  echo $domain ?>/vendor/chartjs/chartjs.js"></script>
-    <script src="<?php  echo $domain ?>/js/plugins/chartjs-bar-income-vs-expense.js"></script>
-    <script src="<?php  echo $domain ?>/js/plugins/chartjs-bar-weekly-expense.js"></script>
-    <script src="<?php  echo $domain ?>/js/plugins/chartjs-profile-wallet.js"></script>
-    <script src="<?php  echo $domain ?>/js/plugins/chartjs-profile-wallet2.js"></script>
-    <script src="<?php  echo $domain ?>/js/plugins/chartjs-profile-wallet3.js"></script>
-    <script src="<?php  echo $domain ?>/js/plugins/chartjs-profile-wallet4.js"></script>
+    <script src="<?php echo $domain ?>/vendor/jquery/jquery.min.js"></script>
+    <script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?php echo $domain ?>/vendor/toastr/toastr.min.js"></script>
+    <script src="<?php echo $domain ?>/vendor/toastr/toastr-init.js"></script>
+    <script src="<?php echo $domain ?>/vendor/circle-progress/circle-progress.min.js"></script>
+    <script src="<?php echo $domain ?>/vendor/circle-progress/circle-progress-init.js"></script>
+    <script src="<?php echo $domain ?>/vendor/chartjs/chartjs.js"></script>
+    <script src="<?php echo $domain ?>/js/plugins/chartjs-bar-income-vs-expense.js"></script>
+    <script src="<?php echo $domain ?>/js/plugins/chartjs-bar-weekly-expense.js"></script>
+    <script src="<?php echo $domain ?>/js/plugins/chartjs-profile-wallet.js"></script>
+    <script src="<?php echo $domain ?>/js/plugins/chartjs-profile-wallet2.js"></script>
+    <script src="<?php echo $domain ?>/js/plugins/chartjs-profile-wallet3.js"></script>
+    <script src="<?php echo $domain ?>/js/plugins/chartjs-profile-wallet4.js"></script>
     <!--  -->
     <!--  -->
-    <script src="<?php  echo $domain ?>/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
-    <script src="<?php  echo $domain ?>/js/plugins/perfect-scrollbar-init.js"></script>
-    <script src="<?php  echo $domain ?>/vendor/circle-progress/circle-progress.min.js"></script>
-    <script src="<?php  echo $domain ?>/js/plugins/circle-progress-init.js"></script>
-    <script src="<?php  echo $domain ?>/js/scripts.js"></script>
+    <script src="<?php echo $domain ?>/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="<?php echo $domain ?>/js/plugins/perfect-scrollbar-init.js"></script>
+    <script src="<?php echo $domain ?>/vendor/circle-progress/circle-progress.min.js"></script>
+    <script src="<?php echo $domain ?>/js/plugins/circle-progress-init.js"></script>
+    <script src="<?php echo $domain ?>/js/scripts.js"></script>
 </body>
 
 </html>
