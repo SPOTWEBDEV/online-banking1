@@ -465,7 +465,7 @@ if (!$inv_stmt) {
                                     <div class="invest-progress-pct"><?= $progress ?>%</div>
                                 </div>
 
-                                <!-- ✅ ADDED INPUT + ACTIVATE BUTTON (ONLY ADDITION) -->
+                              
                                 <form method="post" action="">
                                     <input type="hidden" name="plan_name" value="<?= htmlspecialchars($plan_name) ?>">
                                     <input type="hidden" name="daily_profit" value="<?= (float)$daily ?>">
