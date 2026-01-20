@@ -1,14 +1,14 @@
 <?php
 include("../server/connection.php");
+if (!isset($_SESSION['user_id'])) {
+    header("location: {$domain}/auth/sign_in/");
+}
 
 $errors = [];
 $success = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // if (!isset($_SESSION['user_id'])) {
-    //     header("location: ../auth/sign_in/");
-    // }
 
     $user_id = $_SESSION['user_id'] ?? null;
 
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
 
-       
+
         $interest_rate = 5; // 5% monthly
         $monthly_interest = ($loan_amount * $interest_rate) / 100;
         $total_interest = $monthly_interest * $loan_duration;
@@ -226,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                 </div>
                             </div>
-                           
+
 
 
                         </div>

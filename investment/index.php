@@ -2,10 +2,10 @@
 include("../server/connection.php");
 
 
-// if (!isset($_SESSION['user_id']) || !is_numeric($_SESSION['user_id'])) {
-//     header("Location: ../auth/sign_in/");
-//     exit;
-// }
+if (!isset($_SESSION['user_id']) || !is_numeric($_SESSION['user_id'])) {
+    header("location: {$domain}/auth/sign_in/");
+    exit;
+}
 
 $user_id = (int) $_SESSION['user_id'];
 

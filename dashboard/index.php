@@ -1,9 +1,55 @@
 <?php
 include("../server/connection.php");
-// if (!isset($_SESSION['user_id'])) {
-//    header("location: ../auth/sign_in/");
-//    exit;
-// }
+if (!isset($_SESSION['user_id'])) {
+    header("location: {$domain}/auth/sign_in/");
+    exit;
+}
+
+
+$user_id = $_SESSION['user_id'];
+
+// default values (avoid errors)
+$fullname = "";
+$balance = 0;
+$loan_balance = 0;
+$crypto_balance = 0;
+$virtual_card_balance = 0;
+
+$sql = "SELECT fullname, balance, loan_balance, crypto_balance, virtual_card_balance
+        FROM users
+        WHERE id = ? LIMIT 1";
+$stmt = mysqli_prepare($connection, $sql);
+
+if (!$stmt) {
+    die("Query error: " . mysqli_error($connection));
+}
+
+mysqli_stmt_bind_param($stmt, "i", $user_id);
+mysqli_stmt_execute($stmt);
+
+$result = mysqli_stmt_get_result($stmt);
+if ($result && mysqli_num_rows($result) === 1) {
+    $user = mysqli_fetch_assoc($result);
+
+    $fullname = $user['fullname'] ?? "";
+    $balance = (float)($user['balance'] ?? 0);
+    $loan_balance = (float)($user['loan_balance'] ?? 0);
+    $crypto_balance = (float)($user['crypto_balance'] ?? 0);
+    $virtual_card_balance = (float)($user['virtual_card_balance'] ?? 0);
+} else {
+    // session user_id not found in DB
+    session_destroy();
+    header("Location: {$domain}/auth/sign_in/");
+    exit;
+}
+
+mysqli_stmt_close($stmt);
+
+// helper to format money
+function money($amount)
+{
+    return number_format((float)$amount, 2);
+}
 ?>
 
 <!DOCTYPE html>
@@ -63,19 +109,20 @@ include("../server/connection.php");
                                             </div>
                                             <div class="wallet-nav-text">
                                                 <h3>Balance</h3>
-                                                <p>$221,478</p>
+                                                <p>$<?= money($balance) ?></p>
+
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-12 col-md-6">
-                                        <div class="wallet-nav" >
+                                        <div class="wallet-nav">
                                             <!-- data-bs-toggle="pill" data-bs-target="#a2" -->
                                             <div class="wallet-nav-icon">
                                                 <span><i class="fi fi-rr-credit-card"></i></span>
                                             </div>
                                             <div class="wallet-nav-text">
                                                 <h3>Loan balance</h3>
-                                                <p>$221,478</p>
+                                                <p>$<?= money($loan_balance) ?></p>
                                             </div>
                                         </div>
                                     </div>
@@ -86,7 +133,8 @@ include("../server/connection.php");
                                             </div>
                                             <div class="wallet-nav-text">
                                                 <h3>Crypto Balance</h3>
-                                                <p>$221,478</p>
+                                                <p>$<?= money($crypto_balance) ?></p>
+
                                             </div>
                                         </div>
                                     </div>
@@ -97,14 +145,14 @@ include("../server/connection.php");
                                             </div>
                                             <div class="wallet-nav-text">
                                                 <h3>Virtual Card Balance</h3>
-                                                <p>$221,478</p>
+                                                <p>$<?= money($virtual_card_balance) ?></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
 
-                           
+
                         </div>
 
                         <div class="col-xl-9">

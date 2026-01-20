@@ -1,5 +1,9 @@
 <?php
 include("../../server/connection.php");
+if (!isset($_SESSION['user_id'])) {
+    header("location: {$domain}/auth/sign_in/");
+    exit;
+}
 ?>
 
 
@@ -24,13 +28,13 @@ include("../../server/connection.php");
 </head>
 
 <body class="dashboard">
-    
+
     <div id="main-wrapper">
         <!-- nav -->
-           <?php include("../../include/header.php") ?>
-           <!-- side nav -->
-              <?php include("../../include/sidenav.php") ?>
-       
+        <?php include("../../include/header.php") ?>
+        <!-- side nav -->
+        <?php include("../../include/sidenav.php") ?>
+
         <div class="content-body">
             <div class="container">
                 <div class="row">
@@ -57,22 +61,22 @@ include("../../server/connection.php");
                 <div class="row">
                     <div class="col-xxl-12 col-xl-12">
 
-                  
+
 
                         <div class="row">
-             
-                            
+
+
                             <?php
 
 
                             $user_id = $_SESSION['user_id'];
 
-                          
+
                             $limit = 10;
                             $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
                             $offset = ($page - 1) * $limit;
 
-                          
+
                             $count_sql = "
     SELECT COUNT(*) AS total 
     FROM loan_requests 
@@ -128,11 +132,11 @@ include("../../server/connection.php");
                                                     <?php if (mysqli_num_rows($result) > 0): $count = 0 ?>
                                                         <?php while ($row = mysqli_fetch_assoc($result)):  $count++ ?>
                                                             <tr>
-                                                                <td><?=  $count?></td>
+                                                                <td><?= $count ?></td>
                                                                 <td><?= htmlspecialchars($row['fullname']) ?></td>
                                                                 <td>$<?= number_format($row['loan_amount'], 2) ?></td>
 
-                                                                   <td><?= date("Y-m-d", strtotime($row['created_at'])) ?></td>
+                                                                <td><?= date("Y-m-d", strtotime($row['created_at'])) ?></td>
                                                                 <td>
                                                                     <span class="badge 
                                             <?php
@@ -143,7 +147,7 @@ include("../../server/connection.php");
                                                                         <?= ucfirst($row['status']) ?>
                                                                     </span>
                                                                 </td>
-                                                             
+
                                                             </tr>
                                                         <?php endwhile; ?>
                                                     <?php else: ?>

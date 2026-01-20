@@ -1,5 +1,5 @@
 <?php
-include("./server/connection.php");
+include("../../server/connection.php");
 
 
 $success = "";
@@ -98,21 +98,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $sitename ?>| Sign Up </title>
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="vendor/toastr/toastr.min.css">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
+    <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
+    <link rel="stylesheet" href="<?php echo $domain ?>/vendor/toastr/toastr.min.css">
 </head>
 
 <body class="dashboard">
-    <div id="preloader" class="preloader-wrapper">
-        <div class="loader">
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    </div>
+ 
+   
     <div class="authincation">
         <div class="container">
             <div class="row justify-content-center align-items-center g-0">
@@ -122,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                             <div class="welcome-content">
                                 <div class="welcome-title">
                                     <div class="mini-logo">
-                                        <a href="index.html"><img src="images/logo-white.png" alt="" width="30" /></a>
+                                        <a href="index.html"><img src="<?php echo $domain ?>/images/logo-white.png" alt="" width="30" /></a>
                                     </div>
                                     <h3>Welcome to Zentra Bank</h3>
                                 </div>
@@ -184,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                         <button type="submit" class="btn btn-primary me-8 text-white">Sign Up</button>
                                     </div>
                                 </form>
-                                <p class="mt-3 mb-0 undefined">Already have an account?<a class="text-primary" href="signin.php"> Sign In</a></p>
+                                <p class="mt-3 mb-0 undefined">Already have an account?<a class="text-primary" href="../sign_in/"> Sign In</a></p>
                             </div>
                         </div>
                     </div>
@@ -193,9 +186,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         </div>
     </div>
 
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="js/scripts.js"></script>
+    <script src="<?php echo $domain ?>/vendor/jquery/jquery.min.js"></script>
+    <script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?php echo $domain ?>/js/scripts.js"></script>
 </body>
 
 </html>
