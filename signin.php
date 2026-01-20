@@ -51,12 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     echo "
                     <script>
                      setTimeout(() => {
-          window.location.href = './wallets.html'
+          window.location.href = './dashboard.php'
                  }, 2500);
                   </script>
                     ";
                 } else {
-                    $passwordErr = "invalid credential ";
+                    $passwordErr = "invalid credential";
                 }
             } else {
                 $emailErr = "No account found ";
@@ -85,13 +85,13 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 <body class="dashboard">
     <div id="preloader" class="preloader-wrapper">
-        <div class="loader">
+        <!-- <div class="loader">
             <div></div>
             <div></div>
             <div></div>
             <div></div>
             <div></div>
-        </div>
+        </div> -->
     </div>
     <div class="authincation">
         <div class="container">

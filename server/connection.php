@@ -60,5 +60,4 @@ if ($request === 'https') {
     }
 };
 
-
 session_start();

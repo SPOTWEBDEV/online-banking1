@@ -1,5 +1,4 @@
 <?php
-session_start();
 include("./server/connection.php");
 
 // if (!isset($_SESSION['user_id'])) {
@@ -277,8 +276,7 @@ $user_id = $_SESSION['user_id'];
                         $sql = "
     SELECT 
         deposits.amount,
-        deposits.method,
-        deposits.type,
+        deposits.type_id,
         deposits.status,
         deposits.date,
         users.fullname
@@ -303,7 +301,6 @@ $user_id = $_SESSION['user_id'];
                                             <tr>
                                                 <th>S/N</th>
                                                 <th>ACCOUNT HOLDER</th>
-                                                <th>METHOD</th>
                                                 <th>TYPE</th>
                                                 <th>AMOUNT</th>
                                                 <th>DATE</th>
@@ -317,8 +314,7 @@ $user_id = $_SESSION['user_id'];
                                                     <tr>
                                                         <td><?= $count ?></td>
                                                         <td><?= htmlspecialchars($row['fullname']) ?></td>
-                                                        <td><?= htmlspecialchars($row['method']) ?></td>
-                                                        <td><?= htmlspecialchars($row['type']) ?></td>
+                                                        <td><?= htmlspecialchars($row['type_id']) ?></td>
                                                         <td>$<?= number_format($row['amount'], 2) ?></td>
                                                         <td><?= date("Y-m-d", strtotime($row['date'])) ?></td>
                                                         <td>
