@@ -21,10 +21,10 @@ define("HOST", "localhost");
 
 if ($request === 'https') {
     $sitename = "Zentra Bank";
-    $domain = "";
-    define("USER", "");
-    define("PASSWORD", "");
-    define("DATABASE", "");
+    $domain = "https://zentrapb.com";
+    define("USER", "thestrat_zentra_bank");
+    define("PASSWORD", "thestrat_zentra_bank");
+    define("DATABASE", "thestrat_zentra_bank");
 
 
     $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);

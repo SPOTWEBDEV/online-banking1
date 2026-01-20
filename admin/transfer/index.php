@@ -1,6 +1,5 @@
 
 <?php
-session_start();
 include("../../server/connection.php");
 
 // if (!isset($_SESSION['user_id'])) {
@@ -31,7 +30,7 @@ $user_id = $_SESSION['user_id'];
 </head>
 
 <body class="dashboard">
-    <!-- <div id="preloader" class="preloader-wrapper">
+    <div id="preloader" class="preloader-wrapper">
         <div class="loader">
             <div></div>
             <div></div>
@@ -39,7 +38,7 @@ $user_id = $_SESSION['user_id'];
             <div></div>
             <div></div>
         </div>
-    </div> -->
+    </div>
     <div id="main-wrapper">
         <!-- header -->
            <?php include("../include/nav.php") ?>

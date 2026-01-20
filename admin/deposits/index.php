@@ -44,7 +44,7 @@ $user_id = $_SESSION['user_id'];
      <?php include("../include/nav.php") ?>
        
         <!-- Side Nav -->
-     <?php include("./include/sidenav.php") ?>
+     <?php include("../include/sidenav.php") ?>
 
 
         <div class="content-body">
