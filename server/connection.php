@@ -34,7 +34,7 @@ if ($request === 'https') {
     }
 } elseif ($request === 'http') {
     $sitename = "Zentra Bank";
-    $domain = "http://localhost/online-banking1";
+    $domain = "http://localhost/zentra-bank";
     define("USER", "root");
     define("PASSWORD", "");
     define("DATABASE", "zentra_bank");
@@ -47,7 +47,7 @@ if ($request === 'https') {
     }
 } else {
     $sitename = "Zentra Bank";
-    $domain = "http://localhost/online-banking1";
+    $domain = "http://localhost/zentra-bank";
     define("USER", "root");
     define("PASSWORD", "");
     define("DATABASE", "zentra_bank");
