@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     echo "
                     <script>
                      setTimeout(() => {
-          window.location.href = './dashboard.php'
+          window.location.href = '{$domain}/dashboard/'
                  }, 2500);
                   </script>
                     ";

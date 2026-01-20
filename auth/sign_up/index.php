@@ -8,6 +8,7 @@ $emailErr = "";
 $passwordErr = "";
 $confirmPasswordErr = "";
 $termsErr = "";
+$exist_err = "";
 
 
 $fullname = "";
@@ -46,18 +47,32 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $hasError = true;
     }
 
- 
+
     if ($password !== $confirmPassword) {
         $confirmPasswordErr = "Passwords do not match";
         $hasError = true;
     }
 
- 
+
     if (empty($accept_terms)) {
         $termsErr = "Please accept terms and conditions";
         $hasError = true;
     }
 
+
+
+    $sql_exist = "SELECT id, fullname, email, password FROM users WHERE email = ?";
+    $stmt_exist = mysqli_prepare($connection, $sql_exist);
+    mysqli_stmt_bind_param($stmt_exist, "s", $email);
+    if (mysqli_stmt_execute($stmt_exist)) {
+        echo  " <script>
+                     setTimeout(() => {
+          window.location.href = '../sign_in/'
+                 }, 200);
+                  </script>
+                    ";
+        exit;
+    }
 
     if (!$hasError) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -75,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 $accept_terms = "";
                 echo  " <script>
                      setTimeout(() => {
-          window.location.href = './signin.php'
+          window.location.href = '../sign_in/'
                  }, 2500);
                   </script>
                     ";
@@ -104,8 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 </head>
 
 <body class="dashboard">
- 
-   
+
+
     <div class="authincation">
         <div class="container">
             <div class="row justify-content-center align-items-center g-0">
@@ -139,6 +154,10 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                 <?php if (!empty($success)) { ?>
                                     <div class="alert alert-success"><?= $success ?></div>
                                 <?php } ?>
+                                <?php if (!empty($exist_err)) { ?>
+                                    <div class="alert alert-error"><?= $exist_err ?></div>
+                                <?php } ?>
+
 
                                 <form action="" method="POST">
                                     <div class="row">
