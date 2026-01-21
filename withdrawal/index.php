@@ -1,9 +1,6 @@
 <?php
 include("../server/connection.php");
-
-if (!isset($_SESSION['user_id'])) {
-    header("location: {$domain}/auth/sign_in/");
-}
+include("../server/auth/client.php");
 
 $user_id = (int) ($_SESSION['user_id'] ?? 0);
 $errors = [];
@@ -187,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
                                         <h4 class="card-title">Withdrawal Details</h4>
-                                        <span class="badge bg-success">$0</span>
+                                        <span class="badge bg-success">$<?php echo $client['balance'] ?></span>
                                     </div>
 
                                     <div class="card-body">

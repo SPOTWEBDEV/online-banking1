@@ -10,7 +10,7 @@
         right: 0;
         bottom: 0;
         height: var(--bottom-nav-h);
-          z-index: 1030;
+        z-index: 1030;
         display: flex;
         justify-content: space-around;
         align-items: center;
@@ -109,8 +109,22 @@
         <ul>
             <li>
                 <a href="<?php echo $domain ?>/dashboard/">
-                    <span><i class="fi fi-rr-dashboard"></i></span>
+                    <span><i class="fi fi-rr-home"></i></span>
                     <span class="nav-text">Dashboard</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="<?= $domain ?>/deposits/">
+                    <span><i class="fi fi-rr-bank"></i></span>
+                    <span class="nav-text">Deposits</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="<?= $domain ?>/transfer/">
+                    <span><i class="fi fi-rr-exchange"></i></span>
+                    <span class="nav-text">Transfers</span>
                 </a>
             </li>
 

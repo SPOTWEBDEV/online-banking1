@@ -222,70 +222,9 @@ echo json_encode([
 
                 <div class="row">
 
-                    <div class="col-xl-4 col-lg-6 col-md-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Payments History</h4>
-                                <a href="index.html#">See more</a>
-                            </div>
-                            <div class="card-body">
-                                <div class="invoice-content">
-                                    <ul>
-                                        <li class="d-flex justify-content-between active">
-                                            <div class="d-flex align-items-center">
-                                                <div class="invoice-info">
-                                                    <h5 class="mb-0">Electricity</h5>
-                                                    <p>5 january 2024</p>
-                                                </div>
-                                            </div>
-                                            <div class="text-end">
-                                                <h5 class="mb-2">+450.00</h5>
-                                                <span class=" text-white bg-success">Paid</span>
-                                            </div>
-                                        </li>
-                                        <li class="d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <div class="invoice-info">
-                                                    <h5 class="mb-0">Internet</h5>
-                                                    <p>5 january 2024</p>
-                                                </div>
-                                            </div>
-                                            <div class="text-end">
-                                                <h5 class="mb-2">+450.00</h5>
-                                                <span class=" text-white bg-warning">Due</span>
-                                            </div>
-                                        </li>
-                                        <li class="d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <div class="invoice-info">
-                                                    <h5 class="mb-0">Apple Music</h5>
-                                                    <p>5 january 2024</p>
-                                                </div>
-                                            </div>
-                                            <div class="text-end">
-                                                <h5 class="mb-2">+450.00</h5>
-                                                <span class=" text-white bg-danger">Cancel</span>
-                                            </div>
-                                        </li>
-                                        <li class="d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <div class="invoice-info">
-                                                    <h5 class="mb-0">Groceries</h5>
-                                                    <p>5 january 2024</p>
-                                                </div>
-                                            </div>
-                                            <div class="text-end">
-                                                <h5 class="mb-2">+450.00</h5>
-                                                <span class=" text-white bg-success">Paid</span>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
 
-                    <div class="col-xl-8">
+                    <div class="col-12">
                         <div class="card">
                             <div class="card-header">
                                 <h4 class="card-title">Transfer History</h4>

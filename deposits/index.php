@@ -88,10 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <!-- <div class="breadcrumbs"><a href="settings-api.html#">Home </a>
-                                        <span><i class="fi fi-rr-angle-small-right"></i></span>
-                                        <a href="settings-api.html#">Api</a>
-                                    </div> -->
+                                     <a href="./deposits_history/"><button class="btn btn-primary mr-2">View Deposit History</button></a>
                                 </div>
                             </div>
                         </div>

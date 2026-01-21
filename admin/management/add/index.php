@@ -17,7 +17,7 @@ include("../../controllers/management.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ekash : Personal Finance Management Admin Dashboard HTML Template</title>
+    <title><?php echo $sitename ?></title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
     <!-- Custom Stylesheet -->
@@ -27,7 +27,7 @@ include("../../controllers/management.php");
 
 <body class="dashboard">
     <div id="main-wrapper">
-         <?php include("../../include/nav.php") ?>
+        <?php include("../../include/nav.php") ?>
         <?php include("../../include/sidenav.php") ?>
         <div class="content-body">
             <div class="verification">
@@ -211,20 +211,28 @@ include("../../controllers/management.php");
                                     <form method="POST" class="form-style">
 
                                         <label>User</label>
-                                        <select name="user_id" class="form-control" required>
-                                            <option value="">Select User</option>
-                                            <?php while ($u = $users->fetch_assoc()) { ?>
-                                                <option value="<?= $u['id'] ?>">
-                                                    <?= $u['fullname'] ?> (<?= $u['email'] ?>)
-                                                </option>
-                                            <?php } ?>
+                                        <select name="user_id" class="form-control">
+                                            <option selected>Select User</option>
+                                            <?php
+                                            $users = mysqli_query($connection, "SELECT id, fullname FROM users ORDER BY fullname ASC");
+                                            while ($u = mysqli_fetch_assoc($users)) {
+                                                echo '<option value="' . $u['id'] . '">' . $u['fullname'] . '</option>';
+                                            }
+                                            ?>
                                         </select>
 
-                                        <label>Method (e.g. Bank Transfer, Crypto, Paystack)</label>
-                                        <input type="text" name="method" class="form-control" required>
+                                        <label class="mt-3">Method (e.g. Bank Transfer, Crypto, Paystack)</label>
+                                        <select name="type" class="form-control">
+                                            <option selected>Select Method</option>
+                                            <?php
+                                            $users = mysqli_query($connection, "SELECT id, type FROM payment_account");
+                                            while ($u = mysqli_fetch_assoc($users)) {
+                                                echo '<option value="' . $u['id'] . '">' . $u['type'] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                        
 
-                                        <label>Type (e.g. Deposit / Withdrawal)</label>
-                                        <input type="text" name="type" class="form-control" required>
 
                                         <label>Amount</label>
                                         <input type="number" step="0.01" name="amount" class="form-control" required>
@@ -235,6 +243,9 @@ include("../../controllers/management.php");
                                             <option value="approved">Approved</option>
                                             <option value="failed">Failed</option>
                                         </select>
+
+                                        <label>Date</label>
+                                        <input type="date"  name="date" class="form-control" required>
 
                                         <button type="submit" name="add_deposit" class="btn-submit mt-3 btn btn-success w-100">Submit Deposit</button>
 

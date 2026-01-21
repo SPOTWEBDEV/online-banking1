@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 21, 2026 at 09:03 AM
+-- Generation Time: Jan 21, 2026 at 01:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -44,6 +44,54 @@ INSERT INTO `admin` (`id`, `name`, `email`, `password`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `bank_list`
+--
+
+CREATE TABLE `bank_list` (
+  `id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `bank_list`
+--
+
+INSERT INTO `bank_list` (`id`, `name`) VALUES
+(5, 'Accion Opportunity Fund'),
+(6, 'Ally Bank'),
+(7, 'American Express National Bank'),
+(8, 'Bank of America'),
+(9, 'BBVA USA'),
+(10, 'Capital One'),
+(11, 'Charles Schwab Bank'),
+(12, 'Chase Bank'),
+(13, 'Citibank'),
+(14, 'Citizens Bank'),
+(15, 'Fifth Third Bank'),
+(16, 'First Citizens Bank'),
+(17, 'First Horizon Bank'),
+(18, 'Goldman Sachs'),
+(19, 'Grameen America'),
+(20, 'Huntington National Bank'),
+(21, 'Justine Petersen'),
+(22, 'KeyBank'),
+(23, 'M&T Bank'),
+(24, 'Morgan Stanley'),
+(25, 'Pacific Community Ventures'),
+(26, 'PNC Bank'),
+(27, 'Regions Bank'),
+(28, 'Santander Bank'),
+(29, 'TD Bank'),
+(30, 'Truist Bank'),
+(31, 'U.S. Bank'),
+(32, 'Union Bank'),
+(33, 'Wells Fargo'),
+(34, 'Zions Bank'),
+(36, 'Firstclass Bank');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `bank_transfers`
 --
 
@@ -69,9 +117,7 @@ CREATE TABLE `bank_transfers` (
 --
 
 INSERT INTO `bank_transfers` (`id`, `user_id`, `receiver_account_number`, `receiver_bank`, `receiver_name`, `routing_number`, `swift_code`, `amount`, `otp_code`, `otp_expires_at`, `status`, `created_at`, `updated_at`, `narration`) VALUES
-(1, 1, '4444444444444', 'ayoguchimezie00@gmail.com', '', '5555555555', '333333333333333333', 80000.00, '961661', '2026-01-19 15:17:49', 'pending', '2026-01-19 14:12:49', '2026-01-19 14:12:49', 'sgwrrrrrrrr'),
-(2, 1, '4444444444444', 'ayoguchimezie00@gmail.com', '', '5555555555', '333333333333333333', 80000.00, '654593', '2026-01-19 15:19:00', 'pending', '2026-01-19 14:14:00', '2026-01-19 14:14:00', 'sgwrrrrrrrr'),
-(3, 1, '4444444444444', 'ayoguchimezie00@gmail.com', '', '5555555555', '333333333333333333', 80000.00, '544330', '2026-01-19 15:19:20', 'pending', '2026-01-19 14:14:20', '2026-01-19 14:14:20', 'sgwrrrrrrrr');
+(4, 3, '48858589595', '', 'Ally Bank', '12345678909', '5895949', 50.00, '578355', '2026-01-21 13:37:49', 'pending', '2026-01-21 12:32:49', '2026-01-21 12:32:49', 'he ask for it');
 
 -- --------------------------------------------------------
 
@@ -84,7 +130,7 @@ CREATE TABLE `deposits` (
   `user_id` int(11) NOT NULL,
   `type_id` int(11) NOT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `status` enum('pending','approved','failed') DEFAULT 'pending',
+  `status` enum('pending','approved','declined','failed') DEFAULT 'pending',
   `date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -93,17 +139,8 @@ CREATE TABLE `deposits` (
 --
 
 INSERT INTO `deposits` (`id`, `user_id`, `type_id`, `amount`, `status`, `date`) VALUES
-(1, 1, 0, 50000.00, 'approved', '2026-01-17 22:29:37'),
-(2, 1, 0, 120000.00, 'approved', '2026-01-17 22:29:37'),
-(3, 1, 0, 30000.00, 'pending', '2026-01-17 22:29:37'),
-(4, 1, 0, 80000.00, 'approved', '2026-01-17 22:29:37'),
-(5, 1, 0, 150000.00, 'failed', '2026-01-17 22:29:37'),
-(6, 1, 0, 45000.00, 'pending', '2026-01-17 22:29:37'),
-(7, 1, 0, 400.00, 'pending', '2026-01-17 23:30:18'),
-(8, 1, 0, 400.00, 'pending', '2026-01-17 23:46:32'),
-(9, 1, 0, 20.00, 'pending', '2026-01-17 23:47:04'),
-(10, 1, 1, 3000.00, 'pending', '2026-01-19 13:12:47'),
-(11, 2, 1, 200.00, 'pending', '2026-01-21 00:23:34');
+(19, 1, 1, 100.00, 'approved', '2026-01-18 23:00:00'),
+(20, 3, 2, 100.00, 'pending', '2023-06-20 23:00:00');
 
 -- --------------------------------------------------------
 
@@ -137,7 +174,8 @@ INSERT INTO `investments` (`id`, `user_id`, `plan_name`, `amount_invested`, `dai
 (7, 1, 'PLATINUM PLAN', 1000.00, 500.00, 1500.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
 (8, 1, 'PLATINUM PLAN', 1200.00, 600.00, 1800.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
 (9, 1, 'PLATINUM PLAN', 1500.00, 750.00, 2250.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(10, 1, 'GOLD PLAN', 800.00, 400.00, 1200.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13');
+(10, 1, 'GOLD PLAN', 800.00, 400.00, 1200.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
+(11, 0, 'Select Plan', 0.00, 0.00, 0.00, '0000-00-00', '0000-00-00', '2026-01-21 09:41:49');
 
 -- --------------------------------------------------------
 
@@ -179,6 +217,7 @@ CREATE TABLE `loan_requests` (
   `account_number` varchar(30) DEFAULT NULL,
   `interest_rate` decimal(5,2) DEFAULT 0.00,
   `total_payable` decimal(15,2) DEFAULT 0.00,
+  `paid` varchar(255) NOT NULL,
   `status` enum('pending','approved','rejected','paid') DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
@@ -188,12 +227,12 @@ CREATE TABLE `loan_requests` (
 -- Dumping data for table `loan_requests`
 --
 
-INSERT INTO `loan_requests` (`id`, `user_id`, `loan_amount`, `loan_duration`, `loan_reason`, `monthly_income`, `employment_status`, `bank_name`, `account_number`, `interest_rate`, `total_payable`, `status`, `created_at`, `updated_at`) VALUES
-(1, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, 'pending', '2026-01-16 11:38:33', '2026-01-16 11:38:33'),
-(2, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, 'pending', '2026-01-16 11:40:15', '2026-01-16 11:40:15'),
-(3, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, 'pending', '2026-01-16 11:42:02', '2026-01-16 11:42:02'),
-(4, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, 'pending', '2026-01-16 14:04:26', '2026-01-16 14:04:26'),
-(5, 2, 4000.00, 3, 'school fees', 30000.00, 'self-employed', 'Growth Bank', '22669056778', 5.00, 4600.00, 'pending', '2026-01-21 00:57:15', '2026-01-21 00:57:15');
+INSERT INTO `loan_requests` (`id`, `user_id`, `loan_amount`, `loan_duration`, `loan_reason`, `monthly_income`, `employment_status`, `bank_name`, `account_number`, `interest_rate`, `total_payable`, `paid`, `status`, `created_at`, `updated_at`) VALUES
+(1, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, '', 'pending', '2026-01-16 11:38:33', '2026-01-16 11:38:33'),
+(2, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, '', 'pending', '2026-01-16 11:40:15', '2026-01-16 11:40:15'),
+(3, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, '', 'pending', '2026-01-16 11:42:02', '2026-01-16 11:42:02'),
+(4, 1, 500.00, 3, 'rooot', 5000.00, 'self-employed', 'opay', '7019855552', 5.00, 575.00, '', 'pending', '2026-01-16 14:04:26', '2026-01-16 14:04:26'),
+(5, 2, 4000.00, 3, 'school fees', 30000.00, 'self-employed', 'Growth Bank', '22669056778', 5.00, 4600.00, '', 'pending', '2026-01-21 00:57:15', '2026-01-21 00:57:15');
 
 -- --------------------------------------------------------
 
@@ -248,7 +287,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `user_profile`, `created_at`, `balance`, `loan_balance`, `crypto_balance`, `virtual_card_balance`, `status`) VALUES
 (1, 'Ayogu Chimezie', 'ayoguchimezie00@gmail.com', '$2y$10$3TDQcP9cgdC812dL4L89P.Ih6KRnDso5o27O.ufH5mE2/zThcN1si', '/images/avatar/profile_696a3fcc9a25d0.85272167.jpeg', '2026-01-15 13:11:50', 0.00, 0.00, 0.00, 0.00, 'active'),
-(2, 'Ezea Ugochukwu micheal', 'spotwebdev.com@gmail.com', '$2y$10$.XTST3H2SnvIc8gGMGTL3.dDKh1Mnd0uInDm.9K.f.wd9/rZBe29y', NULL, '2026-01-20 23:15:35', 0.00, 0.00, 0.00, 0.00, 'active');
+(2, 'Ezea Ugochukwu micheal', 'spotwebdev.com@gmail.com', '$2y$10$.XTST3H2SnvIc8gGMGTL3.dDKh1Mnd0uInDm.9K.f.wd9/rZBe29y', NULL, '2026-01-20 23:15:35', 0.00, 0.00, 0.00, 0.00, 'active'),
+(3, 'jenny rose', 'jennyrose@gmail.com', '$2y$10$Ky0ZxlH/cppRIhUquEsomuUsrU1vpO1XmBQhuhWaOsfz2fpEtNvIa', NULL, '2026-01-21 11:26:02', 100.00, 0.00, 0.00, 0.00, 'active');
 
 -- --------------------------------------------------------
 
@@ -280,6 +320,12 @@ INSERT INTO `withdrawals` (`id`, `user_id`, `amount`, `which_account`, `status`,
 -- Indexes for table `admin`
 --
 ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `bank_list`
+--
+ALTER TABLE `bank_list`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -343,22 +389,28 @@ ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT for table `bank_list`
+--
+ALTER TABLE `bank_list`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+
+--
 -- AUTO_INCREMENT for table `bank_transfers`
 --
 ALTER TABLE `bank_transfers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `deposits`
 --
 ALTER TABLE `deposits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `investments`
 --
 ALTER TABLE `investments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `investment_plans`
@@ -382,7 +434,7 @@ ALTER TABLE `payment_account`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `withdrawals`
