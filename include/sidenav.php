@@ -10,7 +10,7 @@
         right: 0;
         bottom: 0;
         height: var(--bottom-nav-h);
-        z-index: 9999;
+          z-index: 1030;
         display: flex;
         justify-content: space-around;
         align-items: center;
