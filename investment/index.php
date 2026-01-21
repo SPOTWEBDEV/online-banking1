@@ -130,7 +130,7 @@ if (!$inv_stmt) {
         }
 
         .invest-card {
-            background: #171a1d;
+            background: white;
             border-radius: 20px;
             padding: 22px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
@@ -159,7 +159,7 @@ if (!$inv_stmt) {
             margin: 0;
             font-weight: 700;
             letter-spacing: .5px;
-            color: #e9eef2;
+            color: #1f2429;
             text-transform: uppercase;
             font-size: 18px;
         }
@@ -183,7 +183,7 @@ if (!$inv_stmt) {
             margin-bottom: 6px;
             font-size: 34px;
             font-weight: 800;
-            color: #e9eef2;
+            color: #1f2429;
             flex-wrap: wrap;
         }
 
