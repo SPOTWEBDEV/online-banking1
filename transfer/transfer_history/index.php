@@ -1,5 +1,5 @@
 <?php
-session_start();
+
 include("../../server/connection.php");
 
 if (!isset($_SESSION['user_id'])) {
@@ -51,10 +51,7 @@ $user_id = $_SESSION['user_id'];
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <!-- <div class="breadcrumbs"><a href="settings-api.html#">Home </a>
-                                        <span><i class="fi fi-rr-angle-small-right"></i></span>
-                                        <a href="settings-api.html#">Api</a>
-                                    </div> -->
+                                     <a href="../"><button class="btn btn-primary mr-2">Transfer</button></a>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +83,7 @@ $user_id = $_SESSION['user_id'];
                             SELECT 
                                 bank_transfers.id,
                                 bank_transfers.receiver_account_number,
-                                bank_transfers.receiver_email,
+                                bank_transfers.receiver_name,
                                 bank_transfers.routing_number,
                                 bank_transfers.swift_code,
                                 bank_transfers.amount,
@@ -114,15 +111,15 @@ $user_id = $_SESSION['user_id'];
                                         <thead>
                                             <tr>
                                                 <th>S/N</th>
-                                                <th>ACCOUNT HOLDER</th>
+                                                <th>RECEIVER NAME</th>
                                                 <th>RECEIVER ACC NO</th>
-                                                <th>RECEIVER EMAIL</th>
                                                 <th>ROUTING</th>
                                                 <th>SWIFT</th>
                                                 <th>AMOUNT</th>
                                                 <th>NARRATION</th>
                                                 <th>DATE</th>
                                                 <th>STATUS</th>
+                                                <th>ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -131,9 +128,8 @@ $user_id = $_SESSION['user_id'];
                                                 <?php while ($row = mysqli_fetch_assoc($result)): $count++; ?>
                                                     <tr>
                                                         <td><?= $count ?></td>
-                                                        <td><?= htmlspecialchars($row['fullname']) ?></td>
+                                                        <td><?= htmlspecialchars($row['receiver_name']) ?></td>
                                                         <td><?= htmlspecialchars($row['receiver_account_number']) ?></td>
-                                                        <td><?= htmlspecialchars($row['receiver_email']) ?></td>
                                                         <td><?= htmlspecialchars($row['routing_number'] ?? '') ?></td>
                                                         <td><?= htmlspecialchars($row['swift_code'] ?? '') ?></td>
                                                         <td>$<?= number_format($row['amount'], 2) ?></td>
@@ -148,6 +144,9 @@ $user_id = $_SESSION['user_id'];
                                                                 ?>">
                                                                 <?= ucfirst($row['status']) ?>
                                                             </span>
+                                                        </td>
+                                                        <td>
+                                                            <a href="./details/?id=<?php echo $row['id'] ?>"> <span class="badge p-2 bg-info text-white">View Details</span></a>
                                                         </td>
                                                     </tr>
                                                 <?php endwhile; ?>

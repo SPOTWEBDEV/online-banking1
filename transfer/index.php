@@ -7,7 +7,7 @@ $errors = [];
 $success = "";
 
 if (!isset($_SESSION['user_id']) || !is_numeric($_SESSION['user_id'])) {
-   header("location: {$domain}/auth/sign_in/");
+    header("location: {$domain}/auth/sign_in/");
     exit;
 }
 
@@ -16,7 +16,8 @@ $user_id = (int) $_SESSION['user_id'];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $receiver_account_number = isset($_POST["receiver_account_number"]) ? trim($_POST["receiver_account_number"]) : "";
-    $receiver_email          = isset($_POST["receiver_email"]) ? trim($_POST["receiver_email"]) : "";
+    $receiver_name          = isset($_POST["receiver_name"]) ? trim($_POST["receiver_name"]) : "";
+    $receiver_bank          = isset($_POST["receiver_bank"]) ? trim($_POST["receiver_bank"]) : "";
     $routing_number          = isset($_POST["routing_number"]) ? trim($_POST["routing_number"]) : "";
     $swift_code              = isset($_POST["swift_code"]) ? trim($_POST["swift_code"]) : "";
     $amount                  = isset($_POST["amount"]) ? trim($_POST["amount"]) : "";
@@ -29,10 +30,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors[] = "Receiver account number must be between 8 and 30 characters.";
     }
 
-    if ($receiver_email === "") {
-        $errors[] = "Receiver email is required.";
-    } elseif (!filter_var($receiver_email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Receiver email is not valid.";
+    if ($receiver_name === "") {
+        $errors[] = "Receiver Name is required.";
+    } elseif (strlen($receiver_name) < 3 || strlen($receiver_name) > 100) {
+        $errors[] = "Receiver Name must be between 3 and 100 characters.";
     }
 
 
@@ -66,13 +67,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $otp_expires_at = date("Y-m-d H:i:s", time() + (5 * 60));
 
 
-        $insert_sql = "
-            INSERT INTO bank_transfers
-                (user_id, receiver_account_number, receiver_email, routing_number, swift_code, amount, narration, otp_code, otp_expires_at, status)
-            VALUES
-                (?, ?, ?, ?, ?, ?, ?, ?, ?, 'pending')
-        ";
-
+        $insert_sql = "INSERT INTO bank_transfers 
+            (user_id, receiver_account_number, receiver_name, receiver_bank, routing_number, swift_code, amount, narration, otp_code, otp_expires_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
         $stmt = mysqli_prepare($connection, $insert_sql);
 
         if (!$stmt) {
@@ -82,10 +79,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             mysqli_stmt_bind_param(
                 $stmt,
-                "issssdsss",
+                "isssssdsss",
                 $user_id,
                 $receiver_account_number,
-                $receiver_email,
+                $receiver_name,
+                $receiver_bank,
                 $routing_number,
                 $swift_code,
                 $amount_decimal,
@@ -133,8 +131,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <div id="main-wrapper">
         <!-- nav -->
         <?php include("../include/header.php") ?>
-            <!-- sidenav-->     
-         <?php include("../include/sidenav.php") ?>
+        <!-- sidenav-->
+        <?php include("../include/sidenav.php") ?>
 
         <div class="content-body">
             <div class="container">
@@ -149,10 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <!-- <div class="breadcrumbs"><a href="settings-api.html#">Home </a>
-                                        <span><i class="fi fi-rr-angle-small-right"></i></span>
-                                        <a href="settings-api.html#">Api</a>
-                                    </div> -->
+                                    <a href="./transfer_history/"><button class="btn btn-primary mr-2">View Transfer History</button></a>
                                 </div>
                             </div>
                         </div>
@@ -194,9 +189,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                                                 <!-- Receiver Email -->
                                                 <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
-                                                    <label class="form-label">Receiver Email</label>
-                                                    <input name="receiver_email" type="email" class="form-control" placeholder="Enter receiver email">
+                                                    <label class="form-label">Receiver Account Name</label>
+                                                    <input name="receiver_name" type="text" class="form-control" placeholder="Enter receiver Name">
                                                 </div>
+
+                                                <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
+
+                                                    <label class="form-label">Select Bank</label>
+
+                                                    <select name="receiver_name" class="form-control">
+                                                        <option selected>Select Bank</option>
+                                                        <?php
+                                                        $users = mysqli_query($connection, "SELECT id, name FROM bank_list");
+                                                        while ($u = mysqli_fetch_assoc($users)) {
+                                                            echo '<option value="' . $u['name'] . '">' . $u['name'] . '</option>';
+                                                        }
+                                                        ?>
+                                                    </select>
+
+                                                </div>
+
+
 
                                                 <!-- Routing Number -->
                                                 <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">

@@ -109,27 +109,37 @@
 
     // Insert deposit
     if (isset($_POST['add_deposit'])) {
+
         $user_id = $_POST['user_id'];
-        $method  = $_POST['method'];
         $type    = $_POST['type'];
         $amount  = $_POST['amount'];
         $status  = $_POST['status'];
+        $date  = $_POST['date'];
+
+
+        echo "<script>Swal.fire('Deposit  $status','','success')</script>";
+
+
 
         $insert = $connection->prepare("
-        INSERT INTO deposits (user_id, method, type, amount, status)
+        INSERT INTO deposits (user_id, type_id, amount, status, date)
         VALUES (?, ?, ?, ?, ?)
     ");
 
         $insert->bind_param(
-            "issds",
+            "issss",
             $user_id,
-            $method,
             $type,
             $amount,
-            $status
+            $status,
+            $date
         );
 
         if ($insert->execute()) {
+
+            $insert = $connection->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
+            $insert->bind_param("di", $amount, $user_id);
+            $insert->execute();
 
             echo "<script>Swal.fire('Deposit Added Successfully','','success')</script>";
             echo "<script> setTimeout(()=> { window.location.href = '$domain/admin/management/add'},1000) </script>";
