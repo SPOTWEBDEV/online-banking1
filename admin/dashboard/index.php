@@ -4,16 +4,16 @@ include("../../server/connection.php");
 
 
 // Total deposit
-$deposit = $conn->query("SELECT SUM(amount) AS total_deposit FROM deposits")->fetch_assoc();
+$deposit = $connection->query("SELECT SUM(amount) AS total_deposit FROM deposits")->fetch_assoc();
 
 // Total investment
-$investment = $conn->query("SELECT SUM(amount_invested) AS total_investment FROM investments")->fetch_assoc();
+$investment = $connection->query("SELECT SUM(amount_invested) AS total_investment FROM investments")->fetch_assoc();
 
 // Total withdrawal
-$withdrawal = $conn->query("SELECT SUM(amount) AS total_withdrawal FROM withdrawals")->fetch_assoc();
+$withdrawal = $connection->query("SELECT SUM(amount) AS total_withdrawal FROM withdrawals")->fetch_assoc();
 
 // Total loan requests
-$loan = $conn->query("SELECT SUM(amount_requested) AS total_loan FROM loan_requests")->fetch_assoc();
+$loan = $connection->query("SELECT SUM(loan_amount) AS total_loan FROM loan_requests")->fetch_assoc();
 
 echo json_encode([
     "success" => true,
@@ -185,8 +185,8 @@ echo json_encode([
                 <div class="row">
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                         <div class="stat-widget-1">
-                            <h6>Total Deposit</h6>
-                            <h3 id="totalDeposit">$ 0</h3>
+                            <h6>Total Deposit Amount</h6>
+                            <h3 id="totalDeposit">$ <?php echo $deposit['total_deposit'] ?></h3>
                         </div>
                     </div>
 
@@ -280,7 +280,7 @@ echo json_encode([
                     <div class="col-xl-8">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Transaction History</h4>
+                                <h4 class="card-title">Transfer History</h4>
                             </div>
                             <div class="card-body">
                                 <div class="transaction-table">
@@ -288,93 +288,46 @@ echo json_encode([
                                         <table class="table mb-0 table-responsive-sm">
                                             <thead>
                                                 <tr>
-                                                    <th>Category</th>
-                                                    <th>Date</th>
-                                                    <th>Description</th>
+                                                    <th>Id</th>
+                                                    <th>Account Number</th>
+                                                    <th>Bank</th>
+                                                    <th>Narration</th>
                                                     <th>Amount</th>
-                                                    <th>Currency</th>
+                                                    <th>Status</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <span class="table-category-icon"><i class="bg-emerald-500 fi fi-rr-barber-shop"></i>
-                                                            Beauty</span>
-                                                    </td>
-                                                    <td>
-                                                        12.12.2023
-                                                    </td>
-                                                    <td>
-                                                        Grocery Items and Beverage soft drinks
-                                                    </td>
-                                                    <td>
-                                                        -32.20
-                                                    </td>
-                                                    <td>USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <span class="table-category-icon"><i class="bg-teal-500 fi fi-rr-receipt"></i> Bills &
-                                                            Fees</span>
-                                                    </td>
-                                                    <td>
-                                                        12.12.2023
-                                                    </td>
-                                                    <td>
-                                                        Grocery Items and Beverage soft drinks
-                                                    </td>
-                                                    <td>
-                                                        -32.20
-                                                    </td>
-                                                    <td>USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <span class="table-category-icon"><i class="bg-cyan-500 fi fi-rr-car-side"></i> Car</span>
-                                                    </td>
-                                                    <td>
-                                                        12.12.2023
-                                                    </td>
-                                                    <td>
-                                                        Grocery Items and Beverage soft drinks
-                                                    </td>
-                                                    <td>
-                                                        -32.20
-                                                    </td>
-                                                    <td>USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <span class="table-category-icon"><i class="bg-sky-500 fi fi-rr-graduation-cap"></i>
-                                                            Education</span>
-                                                    </td>
-                                                    <td>
-                                                        12.12.2023
-                                                    </td>
-                                                    <td>
-                                                        Grocery Items and Beverage soft drinks
-                                                    </td>
-                                                    <td>
-                                                        -32.20
-                                                    </td>
-                                                    <td>USD</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <span class="table-category-icon"><i class="bg-blue-500 fi fi-rr-clapperboard-play"></i>
-                                                            Entertainment</span>
-                                                    </td>
-                                                    <td>
-                                                        12.12.2023
-                                                    </td>
-                                                    <td>
-                                                        Grocery Items and Beverage soft drinks
-                                                    </td>
-                                                    <td>
-                                                        -32.20
-                                                    </td>
-                                                    <td>USD</td>
-                                                </tr>
+                                                <?php
+
+                                                $query = $connection->query("SELECT * FROM bank_transfers ORDER BY id DESC LIMIT 5");
+                                                if ($query->num_rows > 0) {
+                                                    while ($transfer = $query->fetch_assoc()) { ?>
+
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td><?php echo $transfer['receiver_account_number'] ?></td>
+                                                            <td><?php echo $transfer['receiver_bank'] ?></td>
+                                                            <td>Payment for services</td>
+                                                            <td>$<?php echo $transfer['amount']  ?></td>
+                                                            <td>
+                                                                <span class="badge text-white <?php
+                                                        echo ($transfer['status'] == 'pending')
+                                                            ? 'bg-warning'
+                                                            : (($transfer['status'] == 'completed')
+                                                                ? 'bg-success'
+                                                                : 'bg-danger');?>">
+                                                                    <?php echo ucfirst($transfer['status']); ?>
+                                                                </span>
+                                                            </td>
+
+                                                        </tr>
+
+                                                <?php }
+                                                }
+
+                                                ?>
+
+
                                             </tbody>
                                         </table>
                                     </div>

@@ -1,14 +1,13 @@
 <?php
 include("../../server/connection.php");
 
-
 $success = "";
 $fullnameErr = "";
 $emailErr = "";
 $passwordErr = "";
 $confirmPasswordErr = "";
 $termsErr = "";
-
+$exist_err = "";
 
 $fullname = "";
 $email = "";
@@ -24,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $hasError = false;
 
-
+    // VALIDATION
     if (empty($fullname)) {
         $fullnameErr = "Full name is required";
         $hasError = true;
@@ -46,19 +45,34 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $hasError = true;
     }
 
- 
     if ($password !== $confirmPassword) {
         $confirmPasswordErr = "Passwords do not match";
         $hasError = true;
     }
 
- 
     if (empty($accept_terms)) {
         $termsErr = "Please accept terms and conditions";
         $hasError = true;
     }
 
+    /*
+    ============================================
+    FIXED EMAIL CHECK — WORKS CORRECTLY NOW
+    ============================================
+    */
+    $sql_exist = "SELECT id FROM users WHERE email = ?";
+    $stmt_exist = mysqli_prepare($connection, $sql_exist);
+    mysqli_stmt_bind_param($stmt_exist, "s", $email);
+    mysqli_stmt_execute($stmt_exist);
+    mysqli_stmt_store_result($stmt_exist);
 
+    if (mysqli_stmt_num_rows($stmt_exist) > 0) {
+        $exist_err = "This email is already registered!";
+        $hasError = true;
+    }
+    mysqli_stmt_close($stmt_exist);
+
+    // If NO ERRORS → insert user
     if (!$hasError) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $sql = "INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)";
@@ -71,14 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             if (mysqli_stmt_affected_rows($stmt) > 0) {
                 $success = "User registered successfully";
 
-                $fullname = $email = "";
+                // clear form values
+                $fullname = "";
+                $email = "";
                 $accept_terms = "";
-                echo  " <script>
-                     setTimeout(() => {
-          window.location.href = './signin.php'
-                 }, 2500);
-                  </script>
-                    ";
+
+                echo  "<script>
+                        setTimeout(() => {
+                            window.location.href = '../sign_in/'
+                        }, 2500);
+                       </script>";
             } else {
                 $success = "Registration failed";
             }
@@ -104,8 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 </head>
 
 <body class="dashboard">
- 
-   
+
     <div class="authincation">
         <div class="container">
             <div class="row justify-content-center align-items-center g-0">
@@ -120,18 +135,19 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                     <h3>Welcome to Zentra Bank</h3>
                                 </div>
                                 <div class="privacy-social">
-                                    <div class="privacy-link"><a href="signup.html#">Have an issue with 2-factor authentication?</a><br /><a href="signup.html#">Privacy Policy</a></div>
+                                    <div class="privacy-link"><a href="#">Have an issue with 2-factor authentication?</a><br /><a href="#">Privacy Policy</a></div>
                                     <div class="intro-social">
                                         <ul>
-                                            <li><a href="signup.html#"><i class="fi fi-brands-facebook"></i></a></li>
-                                            <li><a href="signup.html#"><i class="fi fi-brands-twitter-alt"></i></a></li>
-                                            <li><a href="signup.html#"><i class="fi fi-brands-linkedin"></i></a></li>
-                                            <li><a href="signup.html#"><i class="fi fi-brands-pinterest"></i></a></li>
+                                            <li><a href="#"><i class="fi fi-brands-facebook"></i></a></li>
+                                            <li><a href="#"><i class="fi fi-brands-twitter-alt"></i></a></li>
+                                            <li><a href="#"><i class="fi fi-brands-linkedin"></i></a></li>
+                                            <li><a href="#"><i class="fi fi-brands-pinterest"></i></a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-lg-6">
                             <div class="auth-form">
                                 <h4>Sign Up</h4>
@@ -140,13 +156,19 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                     <div class="alert alert-success"><?= $success ?></div>
                                 <?php } ?>
 
+                                <?php if (!empty($exist_err)) { ?>
+                                    <div class="alert alert-danger"><?= $exist_err ?></div>
+                                <?php } ?>
+
                                 <form action="" method="POST">
                                     <div class="row">
+
                                         <div class="col-12 mb-3">
                                             <label class="form-label">Full Name</label>
                                             <input name="fullName" type="text" class="form-control" value="<?= htmlspecialchars($fullname) ?>" />
                                             <small style="color:red"><?= $fullnameErr ?></small>
                                         </div>
+
                                         <div class="col-12 mb-3">
                                             <label class="form-label">Email</label>
                                             <input name="email" type="text" class="form-control" value="<?= htmlspecialchars($email) ?>" />
@@ -168,18 +190,22 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                         <div class="col-12">
                                             <div class="form-check">
                                                 <input name="acceptTerms" type="checkbox" class="form-check-input" id="acceptTerms" <?= !empty($accept_terms) ? 'checked' : '' ?> />
-                                                <label class="form-check-label" for="acceptTerms">I certify that I am 18 years of age or older, and agree to the <a href="signup.html#" class="text-primary">User Agreement</a> and <a href="signup.html#" class="text-primary">Privacy Policy</a>.</label>
+                                                <label class="form-check-label" for="acceptTerms">I certify that I am 18 years of age or older, and agree to the <a href="#" class="text-primary">User Agreement</a> and <a href="#" class="text-primary">Privacy Policy</a>.</label>
                                                 <br><small style="color:red"><?= $termsErr ?></small>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="mt-3 d-grid gap-2">
                                         <button type="submit" class="btn btn-primary me-8 text-white">Sign Up</button>
                                     </div>
                                 </form>
-                                <p class="mt-3 mb-0 undefined">Already have an account?<a class="text-primary" href="../sign_in/"> Sign In</a></p>
+
+                                <p class="mt-3 mb-0">Already have an account?<a class="text-primary" href="../sign_in/"> Sign In</a></p>
+
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

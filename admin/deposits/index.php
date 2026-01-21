@@ -29,14 +29,14 @@ $user_id = $_SESSION['user_id'];
 </head>
 
 <body class="dashboard">
-    
+
     <div id="main-wrapper">
 
-    <!-- header -->
-     <?php include("../include/nav.php") ?>
-       
+        <!-- header -->
+        <?php include("../include/nav.php") ?>
+
         <!-- Side Nav -->
-     <?php include("../include/sidenav.php") ?>
+        <?php include("../include/sidenav.php") ?>
 
 
         <div class="content-body">
@@ -67,38 +67,26 @@ $user_id = $_SESSION['user_id'];
                     <div class="col-xxl-12 col-xl-12">
 
                         <?php
-                        $limit = 10;
-                        $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
-                        $offset = ($page - 1) * $limit;
-
-                        /* COUNT TOTAL RECORDS */
-                        $count_sql = "SELECT COUNT(*) AS total FROM deposits WHERE user_id = ?";
-                        $count_stmt = mysqli_prepare($connection, $count_sql);
-                        mysqli_stmt_bind_param($count_stmt, "i", $user_id);
-                        mysqli_stmt_execute($count_stmt);
-                        $count_result = mysqli_stmt_get_result($count_stmt);
-                        $total_row = mysqli_fetch_assoc($count_result);
-                        $total_records = $total_row['total'];
-                        $total_pages = ceil($total_records / $limit);
-                        mysqli_stmt_close($count_stmt);
-
-                        /* FETCH DEPOSIT HISTORY */
+                        /* FETCH DEPOSIT HISTORY  */
                         $sql = "
-    SELECT 
-        deposits.amount,
-        deposits.type_id,
-        deposits.status,
-        deposits.date,
-        users.fullname
-    FROM deposits
-    INNER JOIN users ON deposits.user_id = users.id
-    WHERE deposits.user_id = ?
-    ORDER BY deposits.id DESC
-    LIMIT ? OFFSET ?
-";
+                            SELECT 
+                            deposits.id,
+                                deposits.amount,
+                                deposits.type_id,
+                                deposits.status,
+                                deposits.date,
+                                users.fullname,
+                                payment_account.type,
+                                payment_account.account_number,
+                                payment_account.bank_name,
+                                payment_account.wallet_address
+                            FROM deposits
+                            INNER JOIN users ON deposits.user_id = users.id
+                            INNER JOIN payment_account ON payment_account.id = deposits.type_id
+                            ORDER BY deposits.id DESC
+                        ";
 
                         $stmt = mysqli_prepare($connection, $sql);
-                        mysqli_stmt_bind_param($stmt, "iii", $user_id, $limit, $offset);
                         mysqli_stmt_execute($stmt);
                         $result = mysqli_stmt_get_result($stmt);
                         ?>
@@ -115,6 +103,7 @@ $user_id = $_SESSION['user_id'];
                                                 <th>AMOUNT</th>
                                                 <th>DATE</th>
                                                 <th>STATUS</th>
+                                                <th>ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -124,7 +113,7 @@ $user_id = $_SESSION['user_id'];
                                                     <tr>
                                                         <td><?= $count ?></td>
                                                         <td><?= htmlspecialchars($row['fullname']) ?></td>
-                                                        <td><?= htmlspecialchars($row['type_id']) ?></td>
+                                                        <td><?= htmlspecialchars($row['type']) ?></td>
                                                         <td>$<?= number_format($row['amount'], 2) ?></td>
                                                         <td><?= date("Y-m-d", strtotime($row['date'])) ?></td>
                                                         <td>
@@ -136,6 +125,10 @@ $user_id = $_SESSION['user_id'];
         ?>">
                                                                 <?= ucfirst($row['status']) ?>
                                                             </span>
+                                                        </td>
+                                                        <td>
+                                                           <a href="./details/?id=<?php echo $row['id'] ?>"> <span class="badge p-2 bg-info text-white">View Details</span></a>
+
                                                         </td>
                                                     </tr>
                                                 <?php endwhile; ?>

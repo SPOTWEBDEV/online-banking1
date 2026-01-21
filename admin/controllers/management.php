@@ -115,7 +115,7 @@
         $amount  = $_POST['amount'];
         $status  = $_POST['status'];
 
-        $insert = $conn->prepare("
+        $insert = $connection->prepare("
         INSERT INTO deposits (user_id, method, type, amount, status)
         VALUES (?, ?, ?, ?, ?)
     ");

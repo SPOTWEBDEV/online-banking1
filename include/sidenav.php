@@ -122,6 +122,13 @@
             </li>
 
             <li>
+                <a href="<?= $domain ?>/withdrawal/">
+                    <span><i class="fi fi-rr-donate"></i></span>
+                    <span class="nav-text">Withdrawals</span>
+                </a>
+            </li>
+
+            <li>
                 <a href="<?php echo $domain ?>/loan/">
                     <span><i class="fi fi-rr-hand-holding-usd"></i></span>
                     <span class="nav-text">Loan</span>
@@ -130,7 +137,7 @@
 
             <li>
                 <a style="z-index: 5000 !important;" href="<?php echo $domain ?>/setting/">
-                    <span><i class="fi fi-sr-bullseye-arrow"></i></span>
+                    <span><i class="fi fi-rr-user"></i></span>
                     <span class="nav-text">Setting</span>
                 </a>
             </li>

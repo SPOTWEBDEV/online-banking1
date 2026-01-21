@@ -1,83 +1,10 @@
 <?php
-session_start();
+
 include("../../server/connection.php");
 
 $errors = [];
 $success = "";
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    if (!isset($_SESSION['user_id'])) {
-        header("location: ./signin.php");
-    }
-
-    $user_id = $_SESSION['user_id'] ?? null;
-
-    $loan_amount        = trim($_POST['loan_amount'] ?? '');
-    $loan_duration      = trim($_POST['loan_duration'] ?? '');
-    $loan_reason        = trim($_POST['loan_reason'] ?? '');
-    $monthly_income     = trim($_POST['monthly_income'] ?? '');
-    $employment_status  = trim($_POST['employment_status'] ?? '');
-    $account_number     = trim($_POST['account_number'] ?? '');
-    $bank_name          = trim($_POST['bank_name'] ?? '');
-
-    $loan_duration = intval($loan_duration);
-
-
-    if ($loan_amount === '' || $loan_duration === '' || $loan_reason === '' || $monthly_income === '' || $employment_status === '' || $account_number === '' || $bank_name === '') {
-        $errors[] = "All fields are required";
-    }
-
-    if ($loan_amount !== '') {
-        if (!is_numeric($loan_amount) || $loan_amount <= 0) {
-            $errors[] = "Invalid loan amount";
-        }
-    }
-
-
-
-    if (empty($errors)) {
-
-       
-        $interest_rate = 5; // 5% monthly
-        $monthly_interest = ($loan_amount * $interest_rate) / 100;
-        $total_interest = $monthly_interest * $loan_duration;
-        $total_payable = $loan_amount + $total_interest;
-
-        $sql = "INSERT INTO loan_requests 
-            (user_id, loan_amount, interest_rate, loan_duration, total_payable, loan_reason, monthly_income, employment_status, account_number, bank_name)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-        $stmt = mysqli_prepare($connection, $sql);
-
-        if ($stmt) {
-            mysqli_stmt_bind_param(
-                $stmt,
-                "iddidsdsss",
-                $user_id,
-                $loan_amount,
-                $interest_rate,
-                $loan_duration,
-                $total_payable,
-                $loan_reason,
-                $monthly_income,
-                $employment_status,
-                $account_number,
-                $bank_name
-            );
-
-            if (mysqli_stmt_execute($stmt)) {
-                $success = "Loan applied successfully. Awaiting approval.";
-            } else {
-                $errors[] = "Loan application failed. Please try again.";
-            }
-
-            mysqli_stmt_close($stmt);
-        } else {
-            $errors[] = "System error. Please contact support.";
-        }
-    }
-}
 ?>
 
 
@@ -199,6 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         <th>AMOUNT</th>
                                                         <th>APPLIED DATE</th>
                                                         <th>STATUS</th>
+                                                        <th>ACTION</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -220,6 +148,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             ?>">
                                                                         <?= ucfirst($row['status']) ?>
                                                                     </span>
+                                                                </td>
+                                                                <td>
+                                                                    <a href="loan_details.php?id=<?php echo $row['id'] ?>"> <span class="badge p-2 bg-info text-white">View Details</span></a>
                                                                 </td>
                                                              
                                                             </tr>

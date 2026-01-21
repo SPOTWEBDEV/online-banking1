@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
                         <div class="row g-4">
 
                             <!-- Error -->
-                            <div class="col-xxl-6 col-xl-6 col-lg-6">
+                            <div class="col-12">
                                 <?php if (!empty($errors)): ?>
                                     <div class="alert alert-danger">
                                         <p><?= htmlspecialchars($errors[0]) ?></p>

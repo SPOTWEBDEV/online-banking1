@@ -100,6 +100,7 @@ include("../../server/connection.php");
                                                 <th>CRYPTO</th>
                                                 <th>VIRTUAL CARD</th>
                                                 <th>CREATED</th>
+                                                <th>ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -115,6 +116,9 @@ include("../../server/connection.php");
                                                         <td>$<?= number_format((float)$row['crypto_balance'], 2) ?></td>
                                                         <td>$<?= number_format((float)$row['virtual_card_balance'], 2) ?></td>
                                                         <td><?= !empty($row['created_at']) ? date("Y-m-d", strtotime($row['created_at'])) : '-' ?></td>
+                                                        <td>
+                                                            <a href="./details/?id=<?php echo $row['id'] ?>"> <span class="badge p-2 bg-info text-white">View Details</span></a>
+                                                        </td>
                                                     </tr>
                                                 <?php endwhile; ?>
                                             <?php else: ?>

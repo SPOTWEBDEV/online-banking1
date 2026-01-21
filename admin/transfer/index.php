@@ -1,4 +1,3 @@
-
 <?php
 include("../../server/connection.php");
 
@@ -30,14 +29,14 @@ $user_id = $_SESSION['user_id'];
 </head>
 
 <body class="dashboard">
-    
+
     <div id="main-wrapper">
         <!-- header -->
-           <?php include("../include/nav.php") ?>
+        <?php include("../include/nav.php") ?>
 
-           <!-- side nav -->
+        <!-- side nav -->
 
-          <?php include("../include/sidenav.php") ?>
+        <?php include("../include/sidenav.php") ?>
         <div class="content-body">
             <div class="container">
                 <div class="row">
@@ -64,49 +63,6 @@ $user_id = $_SESSION['user_id'];
 
                 <div class="row">
                     <div class="col-xxl-12 col-xl-12">
-
-                        <?php
-                        $limit = 10;
-                        $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
-                        $offset = ($page - 1) * $limit;
-
-                        /* COUNT TOTAL RECORDS */
-                        $count_sql = "SELECT COUNT(*) AS total FROM bank_transfers WHERE user_id = ?";
-                        $count_stmt = mysqli_prepare($connection, $count_sql);
-                        mysqli_stmt_bind_param($count_stmt, "i", $user_id);
-                        mysqli_stmt_execute($count_stmt);
-                        $count_result = mysqli_stmt_get_result($count_stmt);
-                        $total_row = mysqli_fetch_assoc($count_result);
-                        $total_records = $total_row['total'];
-                        $total_pages = ceil($total_records / $limit);
-                        mysqli_stmt_close($count_stmt);
-
-                        /* FETCH TRANSFER HISTORY */
-                        $sql = "
-                            SELECT 
-                                bank_transfers.id,
-                                bank_transfers.receiver_account_number,
-                                bank_transfers.receiver_email,
-                                bank_transfers.routing_number,
-                                bank_transfers.swift_code,
-                                bank_transfers.amount,
-                                bank_transfers.narration,
-                                bank_transfers.status,
-                                bank_transfers.created_at,
-                                users.fullname
-                            FROM bank_transfers
-                            INNER JOIN users ON bank_transfers.user_id = users.id
-                            WHERE bank_transfers.user_id = ?
-                            ORDER BY bank_transfers.id DESC
-                            LIMIT ? OFFSET ?
-                        ";
-
-                        $stmt = mysqli_prepare($connection, $sql);
-                        mysqli_stmt_bind_param($stmt, "iii", $user_id, $limit, $offset);
-                        mysqli_stmt_execute($stmt);
-                        $result = mysqli_stmt_get_result($stmt);
-                        ?>
-
                         <div class="card">
                             <div class="card-body">
                                 <div class="table-responsive">
@@ -115,47 +71,49 @@ $user_id = $_SESSION['user_id'];
                                             <tr>
                                                 <th>S/N</th>
                                                 <th>ACCOUNT HOLDER</th>
-                                                <th>RECEIVER ACC NO</th>
-                                                <th>RECEIVER EMAIL</th>
-                                                <th>ROUTING</th>
-                                                <th>SWIFT</th>
+                                                <th>RECEIVER ACC NO / RECEIVER BANK</th>
                                                 <th>AMOUNT</th>
                                                 <th>NARRATION</th>
                                                 <th>DATE</th>
                                                 <th>STATUS</th>
+                                                <th>ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <?php
 
-                                            <?php if (mysqli_num_rows($result) > 0): $count = 0; ?>
-                                                <?php while ($row = mysqli_fetch_assoc($result)): $count++; ?>
+                                            $query = $connection->query("SELECT bank_transfers.* , users.fullname  FROM bank_transfers , users WHERE users.id = bank_transfers.user_id ORDER BY id DESC");
+                                            if ($query->num_rows > 0) {
+                                                while ($transfer = $query->fetch_assoc()) { ?>
+
                                                     <tr>
-                                                        <td><?= $count ?></td>
-                                                        <td><?= htmlspecialchars($row['fullname']) ?></td>
-                                                        <td><?= htmlspecialchars($row['receiver_account_number']) ?></td>
-                                                        <td><?= htmlspecialchars($row['receiver_email']) ?></td>
-                                                        <td><?= htmlspecialchars($row['routing_number'] ?? '') ?></td>
-                                                        <td><?= htmlspecialchars($row['swift_code'] ?? '') ?></td>
-                                                        <td>$<?= number_format($row['amount'], 2) ?></td>
-                                                        <td><?= htmlspecialchars($row['narration'] ?? '') ?></td>
-                                                        <td><?= date("Y-m-d", strtotime($row['created_at'])) ?></td>
+                                                        <td>1</td>
+                                                        <td><?php echo $transfer['fullname'] ?></td>
+                                                        <td><?php echo $transfer['receiver_account_number'] ?> <br>  <?php echo $transfer['receiver_bank'] ?></td>
+                                                        <td>$<?php echo $transfer['amount']  ?></td>
+                                                        <td>Payment for services</td>
+                                                        <td><?php echo $transfer['created_at']  ?></td>
                                                         <td>
-                                                            <span class="badge 
-                                                                <?php
-                                                                    if ($row['status'] === 'completed') echo 'bg-success';
-                                                                    elseif ($row['status'] === 'failed') echo 'bg-danger';
-                                                                    else echo 'bg-warning';
-                                                                ?>">
-                                                                <?= ucfirst($row['status']) ?>
+                                                            <span class="badge text-white <?php
+                                                                                            echo ($transfer['status'] == 'pending')
+                                                                                                ? 'bg-warning'
+                                                                                                : (($transfer['status'] == 'completed')
+                                                                                                    ? 'bg-success'
+                                                                                                    : 'bg-danger'); ?>">
+                                                                <?php echo ucfirst($transfer['status']); ?>
                                                             </span>
                                                         </td>
+                                                        <td>
+                                                            <a href="./details/?id=<?php echo $transfer['id'] ?>"> <span class="badge p-2 bg-info text-white">View Details</span></a>
+                                                        </td>
+
                                                     </tr>
-                                                <?php endwhile; ?>
-                                            <?php else: ?>
-                                                <tr>
-                                                    <td colspan="10" class="text-center">No transfer history found</td>
-                                                </tr>
-                                            <?php endif; ?>
+
+                                            <?php }
+                                            }
+
+                                            ?>
+
 
                                         </tbody>
                                     </table>

@@ -155,6 +155,8 @@ function money($amount)
 
                         </div>
 
+
+
                         <div class="col-xl-9">
                             <div class="tab-content wallet-tab-content">
 
@@ -267,117 +269,9 @@ function money($amount)
                                             </div>
                                         </div>
 
-                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                                            <div class="stat-widget-1">
-                                                <h6>Total Balance</h6>
-                                                <h3>$ 432568</h3>
-                                                <p>
-                                                    <span class="text-success"><i class="fi fi-rr-arrow-trend-up"></i>2.47%</span>
-                                                    Last month <strong>$24,478</strong>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6">
-                                            <div class="stat-widget-1">
-                                                <h6>Monthly Expenses</h6>
-                                                <h3>$ 432568</h3>
-                                                <p>
-                                                    <span class="text-success"><i class="fi fi-rr-arrow-trend-up"></i>2.47%</span>
-                                                    Last month <strong>$24,478</strong>
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xxl-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h4 class="card-title">Balance Overtime</h4>
-                                                </div>
-                                                <div class="card-body">
-                                                    <canvas id="chartjsBalanceOvertime"></canvas>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h4 class="card-title">Transaction History</h4>
-                                                </div>
-                                                <div class="card-body">
-                                                    <div class="transaction-table">
-                                                        <div class="table-responsive">
-                                                            <table class="table mb-0 table-responsive-sm">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Category</th>
-                                                                        <th>Date</th>
-                                                                        <th>Description</th>
-                                                                        <th>Amount</th>
-                                                                        <th>Currency</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <span class="table-category-icon"><i class="bg-emerald-500 fi fi-rr-barber-shop"></i>
-                                                                                Beauty</span>
-                                                                        </td>
-                                                                        <td>12.12.2023</td>
-                                                                        <td>Grocery Items and Beverage soft drinks</td>
-                                                                        <td>-32.20</td>
-                                                                        <td>USD</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <span class="table-category-icon"><i class="bg-teal-500 fi fi-rr-receipt"></i>
-                                                                                Bills & Fees</span>
-                                                                        </td>
-                                                                        <td>12.12.2023</td>
-                                                                        <td>Grocery Items and Beverage soft drinks</td>
-                                                                        <td>-32.20</td>
-                                                                        <td>USD</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <span class="table-category-icon"><i class="bg-cyan-500 fi fi-rr-car-side"></i>
-                                                                                Car</span>
-                                                                        </td>
-                                                                        <td>12.12.2023</td>
-                                                                        <td>Grocery Items and Beverage soft drinks</td>
-                                                                        <td>-32.20</td>
-                                                                        <td>USD</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <span class="table-category-icon"><i class="bg-sky-500 fi fi-rr-graduation-cap"></i>
-                                                                                Education</span>
-                                                                        </td>
-                                                                        <td>12.12.2023</td>
-                                                                        <td>Grocery Items and Beverage soft drinks</td>
-                                                                        <td>-32.20</td>
-                                                                        <td>USD</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>
-                                                                            <span class="table-category-icon"><i class="bg-blue-500 fi fi-rr-clapperboard-play"></i>
-                                                                                Entertainment</span>
-                                                                        </td>
-                                                                        <td>12.12.2023</td>
-                                                                        <td>Grocery Items and Beverage soft drinks</td>
-                                                                        <td>-32.20</td>
-                                                                        <td>USD</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
 
                                     </div>
+
                                 </div>
 
                                 <!-- ================= OTHER TABS (UNCHANGED) ================= -->
@@ -405,6 +299,67 @@ function money($amount)
                                     <?php /* Keep your existing a4 content here exactly */ ?>
                                 </div>
 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Transaction History</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="transaction-table">
+                                    <div class="table-responsive">
+                                        <table class="table mb-0 table-responsive-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Id</th>
+                                                    <th>Account Number</th>
+                                                    <th>Bank</th>
+                                                    <th>Narration</th>
+                                                    <th>Amount</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <?php
+
+                                                $query = $connection->query("SELECT * FROM bank_transfers WHERE user_id=$user_id ORDER BY id DESC LIMIT 5");
+                                                if ($query->num_rows > 0) {
+                                                    while ($transfer = $query->fetch_assoc()) { ?>
+
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td><?php echo $transfer['receiver_account_number'] ?></td>
+                                                            <td><?php echo $transfer['receiver_bank'] ?></td>
+                                                            <td>Payment for services</td>
+                                                            <td>$<?php echo $transfer['amount']  ?></td>
+                                                            <td>
+                                                                <span class="badge text-white <?php
+                                                                                                echo ($transfer['status'] == 'pending')
+                                                                                                    ? 'bg-warning'
+                                                                                                    : (($transfer['status'] == 'completed')
+                                                                                                        ? 'bg-success'
+                                                                                                        : 'bg-danger'); ?>">
+                                                                    <?php echo ucfirst($transfer['status']); ?>
+                                                                </span>
+                                                            </td>
+
+                                                        </tr>
+
+                                                <?php }
+                                                }
+
+                                                ?>
+
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
