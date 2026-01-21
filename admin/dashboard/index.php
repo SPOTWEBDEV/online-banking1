@@ -4,16 +4,16 @@ include("../../server/connection.php");
 
 
 // Total deposit
-$deposit = $connection->query("SELECT SUM(amount) AS total_deposit FROM deposits")->fetch_assoc();
+$deposit = $connection->query("SELECT SUM(amount) AS total_deposit , count(id) as deposit_count FROM deposits")->fetch_assoc();
 
 // Total investment
-$investment = $connection->query("SELECT SUM(amount_invested) AS total_investment FROM investments")->fetch_assoc();
+$investment = $connection->query("SELECT SUM(amount_invested) AS total_investment , count(id) as investment_count FROM investments")->fetch_assoc();
 
 // Total withdrawal
-$withdrawal = $connection->query("SELECT SUM(amount) AS total_withdrawal FROM withdrawals")->fetch_assoc();
+$withdrawal = $connection->query("SELECT SUM(amount) AS total_withdrawal , count(id) as withdrawal_count FROM withdrawals")->fetch_assoc();
 
 // Total loan requests
-$loan = $connection->query("SELECT SUM(loan_amount) AS total_loan FROM loan_requests")->fetch_assoc();
+$loan = $connection->query("SELECT SUM(loan_amount) AS total_loan , count(id) as loan_count FROM loan_requests")->fetch_assoc();
 
 echo json_encode([
     "success" => true,
@@ -185,29 +185,37 @@ echo json_encode([
                 <div class="row">
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                         <div class="stat-widget-1">
-                            <h6>Total Deposit Amount</h6>
-                            <h3 id="totalDeposit">$ <?php echo $deposit['total_deposit'] ?></h3>
+                            <h6>Total Deposit</h6>
+                            <h3 id="totalDeposit"><?php echo $deposit['deposit_count'] ?></h3>
+                            <h6 style="font-size: 14px;">Total Deposit Amount</h6>
+                            <h3 style="font-size: 14px;margin-top:-4px" id="totalDeposit">$<?php echo $deposit['total_deposit'] ?></h3>
                         </div>
                     </div>
 
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                         <div class="stat-widget-1">
                             <h6>Total Investment</h6>
-                            <h3 id="totalInvestment">$ 0</h3>
+                            <h3 id="totalDeposit"><?php echo $investment['investment_count'] ?></h3>
+                            <h6 style="font-size: 14px;">Total Investment Amount</h6>
+                            <h3 style="font-size: 14px;margin-top:-4px" id="totalDeposit">$<?php echo $investment['total_investment'] ?></h3>
                         </div>
                     </div>
 
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                         <div class="stat-widget-1">
                             <h6>Total Withdrawal</h6>
-                            <h3 id="totalWithdrawal">$ 0</h3>
+                            <h3 id="totalDeposit"><?php echo $withdrawal['withdrawal_count'] ?></h3>
+                            <h6 style="font-size: 14px;">Total Withdrawal Amount</h6>
+                            <h3 style="font-size: 14px;margin-top:-4px" id="totalDeposit">$<?php echo $withdrawal['total_withdrawal'] ?></h3>
                         </div>
                     </div>
 
                     <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6">
                         <div class="stat-widget-1">
-                            <h6>Total Loans</h6>
-                            <h3 id="totalLoan">$ 0</h3>
+                            <h6>Total Loan</h6>
+                            <h3 id="totalDeposit"><?php echo $loan['loan_count'] ?></h3>
+                            <h6 style="font-size: 14px;">Total Loan Amount</h6>
+                            <h3 style="font-size: 14px;margin-top:-4px" id="totalDeposit">$<?php echo $loan['total_loan'] ?></h3>
                         </div>
                     </div>
                 </div>
@@ -311,11 +319,11 @@ echo json_encode([
                                                             <td>$<?php echo $transfer['amount']  ?></td>
                                                             <td>
                                                                 <span class="badge text-white <?php
-                                                        echo ($transfer['status'] == 'pending')
-                                                            ? 'bg-warning'
-                                                            : (($transfer['status'] == 'completed')
-                                                                ? 'bg-success'
-                                                                : 'bg-danger');?>">
+                                                                                                echo ($transfer['status'] == 'pending')
+                                                                                                    ? 'bg-warning'
+                                                                                                    : (($transfer['status'] == 'completed')
+                                                                                                        ? 'bg-success'
+                                                                                                        : 'bg-danger'); ?>">
                                                                     <?php echo ucfirst($transfer['status']); ?>
                                                                 </span>
                                                             </td>
