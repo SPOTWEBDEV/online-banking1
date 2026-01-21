@@ -16,17 +16,10 @@ $success = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment'])) {
 
     $plan_name = isset($_POST['plan_name']) ? trim($_POST['plan_name']) : '';
-    $amount_invested = isset($_POST['amount_invested']) ? trim($_POST['amount_invested']) : '';
-    $daily_profit = isset($_POST['daily_profit']) ? trim($_POST['daily_profit']) : '';
-    $total_profit = isset($_POST['total_profit']) ? trim($_POST['total_profit']) : '';
-    $start_date = date("Y-m-d");
-    $end_date = isset($_POST['end_date']) ? trim($_POST['end_date']) : '';
 
+    
     if ($plan_name === '') $errors[] = "Plan name missing.";
     if ($amount_invested === '' || !is_numeric($amount_invested) || (float)$amount_invested <= 0) $errors[] = "Enter a valid amount.";
-    if ($daily_profit === '' || !is_numeric($daily_profit)) $errors[] = "Daily profit missing.";
-    if ($total_profit === '' || !is_numeric($total_profit)) $errors[] = "Total profit missing.";
-    if ($end_date === '') $errors[] = "End date missing.";
 
     if (empty($errors)) {
 
@@ -76,30 +69,23 @@ $investments = [];
 $inv_sql = "
     SELECT 
         plan_name,
-        amount_invested,
-        daily_profit,
+        profit_per_day,
         total_profit,
-        start_date,
-        end_date
-    FROM investments
-    WHERE user_id = ?
+        duration
+    FROM investment_plans
     ORDER BY id DESC
 ";
 
 $inv_stmt = mysqli_prepare($connection, $inv_sql);
-if (!$inv_stmt) {
-    $errors[] = "Server error: failed to prepare investments query.";
-} else {
-    mysqli_stmt_bind_param($inv_stmt, "i", $user_id);
-    mysqli_stmt_execute($inv_stmt);
-    $inv_result = mysqli_stmt_get_result($inv_stmt);
+mysqli_stmt_execute($inv_stmt);
+$inv_result = mysqli_stmt_get_result($inv_stmt);
 
-    while ($row = mysqli_fetch_assoc($inv_result)) {
-        $investments[] = $row;
-    }
-
-    mysqli_stmt_close($inv_stmt);
+while ($row = mysqli_fetch_assoc($inv_result)) {
+    $investments[] = $row;
 }
+
+mysqli_stmt_close($inv_stmt);
+
 ?>
 
 <!DOCTYPE html>
@@ -279,7 +265,7 @@ if (!$inv_stmt) {
         <?php include("../include/header.php") ?>
 
         <!-- SIDEBAR (kept intact) -->
-         <?php include("../include/sidenav.php") ?>
+        <?php include("../include/sidenav.php") ?>
 
         <!-- CONTENT -->
         <div class="content-body">
@@ -321,20 +307,16 @@ if (!$inv_stmt) {
                     <?php if (!empty($investments)) : ?>
                         <?php foreach ($investments as $inv) :
 
-                            $plan_name = $inv['plan_name'];
-                            $amount = (float) $inv['amount_invested'];
-                            $daily = (float) $inv['daily_profit'];
-                            $total = (float) $inv['total_profit'];
+                           $duration = $inv['duration'];
+                           $plan_name = $inv['plan_name'];
+                           $profit_per_day = (float) $inv['profit_per_day'];
+                           $total_profit = (float) $inv['total_profit'];
 
-                            $start_ts = strtotime($inv['start_date']);
-                            $end_ts = strtotime($inv['end_date']);
 
-                            $total_days = max(1, (int) round(($end_ts - $start_ts) / 86400));
-                            $days_passed = (int) floor((time() - $start_ts) / 86400);
-                            if ($days_passed < 0) $days_passed = 0;
-                            if ($days_passed > $total_days) $days_passed = $total_days;
 
-                            $progress = (int) min(100, round(($days_passed / $total_days) * 100));
+                          
+
+                            $progress = (int) min(100, round((2 / $duration) * 100));
                         ?>
 
                             <div class="invest-card">
@@ -344,7 +326,7 @@ if (!$inv_stmt) {
                                     </div>
                                     <div>
                                         <h4 class="invest-title"><?= htmlspecialchars($plan_name) ?></h4>
-                                        <div class="invest-days"><?= $total_days ?> days</div>
+                                        <div class="invest-days"><?= $duration ?> days</div>
                                     </div>
                                 </div>
 
@@ -352,38 +334,18 @@ if (!$inv_stmt) {
 
                                 <div class="invest-amount-row">
                                     <span class="down">↓</span>
-                                    <span>$<?= number_format($amount, 0) ?></span>
+                                    <span>$<?= number_format($profit_per_day, 0) ?></span>
                                     <span class="up">↑</span>
-                                    <span>$<?= number_format($total, 0) ?></span>
-                                </div>
+                                    <span>$<?= number_format($total_profit, 0) ?></span>
 
-                                <div class="invest-total">
-                                    Total After <?= $total_days ?> Days: $<?= number_format($amount + $total, 0) ?>
-                                </div>
 
-                                <div class="invest-progress-wrap">
-                                    <div class="invest-progress">
-                                        <div style="width: <?= $progress ?>%"></div>
-                                    </div>
-                                    <div class="invest-progress-pct"><?= $progress ?>%</div>
-                                </div>
-
-                              
-                                <form method="post" action="">
+                                <form method="post">
                                     <input type="hidden" name="plan_name" value="<?= htmlspecialchars($plan_name) ?>">
-                                    <input type="hidden" name="daily_profit" value="<?= (float)$daily ?>">
-                                    <input type="hidden" name="total_profit" value="<?= (float)$total ?>">
-                                    <input type="hidden" name="end_date" value="<?= htmlspecialchars($inv['end_date']) ?>">
-
                                     <input class="invest-input" type="number" step="0.01" name="amount_invested" placeholder="Enter Amount" required>
-
                                     <button class="invest-btn" type="submit" name="activate_investment">ACTIVATE</button>
                                 </form>
 
-                                <div class="inv-meta">
-                                    <div>Start: <?= htmlspecialchars($inv['start_date']) ?></div>
-                                    <div>End: <?= htmlspecialchars($inv['end_date']) ?></div>
-                                </div>
+                                
                             </div>
 
                         <?php endforeach; ?>
