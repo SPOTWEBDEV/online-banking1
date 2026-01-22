@@ -182,7 +182,8 @@ if (!isset($_SESSION['user_id'])) {
 
             </div>
         </div>
-        <div class="footer">
+
+        <!-- <div class="footer">
             <div class="container">
                 <div class="row">
                     <div class="col-xl-6">
@@ -208,7 +209,8 @@ if (!isset($_SESSION['user_id'])) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
+
     </div>
     <script src="<?php echo $domain ?>/vendor/jquery/jquery.min.js"></script>
     <script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

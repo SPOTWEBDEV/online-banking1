@@ -395,7 +395,7 @@ function money($amount)
 
     </div>
 
-    <div class="footer">
+    <!-- <div class="footer">
         <div class="container">
             <div class="row">
                 <div class="col-xl-6">
@@ -405,7 +405,7 @@ function money($amount)
                                 var CurrentYear = new Date().getFullYear()
                                 document.write(CurrentYear)
                             </script>
-                            <a href="wallets.html#">Ekash</a> I All Rights Reserved
+                            <a href="wallets.html#"></a> I All Rights Reserved
                         </p>
                     </div>
                 </div>
@@ -421,7 +421,7 @@ function money($amount)
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <script src="<?php echo $domain ?>/vendor/jquery/jquery.min.js"></script>
     <script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

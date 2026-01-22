@@ -444,7 +444,7 @@ if (!$plan_stmt) {
             </div>
 
             <!-- FOOTER (kept intact) -->
-            <div class="footer">
+            <!-- <div class="footer">
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-6">
@@ -470,7 +470,7 @@ if (!$plan_stmt) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
         </div>
 
