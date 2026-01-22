@@ -6,9 +6,9 @@ include('./server/connection.php');
 
 <head>
     <meta charset="utf-8">
-    <meta name="description" content="Aila">
-    <meta name="keywords" content="HTML,CSS,JavaScript">
-    <meta name="author" content="HiBootstrap">
+    <meta name="description" content="<?php echo $sitename; ?>">
+    <meta name="keywords" content="banking, savings, transfers, investment, virtual card">
+    <meta name="author" content="<?php echo $sitename; ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <title><?php echo $sitename ?></title>
@@ -26,12 +26,8 @@ include('./server/connection.php');
     <!-- magnific popup css -->
     <link rel="stylesheet" href="assets/css/magnific-popup.min.css" type="text/css" media="all" />
 
-    <!-- ✅ ICONS (use Boxicons - you already have it) -->
-    <link rel='stylesheet' href='assets/css/boxicons.min.css' type="text/css" media="all" />
-    <!-- Line Awesome CSS -->
-    <link rel='stylesheet' href='assets/css/line-awesome.min.css' type="text/css" media="all" />
-    <!-- flaticon css (kept, but we won't rely on it) -->
-    <link rel='stylesheet' href='assets/css/flaticon.css' type="text/css" media="all" />
+    <!-- ✅ ICONS THAT WILL WORK 100% (Font Awesome via CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <!-- style css -->
     <link rel="stylesheet" href="assets/css/style.css" type="text/css" media="all" />
@@ -65,16 +61,16 @@ include('./server/connection.php');
         <div class="navbar-area">
             <!-- mobile menu -->
             <div class="mobile-nav">
-                <a href="<?php echo $domain; ?>/" class="logo">
-                    <img src="assets/images/logo.png" class="logo1" alt="logo">
-                    <img src="assets/images/logo-white.png" class="logo2" alt="logo">
+                <a href="./" class="logo">
+                    <img src="images/IMG_09099.png" class="logo1" alt="logo">
+                    <img src="images/IMG_09099.png" class="logo2" alt="logo">
                 </a>
 
                 <div class="navbar-option">
                     <div class="navbar-option-item">
-                        <!-- ✅ Link + Icon working -->
-                        <a href="<?php echo $domain; ?>/auth/sign_in/">
-                            <i class='bx bx-log-in'></i>
+                        <!-- ✅ ALL BUTTONS -> ./auth/sign_up/ -->
+                        <a href="./auth/sign_up/">
+                            <i class="fa-solid fa-user-plus"></i>
                         </a>
                     </div>
                 </div>
@@ -84,17 +80,17 @@ include('./server/connection.php');
             <div class="main-nav main-nav-2">
                 <div class="container-fluid">
                     <nav class="navbar navbar-expand-md navbar-light">
-                        <a class="navbar-brand" href="<?php echo $domain; ?>/">
+                        <a class="navbar-brand" href="./">
                             <img src="images/IMG_09099.png" class="logo1" alt="logo">
                         </a>
 
                         <!-- navbar option -->
                         <div class="navbar-option">
                             <div class="navbar-option-item">
-                                <!-- ✅ Link + Icon working -->
-                                <a href="<?php echo $domain; ?>/auth/sign_in/" class="btn1 btn-with-image text-nowrap">
-                                    <i class='bx bx-log-in'></i>
-                                    Sign Up / Login
+                                <!-- ✅ ALL BUTTONS -> ./auth/sign_up/ -->
+                                <a href="./auth/sign_up/" class="btn1 btn-with-image text-nowrap">
+                                    <i class="fa-solid fa-user-plus"></i>
+                                    Get Started
                                 </a>
                             </div>
                         </div>
@@ -118,27 +114,32 @@ include('./server/connection.php');
                 <div class="row align-items-center justify-content-center">
                     <div class="col-sm-12 col-md-12 col-lg-6">
                         <div class="header-content-2">
-                            <h1>Digital Banking Easy to Handle With Mobile</h1>
-                            <p>The advantage of online banking is that you can pay bills superfast and your account is automatically credited or debited for each deposit and payment</p>
+                            <h1>Bank smarter. Move money instantly. Grow daily.</h1>
+                            <p>
+                                Open your account in minutes, send and receive payments fast, track your balance in real-time,
+                                and build wealth with simple investment plans — all from one secure dashboard.
+                            </p>
 
                             <ul class="section-button">
                                 <li>
-                                    <!-- ✅ Get Started -> Sign up (change if you have another page) -->
-                                    <a href="<?php echo $domain; ?>/auth/sign_up/" class="btn1 orange-gradient btn-with-image">
-                                        <i class='bx bx-rocket'></i>
-                                        Get Started
+                                   
+                                    <a href="./auth/sign_up/" class="btn1 orange-gradient btn-with-image">
+                                        <i class="fa-solid fa-bolt"></i>
+                                        Sign up
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="btn1 btn-with-image blue-gradient video-modal" href="http://www.youtube.com/watch?v=aJJoV0xSDqA">
-                                        <i class='bx bx-play-circle'></i>
-                                        Intro Video
+                                  
+                                    <a href="./auth/sign_in/" class="btn1 btn-with-image blue-gradient">
+                                        <i class="fa-solid fa-shield-halved"></i>
+                                        Login
                                     </a>
                                 </li>
                             </ul>
 
                         </div>
                     </div>
+
                     <div class="col-sm-12 col-md-12 col-lg-6">
                         <div class="header-content-2-img">
                             <img src="assets/images/imac.png" alt="imac">
@@ -154,7 +155,7 @@ include('./server/connection.php');
     <div class="home-logo-section-2 border-top-mob">
         <div class="container">
             <div class="section-title">
-                <p>More than 50k brand trusted by using pay </p>
+                <p>Trusted by customers who value speed, safety, and simplicity.</p>
             </div>
             <div class="home-logo-content mt-30">
                 <div class="home-logo-item"><a href="#"><img src="assets/images/logo-1.png" alt="logo"></a></div>
@@ -176,19 +177,23 @@ include('./server/connection.php');
     <section class="home-about-section-2 bg-off-white pt-100 pb-70 overflow-hidden">
         <div class="container-fluid p-0">
             <div class="home-about-content">
+
                 <!-- enterprise -->
                 <div class="row align-items-center m-0">
                     <div class="col-sm-12 col-md-12 col-lg-6 p-0">
                         <div class="home-facility-overview desk-ml-auto pr-20 pl-20 pb-30">
-                            <h3 class="home-about-title">A fully integrated suite for Large enterprise</h3>
-                            <p class="home-about-para">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod cste et dolore magnam aliquam quaerat voluptatem.</p>
+                            <h3 class="home-about-title">Built for serious money movement</h3>
+                            <p class="home-about-para">
+                                Send local and international transfers, manage multiple wallets, and view transactions clearly —
+                                with bank-grade security from day one.
+                            </p>
                             <div class="home-about-list">
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> International Payments</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Request Features</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Premium Support</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Direct Debit</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Automated accounting</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Web Design</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Instant transfers & receipts</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Savings & balance tracking</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Fraud checks & secure login</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Fast deposit approvals</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Clear transaction history</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> 24/7 account access</div>
                             </div>
                             <div class="home-about-animation">
                                 <div class="home-animation-item"><img src="assets/images/curve-line.png" alt="animated-icon"></div>
@@ -214,15 +219,18 @@ include('./server/connection.php');
                     </div>
                     <div class="col-sm-12 col-md-12 col-lg-6 p-0">
                         <div class="home-facility-overview desk-mr-auto pr-20 pl-20 pb-30">
-                            <h3 class="home-about-title">Small to medium-sized businesses</h3>
-                            <p class="home-about-para">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod cste et dolore magnam aliquam quaerat voluptatem.</p>
+                            <h3 class="home-about-title">For personal money and business cashflow</h3>
+                            <p class="home-about-para">
+                                Track income, control spending, and keep your accounts organized —
+                                whether you’re building a business or managing daily life.
+                            </p>
                             <div class="home-about-list">
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Deposit Checks Instantly</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> A powerful open API</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Affiliates and partnerships</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Coverage around the world</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Business without borders</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Web Design</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Deposit and withdraw with ease</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Smart limits & account controls</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Wallets for balance, loan & crypto</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Verified payouts and transfers</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Real-time status updates</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Fast support when you need it</div>
                             </div>
                         </div>
                     </div>
@@ -234,15 +242,18 @@ include('./server/connection.php');
                 <div class="row align-items-center m-0">
                     <div class="col-sm-12 col-md-12 col-lg-6 p-0">
                         <div class="home-facility-overview desk-ml-auto pr-20 pl-20 pb-30">
-                            <h3 class="home-about-title">Entrepreneurs, and sole traders & Freelancers</h3>
-                            <p class="home-about-para">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod cste et dolore magnam aliquam quaerat voluptatem.</p>
+                            <h3 class="home-about-title">Earn with simple investment plans</h3>
+                            <p class="home-about-para">
+                                Choose a plan, invest any amount, and watch your returns grow.
+                                Everything is transparent: duration, daily profit, and total profit.
+                            </p>
                             <div class="home-about-list">
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> International Payments</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Request Features</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Premium Support</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Direct Debit</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Automated accounting</div>
-                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Web Design</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Clear plan duration</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Daily profit calculation</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Investment history tracking</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Secure balance handling</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Simple dashboard view</div>
+                                <div class="home-about-list-item"><img src="assets/images/check.png" alt="check"> Withdraw earnings anytime</div>
                             </div>
                             <div class="home-about-animation entrepreneur-animation">
                                 <div class="home-animation-item"><img src="assets/images/curve-line.png" alt="animated-icon"></div>
@@ -253,9 +264,8 @@ include('./server/connection.php');
                     <div class="col-sm-12 col-md-12 col-lg-6 p-0">
                         <div class="home-facility-item img-right-res pb-30">
                             <img src="assets/images/home-entreprenour-2.png" alt="facility">
-                            <div class="home-about-animated-img home-animated-table-img home-animated-img-left">
-                                <img src="assets/images/data-table.png" alt="data-table">
-                            </div>
+                           
+                          
                         </div>
                     </div>
                 </div>
@@ -263,32 +273,31 @@ include('./server/connection.php');
             </div>
         </div>
     </section>
-    <!-- .end home-about-section -->
 
     <!-- counter-section -->
     <section class="counter-section pt-100 pb-70">
         <div class="container">
             <div class="section-title">
-                <h2>We always try to evaluate customers Values</h2>
+                <h2>Fast. Secure. Designed for daily finance.</h2>
             </div>
             <div class="counter-content">
                 <div class="counter-item">
-                    <h3><span class="counter">70</span><span class="counter-text-lg">+</span></h3>
-                    <p>Contributors</p>
+                    <h3><span class="counter">70+</span></span></h3>
+                    <p>Total Users</p>
                 </div>
                 <div class="counter-item">
-                    <h3><span class="counter">40</span><span class="counter-text-sm">K</span></h3>
-                    <p>Feedback</p>
+                    <h3><span class="counter">40k</span></h3>
+                    <p>Daily Transactions</p>
                     <div class="counter-loader"><span></span><span></span><span></span></div>
                 </div>
                 <div class="counter-item">
-                    <h3><span class="counter">1000</span><span class="counter-text-sm">k</span></h3>
-                    <p>Downloaded</p>
+                    <h3><spa class="counter">1000k</span></h3>
+                    <p>Countries</p>
                     <div class="counter-loader"><span></span><span></span><span></span></div>
                 </div>
                 <div class="counter-item">
-                    <h3><span class="counter">590</span><span class="counter-text-lg">+</span></h3>
-                    <p>Workers</p>
+                    <h3><span class="counter">590+</span></span></h3>
+                    <p>Employess</p>
                     <div class="counter-loader"><span></span><span></span><span></span></div>
                 </div>
             </div>
@@ -304,13 +313,18 @@ include('./server/connection.php');
                         <div class="home-facility-item pb-30">
                             <div class="home-facility-details">
                                 <div class="home-service-start">
-                                    <h2>Payment gateway is easy to fill with our system</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod cste et dolore magnam aliquam quaerat voluptatem.</p>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim numquam eius modi tempora incidunt ut labore et dolore magnam</p>
+                                    <h2>Open an account today and take control of your money</h2>
+                                    <p>
+                                        Fund your wallet, make transfers, track transactions, and start investing —
+                                        all inside one clean dashboard.
+                                    </p>
+                                    <p>
+                                        No long forms. No stress. Just fast banking designed for real life.
+                                    </p>
 
-                                    <!-- ✅ Link + Icon working -->
-                                    <a href="<?php echo $domain; ?>/auth/sign_up/" class="btn1 blue-gradient btn-with-image">
-                                        <i class='bx bx-user-plus'></i>
+                                    <!-- ✅ ALL BUTTONS -> ./auth/sign_up/ -->
+                                    <a href="./auth/sign_up/" class="btn1 blue-gradient btn-with-image">
+                                        <i class="fa-solid fa-user-plus"></i>
                                         Get Started
                                     </a>
                                 </div>
@@ -336,129 +350,23 @@ include('./server/connection.php');
                     <div class="logo-bg-item"><img src="assets/images/square.png" alt="icon"></div>
                 </div>
                 <div class="quick-contact-inner">
-                    <h2>What are you thinking? <br> don’t worry! get connected and say hello to us</h2>
-                    <p>*We’re willingly is here to answer your question about aila</p>
+                    <h2>Ready to start? Create your account in minutes.</h2>
+                    <p>Secure signup. Real-time wallet. Clear investment history.</p>
                     <ul class="section-button">
                         <li>
-                            <a href="<?php echo $domain; ?>/contact-us.php" class="btn1 orange-gradient btn-with-image">
-                                <i class='bx bx-envelope'></i>
-                                Contact us
+                            <a href="./auth/sign_up/" class="btn1 orange-gradient btn-with-image">
+                                <i class="fa-solid fa-bolt"></i>
+                                Register
                             </a>
                         </li>
                         <li>
-                            <a href="<?php echo $domain; ?>/pricing.php" class="btn1 btn-with-image">
-                                <i class='bx bx-badge-check'></i>
-                                Free Trial
+                            <a href="./auth/sign_in/" class="btn1 btn-with-image">
+                                <i class="fa-solid fa-lock"></i>
+                                Login
                             </a>
                         </li>
                     </ul>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- home-client-section -->
-    <div class="home-client-section p-tb-100 overflow-x-hidden">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-sm-12 col-md-12 col-lg-12">
-                    <div class="client-details-carousel owl-carousel owl-theme">
-                        <div class="item"><div class="home-client-details-2"><p class="client-caption-para">Online payment ipsum dolor sit amet, consectetur adi pisicing elit sed do eusmod tempor incididunt ut labore et dolore magna aliq enim ad minim veniam, quis nostrud exercitation ullamcoonisi aliquip ex ea commodo consequat.</p></div></div>
-                        <div class="item"><div class="home-client-details-2"><p class="client-caption-para">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></div></div>
-                        <div class="item"><div class="home-client-details-2"><p class="client-caption-para">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div></div>
-                        <div class="item"><div class="home-client-details-2"><p class="client-caption-para">Online payment ipsum dolor sit amet, consectetur adipisicing elit sed do eusmod tempor incididunt ut labore et dolore magna aliq enim ad minim veniam, quis nostrud exercitation ullamcoonisi aliquip ex ea commodo consequat.</p></div></div>
-                        <div class="item"><div class="home-client-details-2"><p class="client-caption-para">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p></div></div>
-                        <div class="item"><div class="home-client-details-2"><p class="client-caption-para">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="home-client-thumbnail-section">
-                <div class="client-thumbnail-carousel owl-carousel owl-theme">
-                    <div class="item"><div class="client-thumbnail-content"><div class="client-thumbnail-img"><img src="assets/images/client-thumb-1.png" alt="carousel"></div><div class="client-thumbnail-info"><h3 class="client-caption-title">Devit M. kolin</h3><h4 class="client-caption-designation">CEO & Founder</h4></div></div></div>
-                    <div class="item"><div class="client-thumbnail-content"><div class="client-thumbnail-img"><img src="assets/images/client-thumb-2.png" alt="carousel"></div><div class="client-thumbnail-info"><h3 class="client-caption-title">Michael</h3><h4 class="client-caption-designation">Money Loaner</h4></div></div></div>
-                    <div class="item"><div class="client-thumbnail-content"><div class="client-thumbnail-img"><img src="assets/images/client-thumb-3.png" alt="carousel"></div><div class="client-thumbnail-info"><h3 class="client-caption-title">Christoper</h3><h4 class="client-caption-designation">Ronin Bank Inc.</h4></div></div></div>
-                    <div class="item"><div class="client-thumbnail-content"><div class="client-thumbnail-img"><img src="assets/images/client-thumb-4.png" alt="carousel"></div><div class="client-thumbnail-info"><h3 class="client-caption-title">Kenneth</h3><h4 class="client-caption-designation">Finance Consultant</h4></div></div></div>
-                    <div class="item"><div class="client-thumbnail-content"><div class="client-thumbnail-img"><img src="assets/images/client-thumb-5.png" alt="carousel"></div><div class="client-thumbnail-info"><h3 class="client-caption-title">Edward</h3><h4 class="client-caption-designation">Money founding</h4></div></div></div>
-                    <div class="item"><div class="client-thumbnail-content"><div class="client-thumbnail-img"><img src="assets/images/client-thumb-6.png" alt="carousel"></div><div class="client-thumbnail-info"><h3 class="client-caption-title">Devit M. kolin</h3><h4 class="client-caption-designation">CTO</h4></div></div></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- home-download-section -->
-    <section class="home-download-section-2 pt-100 pb-70">
-        <div class="container">
-            <div class="home-download-content">
-                <div class="row align-items-center justify-content-center">
-                    <div class="col-sm-12 col-md-12 col-lg-5">
-                        <div class="home-download-item pb-30">
-                            <div class="home-download-image">
-                                <img src="assets/images/download.png" alt="smartphone">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-12 col-md-12 col-lg-7">
-                        <div class="home-download-item pb-30">
-                            <div class="home-download-details home-service-start">
-                                <h2>Free app download now <br> get sit back & enjoy</h2>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim numquam eius modi tempora incidunt ut labore et dolore magnam</p>
-
-                                <div class="download-feature">
-                                    <div class="download-feature-item"><div class="download-feature-item-inner"><h3>$100,000</h3><p>Guarantee on deposits</p></div></div>
-                                    <div class="download-feature-item"><div class="download-feature-item-inner"><h3>$0.00 / mo</h3><p>Free account available</p></div></div>
-                                    <div class="download-feature-item"><div class="download-feature-item-inner"><h3>10 minutes</h3><p>Available Jobs</p></div></div>
-                                </div>
-
-                                <div class="download-option">
-                                    <ul class="download-option-list">
-                                        <li>
-                                            <a href="https://www.apple.com/app-store/" class="orange-gradient">
-                                                <img src="assets/images/apple.png" alt="apple">
-                                                <img src="assets/images/apple.png" alt="apple">
-                                            </a>
-                                        </li>
-                                        <li>
-                                            <a href="https://play.google.com/store/apps?hl=en&gl=US" class="blue-gradient">
-                                                <img src="assets/images/android.png" alt="android">
-                                                <img src="assets/images/android.png" alt="android">
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- home-contact-section -->
-    <section class="home-contact-section overflow-hidden blue-gradient pt-100 pb-80">
-        <div class="home-contact-bg-circle">
-            <div class="home-contact-circle-item"><img src="assets/images/lg-circle-1.png" alt="circle"></div>
-            <div class="home-contact-circle-item"><img src="assets/images/lg-circle-1.png" alt="circle"></div>
-        </div>
-
-        <div class="container">
-            <div class="home-contact-inner">
-                <h2>493 businesses! create your bank account now</h2>
-                <p>What’s next in Aila Bank? <a href="#">Learn more</a></p>
-
-                <ul class="section-button">
-                    <li>
-                        <!-- ✅ Link + Icon working -->
-                        <a href="<?php echo $domain; ?>/auth/sign_up/" class="btn1 orange-gradient btn-with-image">
-                            <i class='bx bx-user-plus'></i>
-                            Create Your Account
-                        </a>
-                    </li>
-                </ul>
-
             </div>
         </div>
     </section>
@@ -471,47 +379,50 @@ include('./server/connection.php');
                     <div class="col-sm-12 col-md-12 col-lg-4">
                         <div class="footer-content-item">
                             <div class="footer-logo">
-                                <a href="<?php echo $domain; ?>/"><img src="images/IMG_09099.png" alt="logo"></a>
+                                <a href="./"><img src="images/IMG_09099.png" alt="logo"></a>
                             </div>
                             <div class="footer-details">
-                                <p>Lorem ipsum dolor sit amet, consectetur adiisicing elit, sed do eiusmod tempor inc Neque porro quisquam est qui dolorem aliquam quaerat luptatem. sed do eiusmod tempor inc</p>
+                                <p>
+                                    <?php echo $sitename; ?> is built for fast payments, secure transfers, and simple investment tracking —
+                                    so you always know where your money is going.
+                                </p>
                             </div>
                         </div>
                     </div>
 
                     <div class="col-sm-6 col-md-4 col-lg-2">
                         <div class="footer-content-list footer-content-item">
-                            <div class="footer-content-title"><h3>Support</h3></div>
+                            <div class="footer-content-title">
+                                <h3>Quick Links</h3>
+                            </div>
                             <ul class="footer-details footer-list">
-                                <li><a href="#">FAQ's</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Terms & Conditions</a></li>
-                                <li><a href="#">Blogs</a></li>
-                                <li><a href="<?php echo $domain; ?>/contact-us.php">Contact Us</a></li>
+                                <li><a href="./auth/sign_up/">Register</a></li>
+                                <li><a href="./auth/sign_in/">Login</a></li>
+                             
                             </ul>
                         </div>
                     </div>
 
                     <div class="col-sm-6 col-md-4 col-lg-2">
                         <div class="footer-content-list footer-content-item">
-                            <div class="footer-content-title"><h3>Company</h3></div>
+                            <div class="footer-content-title">
+                                <h3>Features</h3>
+                            </div>
                             <ul class="footer-details footer-list">
-                                <li><a href="#">About Us</a></li>
-                                <li><a href="#">Services</a></li>
-                                <li><a href="#">Features</a></li>
-                                <li><a href="<?php echo $domain; ?>/pricing.php">Our Pricing</a></li>
-                                <li><a href="#">Blogs</a></li>
+                               <p>Register to get Started with many Features</p>
                             </ul>
                         </div>
                     </div>
 
                     <div class="col-sm-6 col-md-4 col-lg-4">
                         <div class="footer-content-list footer-content-item">
-                            <div class="footer-content-title"><h3>Address</h3></div>
+                            <div class="footer-content-title">
+                                <h3>Security Note</h3>
+                            </div>
                             <ul class="footer-details footer-list">
-                                <li>Address: <span>456 Labisto Parkways, CA, United States</span></li>
-                                <li>Message: <span><a href="#"><span>[email&#160;protected]</span></a></span></li>
-                                <li>Phone: <span><a href="tel:(+00)67834598">(+00) 678 345 98</a></span></li>
+                                <li> <span>Secure sessions & hashed passwords</span></li>
+                                <li> <span>Transaction status tracking</span></li>
+                                <li><span>Help available inside your dashboard</span></li>
                             </ul>
                         </div>
                     </div>
@@ -522,11 +433,19 @@ include('./server/connection.php');
             <div class="footer-lower">
                 <div class="footer-lower-item footer-copyright-text">
                     <div class="copy-right-text text-end">
-                        <p>©<script>document.write(new Date().getFullYear())</script> <?php echo $sitename; ?></p>
+                        <p>© <script>document.write(new Date().getFullYear())</script> <?php echo $sitename; ?>. All rights reserved.</p>
                     </div>
                 </div>
 
-         
+                <div class="footer-lower-item footer-social-logo">
+                    <ul class="footer-social-list">
+                        <li class="social-btn social-btn-fb"><a href="./auth/sign_up/"><i class="fa-brands fa-facebook-f"></i></a></li>
+                        <li class="social-btn social-btn-tw"><a href="./auth/sign_up/"><i class="fa-brands fa-x-twitter"></i></a></li>
+                        <li class="social-btn social-btn-ins"><a href="./auth/sign_up/"><i class="fa-brands fa-instagram"></i></a></li>
+                        <li class="social-btn social-btn-pin"><a href="./auth/sign_up/"><i class="fa-brands fa-pinterest-p"></i></a></li>
+                        <li class="social-btn social-btn-yt"><a href="./auth/sign_up/"><i class="fa-brands fa-youtube"></i></a></li>
+                    </ul>
+                </div>
             </div>
 
         </div>
@@ -555,4 +474,5 @@ include('./server/connection.php');
     <!-- main js -->
     <script src="assets/js/script.js"></script>
 </body>
+
 </html>
