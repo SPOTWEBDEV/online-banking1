@@ -73,9 +73,8 @@ $query = $connection->query($sql);
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="breadcrumbs"><a href="<?php echo $domain  ?>/admin/dashboard/">Home </a>
-                                        <span><i class="fi fi-rr-angle-small-right"></i></span>
-                                        <a href="<?php echo $domain  ?>/admin/transfer/details">Transfer Details</a>
+                                    <div class="breadcrumbs"><a href="<?php echo $domain  ?>/dashboard/">Home</a>
+                                       
                                     </div>
                                 </div>
                             </div>
