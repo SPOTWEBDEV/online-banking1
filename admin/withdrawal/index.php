@@ -76,6 +76,7 @@ $user_id = $_SESSION['user_id'];
                         // NOTE: If your column name is "date" keep it, if it's "created_at" change it.
                         $sql = "
                             SELECT 
+                            withdrawals.id,
                                 withdrawals.amount,
                                 withdrawals.which_account,
                                 withdrawals.status,
@@ -83,13 +84,10 @@ $user_id = $_SESSION['user_id'];
                                 users.fullname
                             FROM withdrawals, users
                             WHERE withdrawals.user_id = users.id
-                            AND withdrawals.user_id = ?
                             ORDER BY withdrawals.id DESC
-                            LIMIT ? OFFSET ?
                         ";
 
                         $stmt = mysqli_prepare($connection, $sql);
-                        mysqli_stmt_bind_param($stmt, "iii", $user_id, $limit, $offset);
                         mysqli_stmt_execute($stmt);
                         $result = mysqli_stmt_get_result($stmt);
                         ?>
@@ -106,6 +104,7 @@ $user_id = $_SESSION['user_id'];
                                                 <th>AMOUNT</th>
                                                 <th>DATE</th>
                                                 <th>STATUS</th>
+                                                <th>ACTION</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -127,6 +126,9 @@ $user_id = $_SESSION['user_id'];
                                                                 ?>">
                                                                 <?= ucfirst($row['status']) ?>
                                                             </span>
+                                                        </td>
+                                                        <td>
+                                                           <a href="./details/?id=<?php echo $row['id'] ?>"> <span class="badge p-2 bg-info text-white">View Details</span></a>
                                                         </td>
                                                     </tr>
                                                 <?php endwhile; ?>

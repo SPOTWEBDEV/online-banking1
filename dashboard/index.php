@@ -14,8 +14,9 @@ $balance = 0;
 $loan_balance = 0;
 $crypto_balance = 0;
 $virtual_card_balance = 0;
+$limit = 0;
 
-$sql = "SELECT fullname, balance, loan_balance, crypto_balance, virtual_card_balance
+$sql = "SELECT fullname, balance, loan_balance, crypto_balance, virtual_card_balance , limits
         FROM users
         WHERE id = ? LIMIT 1";
 $stmt = mysqli_prepare($connection, $sql);
@@ -36,6 +37,7 @@ if ($result && mysqli_num_rows($result) === 1) {
     $loan_balance = (float)($user['loan_balance'] ?? 0);
     $crypto_balance = (float)($user['crypto_balance'] ?? 0);
     $virtual_card_balance = (float)($user['virtual_card_balance'] ?? 0);
+    $limit = (float)($user['limit'] ?? 0);
 } else {
     // session user_id not found in DB
     session_destroy();
@@ -213,15 +215,15 @@ function money($amount)
                                                 <div class="card-body">
                                                     <div class="wallet-total-balance">
                                                         <p class="mb-0">Total Balance</p>
-                                                        <h2>$221,478</h2>
+                                                        <h2>$<?php echo $balance + $crypto_balance + $virtual_card_balance + $loan_balance ?></h2>
                                                     </div>
                                                     <div class="funds-credit">
-                                                        <p class="mb-0">Personal Funds</p>
-                                                        <h5>$32,500.28</h5>
+                                                        <p class="mb-0">Personal Balance</p>
+                                                        <h5>$<?php echo $balance ?></h5>
                                                     </div>
                                                     <div class="funds-credit">
                                                         <p class="mb-0">Credit Limits</p>
-                                                        <h5>$2500.00</h5>
+                                                        <h5>$<?php echo $limit  ?></h5>
                                                     </div>
                                                 </div>
                                             </div>
@@ -259,7 +261,7 @@ function money($amount)
                                                             <div class="d-flex justify-content-between">
                                                                 <div class="ms-3">
                                                                     <p>Credit Limit</p>
-                                                                    <p><strong>2000 USD</strong></p>
+                                                                    <p><strong><?php echo $user['limit']  ?> USD</strong></p>
                                                                 </div>
                                                                 <div id="circle3"></div>
                                                             </div>
@@ -308,7 +310,7 @@ function money($amount)
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">Transaction History</h4>
+                                <h4 class="card-title">Transfer History</h4>
                             </div>
                             <div class="card-body">
                                 <div class="transaction-table">
@@ -351,6 +353,8 @@ function money($amount)
                                                         </tr>
 
                                                 <?php }
+                                                }else {
+                                                    echo '<tr><td class="text-danger">No transfer history found.</td></tr>';
                                                 }
 
                                                 ?>
