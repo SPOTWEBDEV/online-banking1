@@ -56,8 +56,9 @@ include("../../server/connection.php");
                             <a class="text-primary" href="<?php echo $domain ?>/admin/settings/">General</a>
                             <a href="<?php echo $domain ?>/admin/management/add">User Managment</a>
                             <a href="<?php echo $domain ?>/admin/loan">Loan History</a>
-                            <a href="<?php echo $domain ?>/admin/bank/add">Add Bank</a>
+                            <a href="<?php echo $domain ?>/admin/bank/">Add Bank</a>
                             <a href="<?php echo $domain ?>/admin/investment/">Add Investment Plan</a>
+                            <a href="<?php echo $domain ?>/admin/investment/history/">Investment History</a>
                         </div>
                         <div class="row">
                             <div class="col-xl-12">

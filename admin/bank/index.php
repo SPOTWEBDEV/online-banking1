@@ -7,6 +7,18 @@ mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
 
 
+if(isset($_GET['delete'])) {
+    $id = $_GET['delete'];
+
+    $delete_sql = "DELETE FROM payment_account WHERE id = ?";
+    $delete_stmt = mysqli_prepare($connection, $delete_sql);
+    mysqli_stmt_bind_param($delete_stmt, "i", $id);
+    mysqli_stmt_execute($delete_stmt);
+
+    echo "<script>alert('Payment account deleted successfully.'); window.location.href='index.php';</script>";
+    exit();
+}
+
 ?>
 
 
