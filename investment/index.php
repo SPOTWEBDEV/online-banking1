@@ -80,9 +80,9 @@ if (!$inv_stmt) {
     mysqli_stmt_execute($inv_stmt);
     $inv_result = mysqli_stmt_get_result($inv_stmt);
 
-    while ($row = mysqli_fetch_assoc($inv_result)) {
-        $investments[] = $row;
-    }
+while ($row = mysqli_fetch_assoc($inv_result)) {
+    $investments[] = $row;
+}
 }
 
 mysqli_stmt_close($inv_stmt);
