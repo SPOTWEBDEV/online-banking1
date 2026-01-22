@@ -61,39 +61,51 @@ include('./server/connection.php');
         <div class="navbar-area">
             <!-- mobile menu -->
             <div class="mobile-nav">
-                <a href="./" class="logo">
-                    <img src="images/IMG_09099.png" class="logo1" alt="logo">
-                    <img src="images/IMG_09099.png" class="logo2" alt="logo">
-                </a>
-
+                <a href="index.html" class="logo">
+                        <img src="images/IMG_09099.png" class="logo1" alt="logo">
+                        <img src="assets/images/IMG_09099.png" class="logo2" alt="logo">
+                    </a>
                 <div class="navbar-option">
+                    
                     <div class="navbar-option-item">
-                        <!-- ✅ ALL BUTTONS -> ./auth/sign_up/ -->
-                        <a href="./auth/sign_up/">
-                            <i class="fa-solid fa-user-plus"></i>
-                        </a>
+                        <a href="authentication.html">
+                                <i class="flaticon-login"></i>
+                            </a>
                     </div>
                 </div>
             </div>
-
             <!-- desktop menu -->
             <div class="main-nav main-nav-2">
                 <div class="container-fluid">
                     <nav class="navbar navbar-expand-md navbar-light">
-                        <a class="navbar-brand" href="./">
-                            <img src="images/IMG_09099.png" class="logo1" alt="logo">
-                        </a>
-
-                        <!-- navbar option -->
-                        <div class="navbar-option">
-                            <div class="navbar-option-item">
-                                <!-- ✅ ALL BUTTONS -> ./auth/sign_up/ -->
-                                <a href="./auth/sign_up/" class="btn1 btn-with-image text-nowrap">
-                                    <i class="fa-solid fa-user-plus"></i>
-                                    Get Started
-                                </a>
-                            </div>
+                        <a class="navbar-brand" href="index.html">
+                                <img src="images/IMG_09099.png" class="logo1" alt="logo">
+                                <img src="images/IMG_09099.png" class="logo2" alt="logo">
+                            </a>
+                        <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                            <ul class="navbar-nav mx-auto">
+                                <li class="nav-item">
+                                    <a href="#home" class="nav-link dropdown-toggle active">Home</a>
+                                    
+                                </li>
+                                 
+                                <li class="nav-item">
+                                    <a href="#about" class="nav-link">About Us</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#company" class="nav-link">Company</a>
+                                </li>
+                                
+                               
+                                <li class="nav-item">
+                                    <a href="#stats" class="nav-link">Stats</a>
+                                </li>
+                                
+                                
+                            </ul>
                         </div>
+                        <!-- navbar option -->
+                        
                     </nav>
                 </div>
             </div>
@@ -109,7 +121,7 @@ include('./server/connection.php');
             </div>
         </div>
 
-        <div class="container-fluid">
+        <div id="home" class="container-fluid">
             <div class="header-inner">
                 <div class="row align-items-center justify-content-center">
                     <div class="col-sm-12 col-md-12 col-lg-6">
@@ -122,14 +134,14 @@ include('./server/connection.php');
 
                             <ul class="section-button">
                                 <li>
-                                   
+
                                     <a href="./auth/sign_up/" class="btn1 orange-gradient btn-with-image">
                                         <i class="fa-solid fa-bolt"></i>
                                         Sign up
                                     </a>
                                 </li>
                                 <li>
-                                  
+
                                     <a href="./auth/sign_in/" class="btn1 btn-with-image blue-gradient">
                                         <i class="fa-solid fa-shield-halved"></i>
                                         Login
@@ -152,7 +164,7 @@ include('./server/connection.php');
     <!-- .end header -->
 
     <!-- home-logo-section-2 -->
-    <div class="home-logo-section-2 border-top-mob">
+    <div id="company" class="home-logo-section-2 border-top-mob">
         <div class="container">
             <div class="section-title">
                 <p>Trusted by customers who value speed, safety, and simplicity.</p>
@@ -174,7 +186,7 @@ include('./server/connection.php');
     <!-- .end home-logo-section-2 -->
 
     <!-- home-about-section-2 -->
-    <section class="home-about-section-2 bg-off-white pt-100 pb-70 overflow-hidden">
+    <section id="about" class="home-about-section-2 bg-off-white pt-100 pb-70 overflow-hidden">
         <div class="container-fluid p-0">
             <div class="home-about-content">
 
@@ -264,8 +276,8 @@ include('./server/connection.php');
                     <div class="col-sm-12 col-md-12 col-lg-6 p-0">
                         <div class="home-facility-item img-right-res pb-30">
                             <img src="assets/images/home-entreprenour-2.png" alt="facility">
-                           
-                          
+
+
                         </div>
                     </div>
                 </div>
@@ -275,7 +287,7 @@ include('./server/connection.php');
     </section>
 
     <!-- counter-section -->
-    <section class="counter-section pt-100 pb-70">
+    <section id="stats" class="counter-section pt-100 pb-70">
         <div class="container">
             <div class="section-title">
                 <h2>Fast. Secure. Designed for daily finance.</h2>
@@ -291,7 +303,9 @@ include('./server/connection.php');
                     <div class="counter-loader"><span></span><span></span><span></span></div>
                 </div>
                 <div class="counter-item">
-                    <h3><spa class="counter">1000k</span></h3>
+                    <h3>
+                        <spa class="counter">1000k</span>
+                    </h3>
                     <p>Countries</p>
                     <div class="counter-loader"><span></span><span></span><span></span></div>
                 </div>
@@ -342,7 +356,7 @@ include('./server/connection.php');
     </section>
 
     <!-- home-quick-contact-section -->
-    <section class="home-quick-contact-section blue-gradient">
+    <section class="home-quick-contact-section " style="background:#2F3A53 ;">
         <div class="container-fluid">
             <div class="home-quick-contact home-quick-contact-2">
                 <div class="logo-bg-icon">
@@ -398,7 +412,7 @@ include('./server/connection.php');
                             <ul class="footer-details footer-list">
                                 <li><a href="./auth/sign_up/">Register</a></li>
                                 <li><a href="./auth/sign_in/">Login</a></li>
-                             
+
                             </ul>
                         </div>
                     </div>
@@ -409,7 +423,7 @@ include('./server/connection.php');
                                 <h3>Features</h3>
                             </div>
                             <ul class="footer-details footer-list">
-                               <p>Register to get Started with many Features</p>
+                                <p>Register to get Started with many Features</p>
                             </ul>
                         </div>
                     </div>
@@ -433,7 +447,9 @@ include('./server/connection.php');
             <div class="footer-lower">
                 <div class="footer-lower-item footer-copyright-text">
                     <div class="copy-right-text text-end">
-                        <p>© <script>document.write(new Date().getFullYear())</script> <?php echo $sitename; ?>. All rights reserved.</p>
+                        <p>© <script>
+                                document.write(new Date().getFullYear())
+                            </script> <?php echo $sitename; ?>. All rights reserved.</p>
                     </div>
                 </div>
 
