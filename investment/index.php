@@ -67,31 +67,22 @@ $inv_sql = "
         plan_name,
         profit_per_day,
         total_profit,
-<<<<<<< HEAD
         start_date,
         end_date
     FROM investments
-=======
-        duration
-    FROM investment_plans
->>>>>>> 1cea0843e0945fdd0de480a099784990fc496b92
     ORDER BY id DESC
 ";
 
 $inv_stmt = mysqli_prepare($connection, $inv_sql);
-<<<<<<< HEAD
 if (!$inv_stmt) {
     $errors[] = "Server error: failed to prepare investments query.";
 } else {
     mysqli_stmt_execute($inv_stmt);
     $inv_result = mysqli_stmt_get_result($inv_stmt);
-=======
-mysqli_stmt_execute($inv_stmt);
-$inv_result = mysqli_stmt_get_result($inv_stmt);
->>>>>>> 1cea0843e0945fdd0de480a099784990fc496b92
 
-while ($row = mysqli_fetch_assoc($inv_result)) {
-    $investments[] = $row;
+    while ($row = mysqli_fetch_assoc($inv_result)) {
+        $investments[] = $row;
+    }
 }
 
 mysqli_stmt_close($inv_stmt);
