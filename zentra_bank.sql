@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 21, 2026 at 01:40 PM
+-- Generation Time: Jan 22, 2026 at 10:04 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -106,7 +106,7 @@ CREATE TABLE `bank_transfers` (
   `amount` decimal(15,2) NOT NULL,
   `otp_code` varchar(10) NOT NULL,
   `otp_expires_at` datetime NOT NULL,
-  `status` enum('pending','reversed','completed','failed') NOT NULL DEFAULT 'pending',
+  `status` enum('pending','reversed','completed','failed','declined') NOT NULL DEFAULT 'pending',
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `narration` varchar(255) DEFAULT NULL
@@ -117,7 +117,8 @@ CREATE TABLE `bank_transfers` (
 --
 
 INSERT INTO `bank_transfers` (`id`, `user_id`, `receiver_account_number`, `receiver_bank`, `receiver_name`, `routing_number`, `swift_code`, `amount`, `otp_code`, `otp_expires_at`, `status`, `created_at`, `updated_at`, `narration`) VALUES
-(4, 3, '48858589595', '', 'Ally Bank', '12345678909', '5895949', 50.00, '578355', '2026-01-21 13:37:49', 'pending', '2026-01-21 12:32:49', '2026-01-21 12:32:49', 'he ask for it');
+(4, 3, '48858589595', '', 'Ally Bank', '12345678909', '5895949', 50.00, '578355', '2026-01-21 13:37:49', 'declined', '2026-01-21 12:32:49', '2026-01-22 06:18:39', 'he ask for it'),
+(5, 2, '48858589595', '', 'Bank of America', '12345678909', '5895949', 1000.00, '978348', '2026-01-22 07:11:51', 'completed', '2026-01-22 06:06:51', '2026-01-22 06:14:20', 'he ask for it');
 
 -- --------------------------------------------------------
 
@@ -140,7 +141,8 @@ CREATE TABLE `deposits` (
 
 INSERT INTO `deposits` (`id`, `user_id`, `type_id`, `amount`, `status`, `date`) VALUES
 (19, 1, 1, 100.00, 'approved', '2026-01-18 23:00:00'),
-(20, 3, 2, 100.00, 'pending', '2023-06-20 23:00:00');
+(20, 3, 2, 100.00, 'pending', '2023-06-20 23:00:00'),
+(21, 3, 2, 223.00, 'declined', '2026-01-21 15:01:20');
 
 -- --------------------------------------------------------
 
@@ -151,7 +153,7 @@ INSERT INTO `deposits` (`id`, `user_id`, `type_id`, `amount`, `status`, `date`) 
 CREATE TABLE `investments` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `plan_name` varchar(100) NOT NULL,
+  `plan_id` varchar(100) NOT NULL,
   `amount_invested` decimal(10,2) NOT NULL,
   `daily_profit` decimal(10,2) NOT NULL,
   `total_profit` decimal(10,2) NOT NULL,
@@ -159,23 +161,6 @@ CREATE TABLE `investments` (
   `end_date` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `investments`
---
-
-INSERT INTO `investments` (`id`, `user_id`, `plan_name`, `amount_invested`, `daily_profit`, `total_profit`, `start_date`, `end_date`, `created_at`) VALUES
-(1, 1, 'BASIC PLAN', 100.00, 50.00, 150.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(2, 1, 'BASIC PLAN', 150.00, 75.00, 225.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(3, 1, 'SILVER PLAN', 200.00, 100.00, 300.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(4, 1, 'SILVER PLAN', 250.00, 125.00, 375.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(5, 1, 'GOLD PLAN', 500.00, 250.00, 750.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(6, 1, 'GOLD PLAN', 600.00, 300.00, 900.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(7, 1, 'PLATINUM PLAN', 1000.00, 500.00, 1500.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(8, 1, 'PLATINUM PLAN', 1200.00, 600.00, 1800.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(9, 1, 'PLATINUM PLAN', 1500.00, 750.00, 2250.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(10, 1, 'GOLD PLAN', 800.00, 400.00, 1200.00, '2026-01-19', '2026-01-22', '2026-01-19 17:18:13'),
-(11, 0, 'Select Plan', 0.00, 0.00, 0.00, '0000-00-00', '0000-00-00', '2026-01-21 09:41:49');
 
 -- --------------------------------------------------------
 
@@ -278,6 +263,7 @@ CREATE TABLE `users` (
   `loan_balance` decimal(10,2) NOT NULL DEFAULT 0.00,
   `crypto_balance` decimal(10,2) NOT NULL DEFAULT 0.00,
   `virtual_card_balance` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `limits` varchar(255) NOT NULL DEFAULT '5000',
   `status` enum('pending','suspended','active') NOT NULL DEFAULT 'active'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -285,10 +271,10 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `user_profile`, `created_at`, `balance`, `loan_balance`, `crypto_balance`, `virtual_card_balance`, `status`) VALUES
-(1, 'Ayogu Chimezie', 'ayoguchimezie00@gmail.com', '$2y$10$3TDQcP9cgdC812dL4L89P.Ih6KRnDso5o27O.ufH5mE2/zThcN1si', '/images/avatar/profile_696a3fcc9a25d0.85272167.jpeg', '2026-01-15 13:11:50', 0.00, 0.00, 0.00, 0.00, 'active'),
-(2, 'Ezea Ugochukwu micheal', 'spotwebdev.com@gmail.com', '$2y$10$.XTST3H2SnvIc8gGMGTL3.dDKh1Mnd0uInDm.9K.f.wd9/rZBe29y', NULL, '2026-01-20 23:15:35', 0.00, 0.00, 0.00, 0.00, 'active'),
-(3, 'jenny rose', 'jennyrose@gmail.com', '$2y$10$Ky0ZxlH/cppRIhUquEsomuUsrU1vpO1XmBQhuhWaOsfz2fpEtNvIa', NULL, '2026-01-21 11:26:02', 100.00, 0.00, 0.00, 0.00, 'active');
+INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `user_profile`, `created_at`, `balance`, `loan_balance`, `crypto_balance`, `virtual_card_balance`, `limits`, `status`) VALUES
+(1, 'Ayogu Chimezie', 'ayoguchimezie00@gmail.com', '$2y$10$3TDQcP9cgdC812dL4L89P.Ih6KRnDso5o27O.ufH5mE2/zThcN1si', '/images/avatar/profile_696a3fcc9a25d0.85272167.jpeg', '2026-01-15 13:11:50', 0.00, 0.00, 0.00, 0.00, '5000', 'active'),
+(2, 'Ezea Ugochukwu micheal', 'spotwebdev.com@gmail.com', '$2y$10$.XTST3H2SnvIc8gGMGTL3.dDKh1Mnd0uInDm.9K.f.wd9/rZBe29y', NULL, '2026-01-20 23:15:35', 1000.00, 200.00, 0.00, 0.00, '5000', 'active'),
+(3, 'jenny rose', 'jennyrose@gmail.com', '$2y$10$Ky0ZxlH/cppRIhUquEsomuUsrU1vpO1XmBQhuhWaOsfz2fpEtNvIa', NULL, '2026-01-21 11:26:02', 70.00, 0.00, 0.00, 0.00, '5000', 'active');
 
 -- --------------------------------------------------------
 
@@ -302,15 +288,21 @@ CREATE TABLE `withdrawals` (
   `amount` decimal(10,2) NOT NULL,
   `which_account` varchar(100) NOT NULL,
   `status` enum('pending','approved','failed') DEFAULT 'pending',
-  `date` timestamp NOT NULL DEFAULT current_timestamp()
+  `date` timestamp NOT NULL DEFAULT current_timestamp(),
+  `account_number` varchar(255) NOT NULL,
+  `account_name` varchar(255) NOT NULL,
+  `bank_name` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `withdrawals`
 --
 
-INSERT INTO `withdrawals` (`id`, `user_id`, `amount`, `which_account`, `status`, `date`) VALUES
-(1, 1, 300.00, 'BTC', 'pending', '2026-01-18 00:06:23');
+INSERT INTO `withdrawals` (`id`, `user_id`, `amount`, `which_account`, `status`, `date`, `account_number`, `account_name`, `bank_name`) VALUES
+(1, 1, 300.00, 'BTC', 'pending', '2026-01-18 00:06:23', '', '', ''),
+(2, 3, 14.00, 'balance', 'pending', '2026-01-21 13:47:54', '22669056778', 'ugochukwu micheal', 'Growth Bank'),
+(3, 3, 2.00, 'balance', 'pending', '2026-01-21 13:48:46', '8108833188', 'ugochukwu micheal', 'Opay'),
+(4, 2, 100.00, 'loan_balance', 'failed', '2026-01-22 06:43:28', '22669056778', 'ugochukwu micheal', 'Growth Bank');
 
 --
 -- Indexes for dumped tables
@@ -398,13 +390,13 @@ ALTER TABLE `bank_list`
 -- AUTO_INCREMENT for table `bank_transfers`
 --
 ALTER TABLE `bank_transfers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `deposits`
 --
 ALTER TABLE `deposits`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `investments`
@@ -440,7 +432,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `withdrawals`
 --
 ALTER TABLE `withdrawals`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

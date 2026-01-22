@@ -232,7 +232,7 @@ function money($amount)
                                         <div class="col-xxl-6 col-xl-6 col-lg-6">
                                             <div class="credit-card visa">
                                                 <div class="type-brand">
-                                                    <h4>Debit Card</h4>
+                                                    <h4>Virtual Card</h4>
                                                     <img src="<?php echo $domain ?>/images/cc/visa.png" alt="">
                                                 </div>
                                                 <div class="cc-number">
@@ -242,7 +242,7 @@ function money($amount)
                                                     <h6>9875</h6>
                                                 </div>
                                                 <div class="cc-holder-exp">
-                                                    <h5>Saiful Islam</h5>
+                                                    <h5><?php echo $fullname  ?></h5>
                                                     <div class="exp"><span>EXP:</span><strong>12/21</strong></div>
                                                 </div>
                                                 <div class="cc-info">
