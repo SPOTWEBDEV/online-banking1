@@ -18,13 +18,13 @@
                             </div>
                             <div class="header-right">
                                 <div class="dark-light-toggle" onclick="themeToggle()">
-                                    <span class="dark"><i class="fi fi-rr-eclipse-alt"></i></span>
-                                    <span class="light"><i class="fi fi-rr-eclipse-alt"></i></span>
+                                    <!-- <span class="dark"><i class="fi fi-rr-eclipse-alt"></i></span> -->
+                                    <!-- <span class="light"><i class="fi fi-rr-eclipse-alt"></i></span> -->
                                 </div>
                                 <div class="nav-item dropdown notification">
                                     <div data-bs-toggle="dropdown">
                                         <div class="notify-bell icon-menu">
-                                            <span><i class="fi fi-rs-bells"></i></span>
+                                            <!-- <span><i class="fi fi-rs-bells"></i></span> -->
                                         </div>
                                     </div>
 

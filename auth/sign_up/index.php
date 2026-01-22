@@ -1,5 +1,7 @@
 <?php
 include("../../server/connection.php");
+// chunk_split($rawCardNumber, 4, ' ');
+// echo implode(' ', str_split($row['virtual_card_number'], 4));
 
 $success = "";
 $fullnameErr = "";
