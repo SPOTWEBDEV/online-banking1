@@ -82,7 +82,6 @@ $inv_sql = "
         start_date,
         end_date
     FROM investments
-    WHERE user_id = ?
     ORDER BY id DESC
 ";
 
@@ -90,7 +89,6 @@ $inv_stmt = mysqli_prepare($connection, $inv_sql);
 if (!$inv_stmt) {
     $errors[] = "Server error: failed to prepare investments query.";
 } else {
-    mysqli_stmt_bind_param($inv_stmt, "i", $user_id);
     mysqli_stmt_execute($inv_stmt);
     $inv_result = mysqli_stmt_get_result($inv_stmt);
 
