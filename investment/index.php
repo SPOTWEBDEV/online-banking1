@@ -67,9 +67,8 @@ $inv_sql = "
         plan_name,
         profit_per_day,
         total_profit,
-        start_date,
-        end_date
-    FROM investments
+        duration
+    FROM investment_plans
     ORDER BY id DESC
 ";
 

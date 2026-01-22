@@ -229,6 +229,30 @@ function money($amount)
                                             </div>
                                         </div>
 
+                                        <?php
+                                        $user_id = $_SESSION['user_id'];
+
+                                        $sql = "SELECT virtual_card_number,  virtual_card_expiring_date 
+                                           FROM users 
+                                           WHERE id = ? 
+                                          LIMIT 1";
+
+                                        $stmt = mysqli_prepare($connection, $sql);
+                                        mysqli_stmt_bind_param($stmt, "i", $user_id);
+                                        mysqli_stmt_execute($stmt);
+
+                                        $result = mysqli_stmt_get_result($stmt);
+                                        $user = mysqli_fetch_assoc($result);
+
+                                        mysqli_stmt_close($stmt);
+
+                                        $cardNumber = implode(' ', str_split($user['virtual_card_number'], 4));
+                                        $expiry = date('m/y', strtotime($user['virtual_card_expiring_date']));
+
+
+                                        ?>
+
+
                                         <div class="col-xxl-6 col-xl-6 col-lg-6">
                                             <div class="credit-card visa">
                                                 <div class="type-brand">
@@ -236,14 +260,11 @@ function money($amount)
                                                     <img src="<?php echo $domain ?>/images/cc/visa.png" alt="">
                                                 </div>
                                                 <div class="cc-number">
-                                                    <h6>1234</h6>
-                                                    <h6>5678</h6>
-                                                    <h6>7890</h6>
-                                                    <h6>9875</h6>
+                                                    <h6><?=  $cardNumber ?></h6>
                                                 </div>
                                                 <div class="cc-holder-exp">
                                                     <h5><?php echo $fullname  ?></h5>
-                                                    <div class="exp"><span>EXP:</span><strong>12/21</strong></div>
+                                                    <div class="exp"><span>EXP:</span><strong><?= $expiry ?></strong></div>
                                                 </div>
                                                 <div class="cc-info">
                                                     <div class="row justify-content-between align-items-center">
@@ -353,7 +374,7 @@ function money($amount)
                                                         </tr>
 
                                                 <?php }
-                                                }else {
+                                                } else {
                                                     echo '<tr><td class="text-danger">No transfer history found.</td></tr>';
                                                 }
 
