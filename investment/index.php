@@ -1,7 +1,6 @@
 <?php
 include("../server/connection.php");
 
-
 if (!isset($_SESSION['user_id']) || !is_numeric($_SESSION['user_id'])) {
     header("location: {$domain}/auth/sign_in/");
     exit;
@@ -13,79 +12,109 @@ $errors = [];
 $success = "";
 
 
+$user_balance = 0.00;
+$bal_sql = "SELECT balance FROM users WHERE id = ? LIMIT 1";
+$bal_stmt = mysqli_prepare($connection, $bal_sql);
+if ($bal_stmt) {
+    mysqli_stmt_bind_param($bal_stmt, "i", $user_id);
+    mysqli_stmt_execute($bal_stmt);
+    $bal_res = mysqli_stmt_get_result($bal_stmt);
+    if ($bal_row = mysqli_fetch_assoc($bal_res)) {
+        $user_balance = (float) $bal_row['balance'];
+    }
+    mysqli_stmt_close($bal_stmt);
+} else {
+    $errors[] = "Server error: failed to fetch user balance.";
+}
+
+/**
+ * ✅ ACTIVATE INVESTMENT (check balance first)
+ */
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment'])) {
 
-    $plan_name = isset($_POST['plan_name']) ? trim($_POST['plan_name']) : '';
+    $plan_id = isset($_POST['plan_id']) ? trim($_POST['plan_id']) : '';
     $amount_invested = isset($_POST['amount_invested']) ? trim($_POST['amount_invested']) : '';
 
-
-    if ($plan_name === '') $errors[] = "Plan name missing.";
+    if ($plan_id === '' || !ctype_digit($plan_id)) $errors[] = "Plan ID missing.";
     if ($amount_invested === '' || !is_numeric($amount_invested) || (float)$amount_invested <= 0) $errors[] = "Enter a valid amount.";
 
     if (empty($errors)) {
 
-        $insert_sql = "
-            INSERT INTO investments
-            (user_id, plan_id, amount_invested)
-            VALUES (?, ?, ?)
-        ";
+        $amount_decimal = (float) $amount_invested;
+        $plan_id_int = (int) $plan_id;
 
-        $stmt = mysqli_prepare($connection, $insert_sql);
-        if (!$stmt) {
-            $errors[] = "Server error: failed to prepare statement.";
+    
+        if ($user_balance < $amount_decimal) {
+            $errors[] = "Insufficient balance";
         } else {
 
-            $amount_decimal = (float) $amount_invested;
+            mysqli_begin_transaction($connection);
 
-            mysqli_stmt_bind_param(
-                $stmt,
-                "isd",
-                $user_id,
-                $plan_name,
-                $amount_decimal,
-            );
+            try {
+               
+                $insert_sql = "
+                    INSERT INTO investments (user_id, plan_id, amount_invested)
+                    VALUES (?, ?, ?)
+                ";
+                $stmt = mysqli_prepare($connection, $insert_sql);
+                if (!$stmt) {
+                    throw new Exception("Server error: failed to prepare investment insert.");
+                }
 
-            if (!mysqli_stmt_execute($stmt)) {
-                $errors[] = "Activation failed: " . mysqli_stmt_error($stmt);
-            } else {
+                mysqli_stmt_bind_param($stmt, "iid", $user_id, $plan_id_int, $amount_decimal);
+
+                if (!mysqli_stmt_execute($stmt)) {
+                    $err = mysqli_stmt_error($stmt);
+                    mysqli_stmt_close($stmt);
+                    throw new Exception("Activation failed: " . $err);
+                }
+                mysqli_stmt_close($stmt);
+
+               
+                $upd_stmt = mysqli_prepare($connection, "UPDATE users SET balance = balance - ? WHERE id = ? AND balance >= ?");
+                if (!$upd_stmt) {
+                    throw new Exception("Server error: failed to update balance.");
+                }
+
+                mysqli_stmt_bind_param($upd_stmt, "did", $amount_decimal, $user_id, $amount_decimal);
+
+                if (!mysqli_stmt_execute($upd_stmt) || mysqli_stmt_affected_rows($upd_stmt) < 1) {
+                    $err = mysqli_stmt_error($upd_stmt);
+                    mysqli_stmt_close($upd_stmt);
+                    throw new Exception("Balance update failed. " . ($err ? $err : "Please try again."));
+                }
+                mysqli_stmt_close($upd_stmt);
+
+                mysqli_commit($connection);
+
                 $success = "Investment activated successfully!";
+                $user_balance = $user_balance - $amount_decimal; // update local display balance
+            } catch (Exception $e) {
+                mysqli_rollback($connection);
+                $errors[] = $e->getMessage();
             }
-
-            mysqli_stmt_close($stmt);
         }
     }
 }
 
-/**
- * FETCH INVESTMENTS
- */
-$investments = [];
 
-$inv_sql = "
-    SELECT
-        id,
-        plan_name,
-        profit_per_day,
-        total_profit,
-        duration
+$plans = [];
+$plan_sql = "
+    SELECT id, plan_name, duration, profit_per_day, total_profit
     FROM investment_plans
     ORDER BY id DESC
 ";
-
-$inv_stmt = mysqli_prepare($connection, $inv_sql);
-if (!$inv_stmt) {
-    $errors[] = "Server error: failed to prepare investments query.";
+$plan_stmt = mysqli_prepare($connection, $plan_sql);
+if (!$plan_stmt) {
+    $errors[] = "Server error: failed to prepare investment plans query.";
 } else {
-    mysqli_stmt_execute($inv_stmt);
-    $inv_result = mysqli_stmt_get_result($inv_stmt);
-
-while ($row = mysqli_fetch_assoc($inv_result)) {
-    $investments[] = $row;
+    mysqli_stmt_execute($plan_stmt);
+    $plan_res = mysqli_stmt_get_result($plan_stmt);
+    while ($row = mysqli_fetch_assoc($plan_res)) {
+        $plans[] = $row;
+    }
+    mysqli_stmt_close($plan_stmt);
 }
-}
-
-mysqli_stmt_close($inv_stmt);
-
 ?>
 
 <!DOCTYPE html>
@@ -101,12 +130,12 @@ mysqli_stmt_close($inv_stmt);
     <link rel="stylesheet" href="<?= $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?= $domain ?>/vendor/toastr/toastr.min.css">
 
-    <!-- Extra styles to match your screenshot layout -->
     <style>
+        /* ===== Layout ===== */
         .invest-grid {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 24px;
+            gap: 22px;
         }
 
         @media (max-width: 991px) {
@@ -115,146 +144,183 @@ mysqli_stmt_close($inv_stmt);
             }
         }
 
+        /* ===== Nice Card ===== */
         .invest-card {
-            background: white;
-            border-radius: 20px;
-            padding: 22px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+            border-radius: 22px;
+            padding: 20px;
+            background-color: white;
+            color: black;
+            box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .invest-card:before {
+            content: "";
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            /* background: radial-gradient(circle, rgba(41, 197, 255, 0.28), transparent 60%); */
+            top: -140px;
+            right: -140px;
         }
 
         .invest-top {
             display: flex;
             align-items: center;
             gap: 14px;
-            margin-bottom: 22px;
+            margin-bottom: 14px;
+            position: relative;
+            z-index: 2;
         }
 
         .invest-icon {
-            width: 54px;
-            height: 54px;
-            border-radius: 12px;
-            background: #22282d;
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.10);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #3bd3ff;
             font-size: 22px;
+            color:black;
+            flex: 0 0 auto;
         }
 
         .invest-title {
             margin: 0;
-            font-weight: 700;
-            letter-spacing: .5px;
-            color: #1f2429;
+            font-weight: 900;
+            letter-spacing: .8px;
             text-transform: uppercase;
-            font-size: 18px;
+            font-size: 16px;
+            color: #06121a;
         }
 
-        .invest-days {
-            color: rgba(255, 255, 255, 0.55);
-            margin-top: 2px;
-            font-size: 14px;
+        .invest-sub {
+            margin-top: 4px;
+            font-size: 13px;
+            color: black;
         }
 
-        .invest-label {
-            color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 8px;
-            font-size: 15px;
+        /* ===== Plan Details Block ===== */
+        .plan-details {
+            position: relative;
+            z-index: 2;
+            margin-top: 10px;
+            padding: 14px;
+            border-radius: 16px;
+            background: white;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        .invest-amount-row {
-            display: flex;
-            align-items: baseline;
-            gap: 12px;
-            margin-bottom: 6px;
-            font-size: 24px;
-            font-weight: 800;
-            color: #1f2429;
-            flex-wrap: wrap;
-        }
-
-        .down {
-            color: #ff5b5b;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .up {
-            color: #2cff97;
-            font-size: 18px;
-            font-weight: 700;
-        }
-
-        .invest-total {
-            color: #2cff97;
-            font-weight: 600;
-            font-size: 18px;
-            margin-bottom: 14px;
-        }
-
-        .invest-progress-wrap {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 6px;
-        }
-
-        .invest-progress {
-            width: 100%;
-            height: 8px;
-            background: #2a2f35;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .invest-progress>div {
-            width: 50%;
-            height: 100%;
-            background: #29c5ff;
-        }
-
-        .invest-progress-pct {
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: 600;
-            min-width: 45px;
-            text-align: right;
-        }
-
-        .inv-meta {
-            margin-top: 14px;
+        .plan-row {
             display: flex;
             justify-content: space-between;
-            gap: 12px;
-            color: rgba(255, 255, 255, 0.6);
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
             font-size: 14px;
         }
 
-        /* ✅ input + button styles like screenshot */
+        .plan-row:last-child {
+            border-bottom: 0;
+        }
+
+        .plan-label {
+            color:black;
+            font-weight: 600;
+        }
+
+        .plan-value {
+            color: black;
+            font-weight: 800;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(41, 197, 255, 0.14);
+            color: #bfefff;
+            border: 1px solid rgba(41, 197, 255, 0.25);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        /* ===== Balance chip ===== */
+        .balance-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 14px;
+            background: white;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            color: #06121a;
+            font-weight: 800;
+            font-size: 14px;
+        }
+
+        .balance-chip small {
+            opacity: .65;
+            font-weight: 700;
+        }
+
+        /* ===== Input + button ===== */
+        .invest-form {
+            position: relative;
+            z-index: 2;
+            margin-top: 14px;
+        }
+
         .invest-input {
             width: 100%;
             height: 56px;
-            border-radius: 12px;
-            background: #1f2429;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            background: rgba(0, 0, 0, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             outline: none;
             padding: 0 16px;
-            color: #e9eef2;
-            font-size: 16px;
-            margin-top: 16px;
-            margin-bottom: 18px;
+            color: #ffffff;
+            font-size: 15px;
+            margin-bottom: 12px;
+        }
+
+        .invest-input::placeholder {
+            color: rgba(255, 255, 255, 0.45);
         }
 
         .invest-btn {
             width: 100%;
             height: 56px;
-            border-radius: 12px;
+            border-radius: 14px;
             border: none;
-            background: #1f89a8;
-            color: #e9eef2;
-            font-weight: 800;
-            letter-spacing: .8px;
+            background: linear-gradient(90deg, #29c5ff, #1f89a8);
+            color: #06121a;
+            font-weight: 900;
+            letter-spacing: 1px;
+            z-index: -1 !important;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
+            text-transform: uppercase;
+            box-shadow: 0 14px 28px rgba(41, 197, 255, 0.22);
+        }
+
+        .invest-btn:hover {
+            filter: brightness(1.03);
+        }
+
+        /* ===== Small note ===== */
+        .plan-note {
+            margin-top: 10px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.55);
+            position: relative;
+            z-index: 2;
         }
     </style>
 </head>
@@ -276,10 +342,16 @@ mysqli_stmt_close($inv_stmt);
                     <div class="col-12">
                         <div class="page-title">
                             <div class="row align-items-center justify-content-between">
-                                <div class="col-xl-4">
+                                <div class="col-xl-6">
                                     <div class="page-title-content">
                                         <h3>Investment</h3>
                                         <p class="mb-2">Welcome To <?= htmlspecialchars($sitename) ?> Management</p>
+
+                                      
+                                        <div class="balance-chip mt-2">
+                                            <small>Your Balance:</small>
+                                            <span>$<?= number_format((float) htmlspecialchars($bal_sql), 2) ?></span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -305,60 +377,68 @@ mysqli_stmt_close($inv_stmt);
                     </div>
                 <?php } ?>
 
-                <!-- INVESTMENTS GRID -->
+              
                 <div class="invest-grid mt-3">
 
-                    <?php if (!empty($investments)) : ?>
-                        <?php foreach ($investments as $inv) :
+                    <?php if (!empty($plans)) : ?>
+                        <?php foreach ($plans as $p) :
 
-                            $duration = $inv['duration'];
-                            $plan_name = $inv['plan_name'];
-                            $profit_per_day = (float) $inv['profit_per_day'];
-                            $total_profit = (float) $inv['total_profit'];
-                            $id = (int) $inv['id'];
-
-
-
-
-
-                            $progress = (int) min(100, round((2 / $duration) * 100));
+                            $plan_id = (int) $p['id'];
+                            $plan_name = $p['plan_name'];
+                            $duration = (int) $p['duration'];
+                            $profit_per_day = (float) $p['profit_per_day'];
+                            $total_profit = (float) $p['total_profit'];
                         ?>
 
-                            <div class="invest-card">
+                            <div class="invest-card" style="margin-bottom: 15px;">
                                 <div class="invest-top">
                                     <div class="invest-icon">
                                         <i class="fi fi-rr-chart-histogram"></i>
                                     </div>
                                     <div>
                                         <h4 class="invest-title"><?= htmlspecialchars($plan_name) ?></h4>
-                                        <div class="invest-days"><?= $duration ?> days</div>
+                                      
                                     </div>
                                 </div>
 
-                                <div class="invest-label">Plan Amount</div>
+                              
+                                <div class="plan-details">
+                                    <div class="plan-row">
+                                        <span class="plan-label">Plan Name</span>
+                                        <span class="plan-value"><?= htmlspecialchars($plan_name) ?></span>
+                                    </div>
 
-                                <div class="invest-amount-row">
-                                    <span class="up">↓</span>
-                                    <span>$<?= number_format($profit_per_day, 0) ?> Per Day</span>
-                                    <span class="up">↓</span>
-                                    <span>$<?= number_format($total_profit, 0) ?> Total Profit</span>
+                                    <div class="plan-row">
+                                        <span class="plan-label">Duration</span>
+                                        <span class="plan-value"><?= $duration ?> days</span>
+                                    </div>
 
+                                    <div class="plan-row">
+                                        <span class="plan-label">Profit Per Day</span>
+                                        <span class="plan-value">$<?= number_format($profit_per_day, 2) ?></span>
+                                    </div>
 
-                                    <form method="post">
-                                        <input type="hidden" name="plan_name" value="<?= htmlspecialchars($id) ?>">
-                                        <input class="invest-input" type="number" name="amount_invested" placeholder="Enter Amount" required>
-                                        <button class="invest-btn" type="submit" name="activate_investment">ACTIVATE</button>
-                                    </form>
-
-
+                                    <div class="plan-row">
+                                        <span class="plan-label">Total Profit</span>
+                                        <span class="plan-value">$<?= number_format($total_profit, 2) ?></span>
+                                    </div>
                                 </div>
 
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <div class="alert alert-warning">No active investments found.</div>
-                        <?php endif; ?>
+                                <form class="invest-form" method="post">
+                                    <input type="hidden" name="plan_id" value="<?= $plan_id ?>">
+                                    <input class="invest-input" type="number" name="amount_invested" placeholder="Enter Amount" required>
+                                    <button class="invest-btn" type="submit" name="activate_investment">ACTIVATE</button>
+                                </form>
 
+                                <!-- <div class="plan-note">
+                                    * Your balance will be checked automatically before activation.
+                                </div> -->
                             </div>
+
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <div class="alert alert-warning">No investment plans found.</div>
+                    <?php endif; ?>
 
                 </div>
             </div>
