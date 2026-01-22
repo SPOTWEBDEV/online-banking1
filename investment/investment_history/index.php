@@ -49,7 +49,7 @@ $user_id = $_SESSION['user_id'];
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                     <a href="../"><button class="btn btn-primary mr-2">Made Investment</button></a>
+                                     <a href="../"><button class="btn btn-primary mr-2">Make Investment</button></a>
                                 </div>
                             </div>
                         </div>

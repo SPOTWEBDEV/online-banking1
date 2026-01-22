@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2026 at 11:33 AM
+-- Generation Time: Jan 22, 2026 at 03:05 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -165,7 +165,9 @@ CREATE TABLE `investments` (
 --
 
 INSERT INTO `investments` (`id`, `user_id`, `plan_id`, `amount_invested`, `created_at`, `status`) VALUES
-(12, 2, '1', 200.00, '2026-01-22 10:03:41', 'pending');
+(12, 2, '1', 200.00, '2026-01-22 10:03:41', 'pending'),
+(13, 4, '1', 400.00, '2026-01-22 13:00:14', 'pending'),
+(14, 4, '1', 400.00, '2026-01-22 13:00:21', 'pending');
 
 -- --------------------------------------------------------
 
@@ -269,17 +271,20 @@ CREATE TABLE `users` (
   `crypto_balance` decimal(10,2) NOT NULL DEFAULT 0.00,
   `virtual_card_balance` decimal(10,2) NOT NULL DEFAULT 0.00,
   `limits` varchar(255) NOT NULL DEFAULT '5000',
-  `status` enum('pending','suspended','active') NOT NULL DEFAULT 'active'
+  `status` enum('pending','suspended','active') NOT NULL DEFAULT 'active',
+  `virtual_card_number` char(16) DEFAULT NULL,
+  `virtual_card_expiring_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `user_profile`, `created_at`, `balance`, `loan_balance`, `crypto_balance`, `virtual_card_balance`, `limits`, `status`) VALUES
-(1, 'Ayogu Chimezie', 'ayoguchimezie00@gmail.com', '$2y$10$3TDQcP9cgdC812dL4L89P.Ih6KRnDso5o27O.ufH5mE2/zThcN1si', '/images/avatar/profile_696a3fcc9a25d0.85272167.jpeg', '2026-01-15 13:11:50', 0.00, 0.00, 0.00, 0.00, '5000', 'active'),
-(2, 'Ezea Ugochukwu micheal', 'spotwebdev.com@gmail.com', '$2y$10$.XTST3H2SnvIc8gGMGTL3.dDKh1Mnd0uInDm.9K.f.wd9/rZBe29y', NULL, '2026-01-20 23:15:35', 1000.00, 200.00, 0.00, 0.00, '5000', 'active'),
-(3, 'jenny rose', 'jennyrose@gmail.com', '$2y$10$Ky0ZxlH/cppRIhUquEsomuUsrU1vpO1XmBQhuhWaOsfz2fpEtNvIa', NULL, '2026-01-21 11:26:02', 20.00, 0.00, 0.00, 0.00, '5000', 'active');
+INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `user_profile`, `created_at`, `balance`, `loan_balance`, `crypto_balance`, `virtual_card_balance`, `limits`, `status`, `virtual_card_number`, `virtual_card_expiring_date`) VALUES
+(1, 'Ayogu Chimezie', 'ayoguchimezie00@gmail.com', '$2y$10$3TDQcP9cgdC812dL4L89P.Ih6KRnDso5o27O.ufH5mE2/zThcN1si', '/images/avatar/profile_696a3fcc9a25d0.85272167.jpeg', '2026-01-15 13:11:50', 0.00, 0.00, 0.00, 0.00, '5000', 'active', NULL, NULL),
+(2, 'Ezea Ugochukwu micheal', 'spotwebdev.com@gmail.com', '$2y$10$.XTST3H2SnvIc8gGMGTL3.dDKh1Mnd0uInDm.9K.f.wd9/rZBe29y', NULL, '2026-01-20 23:15:35', 1000.00, 200.00, 0.00, 0.00, '5000', 'active', NULL, NULL),
+(3, 'jenny rose', 'jennyrose@gmail.com', '$2y$10$Ky0ZxlH/cppRIhUquEsomuUsrU1vpO1XmBQhuhWaOsfz2fpEtNvIa', NULL, '2026-01-21 11:26:02', 20.00, 0.00, 0.00, 0.00, '5000', 'active', NULL, NULL),
+(4, ' bestkind', 'bestkind444@gmail.com', '$2y$10$iizruajCHJ6Kw5RJSjBxXOPABUDKnUPEENd3Hl2KQjOUf7/3ekbzG', NULL, '2026-01-22 12:36:18', 0.00, 0.00, 0.00, 0.00, '5000', 'active', '2409986573216222', '2030-01-22');
 
 -- --------------------------------------------------------
 
@@ -367,7 +372,8 @@ ALTER TABLE `payment_account`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `email` (`email`);
+  ADD UNIQUE KEY `email` (`email`),
+  ADD UNIQUE KEY `uq_virtual_card_number` (`virtual_card_number`);
 
 --
 -- Indexes for table `withdrawals`
@@ -407,7 +413,7 @@ ALTER TABLE `deposits`
 -- AUTO_INCREMENT for table `investments`
 --
 ALTER TABLE `investments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `investment_plans`
@@ -431,7 +437,7 @@ ALTER TABLE `payment_account`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `withdrawals`
