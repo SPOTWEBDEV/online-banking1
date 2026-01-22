@@ -427,7 +427,7 @@ function money($amount)
     <script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo $domain ?>/vendor/chartjs/chartjs.js"></script>
     <script src="<?php echo $domain ?>/js/plugins/chartjs-line-balance-overtime.js"></script>
-    <script src="js/scripts.js"></script>
+    <script src="<?php echo $domain ?>/js/scripts.js"></script>
 </body>
 
 </html>
