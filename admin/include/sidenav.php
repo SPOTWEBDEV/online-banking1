@@ -47,9 +47,6 @@
                 </a>
             </li>
 
-
-
-
             <li>
                 <a href="<?= $domain ?>/admin/settings/">
                     <span><i class="fi fi-rr-settings"></i></span>

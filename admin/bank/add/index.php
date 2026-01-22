@@ -27,12 +27,29 @@ include("../../controllers/paymentaccount.php");
 
 <body class="dashboard">
     <div id="main-wrapper">
-       <?php include("../../include/nav.php") ?>
+        <?php include("../../include/nav.php") ?>
         <?php include("../../include/sidenav.php") ?>
         <div class="content-body">
             <div class="verification">
                 <div class="container">
                     <div class="row justify-content-center h-100 align-items-center">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title">
+                                    <div class="row align-items-center justify-content-between">
+                                        <div class="col-xl-4">
+                                            <div class="page-title-content">
+                                                <h3>Add Payment Account</h3>
+                                                <p class="mb-2">Welcome To <?= $sitename ?></p>
+                                            </div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="../"><button class="btn btn-primary mr-2">View Account</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
@@ -41,9 +58,9 @@ include("../../controllers/paymentaccount.php");
                                     </h4>
                                 </div>
 
-                            
+
                                 <div class="card-body">
-                                    <form action=""  method="POST">
+                                    <form action="" method="POST">
 
                                         <?php if ($type === "bank"): ?>
 
@@ -102,7 +119,7 @@ include("../../controllers/paymentaccount.php");
 
                                     </form>
                                 </div>
-                               
+
 
                             </div>
 
