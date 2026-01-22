@@ -2,6 +2,11 @@
 include("../../server/connection.php");
 // chunk_split($rawCardNumber, 4, ' ');
 // echo implode(' ', str_split($row['virtual_card_number'], 4));
+// $expDisplay = date('m/y', strtotime($row['virtual_card_expiring_date']));
+// If you want without leading zero: n/y
+// $expDisplay = date('n/y', strtotime($row['virtual_card_expiring_date']));
+
+
 
 $success = "";
 $fullnameErr = "";
@@ -15,13 +20,41 @@ $fullname = "";
 $email = "";
 $accept_terms = "";
 
+function generateUniqueCardNumber($connection) {
+    while (true) {
+        // 16 digits, first digit 1-9 so it doesn't start with 0
+        $card = strval(random_int(1, 9));
+        for ($i = 0; $i < 15; $i++) {
+            $card .= strval(random_int(0, 9));
+        }
+
+        $checkSql = "SELECT id FROM users WHERE virtual_card_number = ? LIMIT 1";
+        $checkStmt = mysqli_prepare($connection, $checkSql);
+        if (!$checkStmt) {
+            // if prepare fails, stop immediately
+            throw new Exception("server error: ");
+        }
+
+        mysqli_stmt_bind_param($checkStmt, "s", $card);
+        mysqli_stmt_execute($checkStmt);
+        mysqli_stmt_store_result($checkStmt);
+
+        $exists = (mysqli_stmt_num_rows($checkStmt) > 0);
+        mysqli_stmt_close($checkStmt);
+
+        if (!$exists) {
+            return $card;
+        }
+    }
+}
+
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    $fullname = $_POST['fullName'];
-    $email    = $_POST['email'];
-    $password = $_POST['password'];
+    $fullname = $_POST['fullName'] ?? '';
+    $email    = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
     $accept_terms = isset($_POST['acceptTerms']) ? $_POST['acceptTerms'] : "";
-    $confirmPassword = $_POST['confirmPassword'];
+    $confirmPassword = $_POST['confirmPassword'] ?? '';
 
     $hasError = false;
 
@@ -57,12 +90,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $hasError = true;
     }
 
-    /*
-    ============================================
-    FIXED EMAIL CHECK — WORKS CORRECTLY NOW
-    ============================================
-    */
-    $sql_exist = "SELECT id FROM users WHERE email = ?";
+    // EMAIL EXISTS CHECK
+    $sql_exist = "SELECT id FROM users WHERE email = ? LIMIT 1";
     $stmt_exist = mysqli_prepare($connection, $sql_exist);
     mysqli_stmt_bind_param($stmt_exist, "s", $email);
     mysqli_stmt_execute($stmt_exist);
@@ -77,36 +106,61 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     // If NO ERRORS → insert user
     if (!$hasError) {
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO users (fullname, email, password) VALUES (?, ?, ?)";
-        $stmt = mysqli_prepare($connection, $sql);
 
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "sss", $fullname, $email, $hashedPassword);
-            mysqli_stmt_execute($stmt);
+        // 1) Generate unique card number
+        try {
+            $virtualCardNumber = generateUniqueCardNumber($connection);
+        } catch (Exception $e) {
+            $success = $e->getMessage();
+            $hasError = true;
+        }
 
-            if (mysqli_stmt_affected_rows($stmt) > 0) {
-                $success = "User registered successfully";
+        $virtualCardExpiry = (new DateTime())->modify('+4 years')->format('Y-m-d');
 
-                // clear form values
-                $fullname = "";
-                $email = "";
-                $accept_terms = "";
+        if (!$hasError) {
+            $sql = "INSERT INTO users (fullname, email, password, virtual_card_number, virtual_card_expiring_date)
+                    VALUES (?, ?, ?, ?, ?)";
+            $stmt = mysqli_prepare($connection, $sql);
 
-                echo  "<script>
+            if ($stmt) {
+                mysqli_stmt_bind_param(
+                    $stmt,
+                    "sssss",
+                    $fullname,
+                    $email,
+                    $hashedPassword,
+                    $virtualCardNumber,
+                    $virtualCardExpiry
+                );
+
+                mysqli_stmt_execute($stmt);
+
+                if (mysqli_stmt_affected_rows($stmt) > 0) {
+                    $success = "User registered successfully";
+
+                    // clear form values
+                    $fullname = "";
+                    $email = "";
+                    $accept_terms = "";
+
+                    echo "<script>
                         setTimeout(() => {
                             window.location.href = '../sign_in/'
                         }, 2500);
-                       </script>";
-            } else {
-                $success = "Registration failed";
-            }
+                    </script>";
+                } else {
+                    $success = "Registration failed";
+                }
 
-            mysqli_stmt_close($stmt);
-        } else {
-            $success = "Database error: " . mysqli_error($connection);
+                mysqli_stmt_close($stmt);
+            } else {
+                $success = "Database error: " . mysqli_error($connection);
+            }
         }
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>
