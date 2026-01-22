@@ -27,8 +27,8 @@ include("../../server/connection.php");
         <?php include("../include/nav.php") ?>
         <?php include("../include/sidenav.php") ?>
         <div class="content-body">
-            <div class="verification section-padding">
-                <div class="container h-100">
+            <div class="verification">
+                <div class="container">
                     <div class="row justify-content-center h-100 align-items-center">
                         <div class="col-xl-8 col-md-12">
 

@@ -16,8 +16,9 @@ $success = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment'])) {
 
     $plan_name = isset($_POST['plan_name']) ? trim($_POST['plan_name']) : '';
+    $amount_invested = isset($_POST['amount_invested']) ? trim($_POST['amount_invested']) : '';
 
-    
+
     if ($plan_name === '') $errors[] = "Plan name missing.";
     if ($amount_invested === '' || !is_numeric($amount_invested) || (float)$amount_invested <= 0) $errors[] = "Enter a valid amount.";
 
@@ -25,8 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment']
 
         $insert_sql = "
             INSERT INTO investments
-            (user_id, plan_name, amount_invested, daily_profit, total_profit, start_date, end_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            (user_id, plan_id, amount_invested)
+            VALUES (?, ?, ?)
         ";
 
         $stmt = mysqli_prepare($connection, $insert_sql);
@@ -34,20 +35,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment']
             $errors[] = "Server error: failed to prepare statement.";
         } else {
 
-            $amount_decimal = (float)$amount_invested;
-            $daily_decimal  = (float)$daily_profit;
-            $total_decimal  = (float)$total_profit;
+            $amount_decimal = (float) $amount_invested;
 
             mysqli_stmt_bind_param(
                 $stmt,
-                "isdddss",
+                "isd",
                 $user_id,
                 $plan_name,
                 $amount_decimal,
-                $daily_decimal,
-                $total_decimal,
-                $start_date,
-                $end_date
             );
 
             if (!mysqli_stmt_execute($stmt)) {
@@ -67,7 +62,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment']
 $investments = [];
 
 $inv_sql = "
-    SELECT 
+    SELECT
+        id,
         plan_name,
         profit_per_day,
         total_profit,
@@ -167,7 +163,7 @@ mysqli_stmt_close($inv_stmt);
             align-items: baseline;
             gap: 12px;
             margin-bottom: 6px;
-            font-size: 34px;
+            font-size: 24px;
             font-weight: 800;
             color: #e9eef2;
             flex-wrap: wrap;
@@ -254,6 +250,7 @@ mysqli_stmt_close($inv_stmt);
             font-weight: 800;
             letter-spacing: .8px;
             cursor: pointer;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -281,6 +278,9 @@ mysqli_stmt_close($inv_stmt);
                                         <p class="mb-2">Welcome To <?= htmlspecialchars($sitename) ?> Management</p>
                                     </div>
                                 </div>
+                                <div class="col-auto">
+                                    <a href="./investment_history/"><button class="btn btn-primary mr-2">View Investment History</button></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -307,14 +307,15 @@ mysqli_stmt_close($inv_stmt);
                     <?php if (!empty($investments)) : ?>
                         <?php foreach ($investments as $inv) :
 
-                           $duration = $inv['duration'];
-                           $plan_name = $inv['plan_name'];
-                           $profit_per_day = (float) $inv['profit_per_day'];
-                           $total_profit = (float) $inv['total_profit'];
+                            $duration = $inv['duration'];
+                            $plan_name = $inv['plan_name'];
+                            $profit_per_day = (float) $inv['profit_per_day'];
+                            $total_profit = (float) $inv['total_profit'];
+                            $id = (int) $inv['id'];
 
 
 
-                          
+
 
                             $progress = (int) min(100, round((2 / $duration) * 100));
                         ?>
@@ -333,65 +334,65 @@ mysqli_stmt_close($inv_stmt);
                                 <div class="invest-label">Plan Amount</div>
 
                                 <div class="invest-amount-row">
-                                    <span class="down">↓</span>
-                                    <span>$<?= number_format($profit_per_day, 0) ?></span>
-                                    <span class="up">↑</span>
-                                    <span>$<?= number_format($total_profit, 0) ?></span>
+                                    <span class="up">↓</span>
+                                    <span>$<?= number_format($profit_per_day, 0) ?> Per Day</span>
+                                    <span class="up">↓</span>
+                                    <span>$<?= number_format($total_profit, 0) ?> Total Profit</span>
 
 
-                                <form method="post">
-                                    <input type="hidden" name="plan_name" value="<?= htmlspecialchars($plan_name) ?>">
-                                    <input class="invest-input" type="number" step="0.01" name="amount_invested" placeholder="Enter Amount" required>
-                                    <button class="invest-btn" type="submit" name="activate_investment">ACTIVATE</button>
-                                </form>
+                                    <form method="post">
+                                        <input type="hidden" name="plan_name" value="<?= htmlspecialchars($id) ?>">
+                                        <input class="invest-input" type="number" name="amount_invested" placeholder="Enter Amount" required>
+                                        <button class="invest-btn" type="submit" name="activate_investment">ACTIVATE</button>
+                                    </form>
 
-                                
+
+                                </div>
+
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <div class="alert alert-warning">No active investments found.</div>
+                        <?php endif; ?>
+
                             </div>
 
-                        <?php endforeach; ?>
-                    <?php else: ?>
-                        <div class="alert alert-warning">No active investments found.</div>
-                    <?php endif; ?>
-
                 </div>
-
             </div>
-        </div>
 
-        <!-- FOOTER (kept intact) -->
-        <div class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-6">
-                        <div class="copyright">
-                            <p>© Copyright
-                                <script>
-                                    var CurrentYear = new Date().getFullYear()
-                                    document.write(CurrentYear)
-                                </script>
-                                <a href="#"><?= htmlspecialchars($sitename) ?></a> | All Rights Reserved
-                            </p>
+            <!-- FOOTER (kept intact) -->
+            <div class="footer">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6">
+                            <div class="copyright">
+                                <p>© Copyright
+                                    <script>
+                                        var CurrentYear = new Date().getFullYear()
+                                        document.write(CurrentYear)
+                                    </script>
+                                    <a href="#"><?= htmlspecialchars($sitename) ?></a> | All Rights Reserved
+                                </p>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xl-6">
-                        <div class="footer-social">
-                            <ul>
-                                <li><a href="#"><i class="fi fi-brands-facebook"></i></a></li>
-                                <li><a href="#"><i class="fi fi-brands-twitter"></i></a></li>
-                                <li><a href="#"><i class="fi fi-brands-linkedin"></i></a></li>
-                                <li><a href="#"><i class="fi fi-brands-youtube"></i></a></li>
-                            </ul>
+                        <div class="col-xl-6">
+                            <div class="footer-social">
+                                <ul>
+                                    <li><a href="#"><i class="fi fi-brands-facebook"></i></a></li>
+                                    <li><a href="#"><i class="fi fi-brands-twitter"></i></a></li>
+                                    <li><a href="#"><i class="fi fi-brands-linkedin"></i></a></li>
+                                    <li><a href="#"><i class="fi fi-brands-youtube"></i></a></li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
-    </div>
-
-    <script src="<?= $domain ?>/vendor/jquery/jquery.min.js"></script>
-    <script src="<?= $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="<?= $domain ?>/js/scripts.js"></script>
+        <script src="<?= $domain ?>/vendor/jquery/jquery.min.js"></script>
+        <script src="<?= $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="<?= $domain ?>/js/scripts.js"></script>
 </body>
 
 </html>

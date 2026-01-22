@@ -107,10 +107,7 @@ $query = $connection->query($sql);
                                                     <td><span class="text-primary">$<?php echo number_format($transfer['amount'], 2); ?></span></td>
                                                 </tr>
 
-                                                <tr>
-                                                    <td>Sender Name:</td>
-                                                    <td><?php echo $transfer['fullname']; ?></td>
-                                                </tr>
+                                                
 
                                                 <tr>
                                                     <td>Beneficiary Bank:</td>
@@ -154,14 +151,14 @@ $query = $connection->query($sql);
                                                 </tr>
 
                                                 <tr>
-                                                    <td>Created At:</td>
+                                                    <td>Date:</td>
                                                     <td><?php echo $transfer['created_at']; ?></td>
                                                 </tr>
 
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>Last Update:</td>
                                                     <td><?php echo $transfer['updated_at']; ?></td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>

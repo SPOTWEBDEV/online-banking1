@@ -197,7 +197,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                                                     <label class="form-label">Select Bank</label>
 
-                                                    <select name="receiver_name" class="form-control">
+                                                    <select name="receiver_bank" class="form-control">
                                                         <option selected>Select Bank</option>
                                                         <?php
                                                         $users = mysqli_query($connection, "SELECT id, name FROM bank_list");
