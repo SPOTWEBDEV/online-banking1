@@ -1,4 +1,4 @@
-<style>
+<!-- <style>
     :root {
         --bottom-nav-h: 70px;
     }
@@ -93,7 +93,7 @@
             border-radius: 10px;
         }
     }
-</style>
+</style> -->
 
 <!-- ========================= -->
 <!-- SIDEBAR (DESKTOP) -->
@@ -157,7 +157,9 @@
             </li>
 
             <!-- HISTORY (DESKTOP DROPDOWN) -->
-            <li>
+
+
+          <!--   <li>
                 <a href="#historyMenu"
                     data-bs-toggle="collapse"
                     aria-expanded="false"
@@ -194,15 +196,14 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> -->
+
+
             <!-- END HISTORY -->
         </ul>
     </div>
 </div>
 
-<!-- ========================= -->
-<!-- MOBILE BOTTOM NAV -->
-<!-- ========================= -->
 <div class="mobile-bottom-nav d-lg-none">
     <a class="mobile-nav-item" href="<?php echo $domain ?>/dashboard/">
         <i class="fi fi-rr-dashboard"></i>
@@ -220,19 +221,23 @@
         <i class="fi fi-sr-bullseye-arrow"></i>
     </a>
 
+
+
+
     <!-- History (opens bottom sheet) -->
-    <a class="mobile-nav-item"
+    <!-- <a class="mobile-nav-item"
         href="javascript:void(0)"
         data-bs-toggle="offcanvas"
         data-bs-target="#historyOffcanvas">
         <i class="fi fi-rr-receipt"></i>
-    </a>
+    </a> -->
 </div>
 
 <!-- ========================= -->
 <!-- HISTORY OFFCANVAS (MOBILE) -->
 <!-- ========================= -->
-<div class="offcanvas offcanvas-bottom" tabindex="-1" id="historyOffcanvas">
+
+<!-- <div class="offcanvas offcanvas-bottom" tabindex="-1" id="historyOffcanvas">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title">History</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
@@ -258,10 +263,10 @@
             </a>
         </div>
     </div>
-</div>
+</div> -->
 
 <!-- JS to expand sidebar width when History is opened (desktop only) -->
-<script>
+<!-- <script>
     (function() {
         var sidebar = document.getElementById('desktopSidebar');
         var historyMenu = document.getElementById('historyMenu');
@@ -284,4 +289,4 @@
             if (!isDesktop()) sidebar.classList.remove('history-open');
         });
     })();
-</script>
+</script> -->
