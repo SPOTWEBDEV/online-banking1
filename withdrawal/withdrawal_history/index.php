@@ -47,6 +47,9 @@ $user_id = $_SESSION['user_id'];
                                         <p class="mb-2">Welcome To <?= $sitename ?> Management</p>
                                     </div>
                                 </div>
+                                <div class="col-auto">
+                                     <a href="../"><button class="btn btn-primary mr-2"> Withdrawal Fund</button></a>
+                                </div>
                             </div>
                         </div>
                     </div>

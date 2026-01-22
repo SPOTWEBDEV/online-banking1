@@ -20,13 +20,41 @@ $sql = "
         bank_transfers.created_at,
         bank_transfers.updated_at,
         bank_transfers.narration,
-        users.fullname
+        users.fullname,
+        users.id AS user_id
     FROM bank_transfers
     INNER JOIN users ON users.id = bank_transfers.user_id
     WHERE bank_transfers.id = '$id'
 ";
 
 $query = $connection->query($sql);
+
+
+
+if(isset($_GET['approve_transfers']) && isset($_GET['amount']) && isset($_GET['user_id'])) {
+    $transfer_id = mysqli_real_escape_string($connection, $_GET['approve_transfers']);
+    $amount = mysqli_real_escape_string($connection, $_GET['amount']);
+    $user_id = mysqli_real_escape_string($connection, $_GET['user_id']);
+    $approve_sql = "UPDATE bank_transfers SET status='completed' WHERE id='$transfer_id'";
+    $connection->query($approve_sql);
+    $query = $connection->query("UPDATE users SET balance = balance - $amount WHERE id = $user_id");
+
+    echo "<script>alert('Transfer approved successfully.'); window.location.href='./index.php?id=$transfer_id';</script>";
+    exit();
+}
+
+if(isset($_GET['decline_transfers']) && isset($_GET['amount']) && isset($_GET['user_id'])) {
+    $transfer_id = mysqli_real_escape_string($connection, $_GET['decline_transfers']);
+    $amount = mysqli_real_escape_string($connection, $_GET['amount']);
+    $user_id = mysqli_real_escape_string($connection, $_GET['user_id']);
+    $decline_sql = "UPDATE bank_transfers SET status='declined' WHERE id='$transfer_id'";
+    $connection->query($decline_sql);  
+    
+    echo "<script>alert('Transfer declined successfully.'); window.location.href='./index.php?id=$transfer_id';</script>";
+    exit();
+
+}
+
 
 
 
@@ -166,12 +194,12 @@ $query = $connection->query($sql);
                                                 <tr>
                                                     <td>Action</td>
                                                     <td>
-                                                        <a href="./?approve_transfers=<?= $transfer['id'] ?>">
-                                                                    <button class="btn btn-success btn-sm approve-deposit">Approve</button>
-                                                                </a>
-                                                                <a href="./?decline_transfers=<?= $transfer['id'] ?>">
-                                                                    <button class="btn btn-danger btn-sm decline-deposit">Decline</button>
-                                                                </a>
+                                                        <a href="?approve_transfers=<?= $transfer['id'] ?>&amount=<?= $transfer['amount'] ?>&user_id=<?= $transfer['user_id'] ?>">
+                                                            <button class="btn btn-success btn-sm approve-deposit">Approve</button>
+                                                        </a>
+                                                        <a href="?decline_transfers=<?= $transfer['id'] ?>&amount=<?= $transfer['amount'] ?>&user_id=<?= $transfer['user_id'] ?>">
+                                                            <button class="btn btn-danger btn-sm decline-deposit">Decline</button>
+                                                        </a>
                                                     </td>
                                                 </tr>
 

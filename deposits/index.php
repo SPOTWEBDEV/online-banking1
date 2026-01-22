@@ -2,7 +2,7 @@
 include("../server/connection.php");
 
 if (!isset($_SESSION['user_id'])) {
-     header("location: {$domain}/auth/sign_in/");
+    header("location: {$domain}/auth/sign_in/");
 }
 
 $user_id = (int) $_SESSION['user_id'];
@@ -67,13 +67,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
 </head>
 
 <body class="dashboard">
-  
+
     <div id="main-wrapper">
-       <!-- nav -->
+        <!-- nav -->
         <?php include("../include/header.php") ?>
 
-       <!-- side nav -->
-                <?php include("../include/sidenav.php") ?>
+        <!-- side nav -->
+        <?php include("../include/sidenav.php") ?>
 
         <div class="content-body">
             <div class="container">
@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                     <a href="./deposits_history/"><button class="btn btn-primary mr-2">View Deposit History</button></a>
+                                    <a href="./deposits_history/"><button class="btn btn-primary mr-2">View Deposit History</button></a>
                                 </div>
                             </div>
                         </div>
@@ -99,10 +99,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                     <div class="col-xxl-12 col-xl-12">
 
                         <div class="row">
-
                             <div class="row g-4">
 
-                                <!-- Error-->
+                                <!-- ERROR -->
                                 <div class="col-xxl-6 col-xl-6 col-lg-6">
                                     <?php if (!empty($errors)): ?>
                                         <div class="alert alert-danger">
@@ -119,7 +118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                                     <?php endif; ?>
 
 
-
                                     <div class="card">
                                         <div class="card-header">
                                             <h4 class="card-title">Select Deposit Method</h4>
@@ -127,29 +125,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                                         <div class="card-body">
                                             <form method="post" id="depositForm">
 
-                                              <?php
-                                              $sql_type = "SELECT id,  type FROM payment_account"; 
-                                              $stm_query = mysqli_query($connection, $sql_type);
-                                            
-
-                                              ?>
+                                                <?php
+                                                // Fetch all payment types
+                                                $sql_type = "SELECT * FROM payment_account ORDER BY type ASC";
+                                                $stm_query = mysqli_query($connection, $sql_type);
+                                                ?>
 
                                                 <div class="mb-3">
                                                     <label class="form-label">Type</label>
                                                     <select name="type" class="form-select" id="type">
-                                                        <option disabled selected hidden  value="">Select Type</option>
-                                                        <?php while($result = mysqli_fetch_assoc($stm_query)):  ?>
-                                                        <option value="<?= htmlspecialchars($result['id']) ?>"><?= htmlspecialchars($result['type']) ?></option>
-                                                          <?php endwhile; ?>
+                                                        <option disabled selected hidden value="">Select Type</option>
+
+                                                        <?php while ($row = mysqli_fetch_assoc($stm_query)): ?>
+
+                                                            <option
+                                                                value="<?= $row['id']; ?>"
+                                                                data-type="<?= $row['type']; ?>"
+                                                                data-network="<?= $row['network']; ?>"
+                                                                data-wallet="<?= $row['wallet_address']; ?>"
+                                                                data-bankname="<?= $row['bank_name']; ?>"
+                                                                data-accountnumber="<?= $row['account_number']; ?>"
+                                                                data-fullname="<?= $row['fullname']; ?>"
+                                                                data-label="<?= $row['label']; ?>">
+                                                                <?= ucfirst($row['type']) ?> - <?= $row['label'] ?>
+                                                            </option>
+
+                                                        <?php endwhile; ?>
                                                     </select>
                                                 </div>
-
 
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- RIGHT SIDE -->
+                                <!-- RIGHT SIDE: Payment Address -->
                                 <div class="col-xxl-6 col-xl-6 col-lg-6">
                                     <div class="card">
                                         <div class="card-header d-flex justify-content-between align-items-center">
@@ -157,14 +166,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                                             <button type="button" class="btn btn-sm btn-primary" onclick="copyWallet()">Copy</button>
                                         </div>
                                         <div class="card-body">
-                                            <p><strong>Crypto Type:</strong> <span id="cryptoType"> testing</span></p>
-                                            <p id="walletAddress" class="text-break text-muted"><strong>Wallet Address:</strong> testing</p>
-                                            <!-- <p id="walletAddress" class="text-break text-muted"></p> -->
+                                            <p><strong>Type:</strong> <span id="cryptoType">---</span></p>
+                                            <p id="walletAddress" class="text-break text-muted"><strong>Details:</strong> Select a type</p>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- BOTTOM -->
+                                <!-- SUBMIT AMOUNT -->
                                 <div class="col-xxl-6 col-xl-6 col-lg-6">
                                     <div class="card">
                                         <div class="card-header">
@@ -183,46 +191,64 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
                                 </form>
 
                             </div>
-
-
                         </div>
+
                     </div>
                 </div>
 
-                <!-- deposite js temporal -->
-
                 <script>
-                    const wallets = {
-                        USDT: "TX8K9xKJdsj2390dsUSDTexample",
-                        BTC: "bc1qexamplebtcaddress123",
-                        POLYGON: "0x2AC3229c7BE5A1bD7F4062d9283BC89Cb8600c5e"
-                    };
-
-                    const method = document.getElementById("method");
-                    const type = document.getElementById("type");
+                    const typeSelect = document.getElementById("type");
                     const walletAddress = document.getElementById("walletAddress");
                     const cryptoType = document.getElementById("cryptoType");
 
                     function updateWallet() {
-                        if (method.value === "wallet" && wallets[type.value]) {
-                            walletAddress.textContent = wallets[type.value];
-                            cryptoType.textContent = type.value;
-                        } else {
-                            walletAddress.textContent = "---";
-                            cryptoType.textContent = "---";
+                        const selected = typeSelect.options[typeSelect.selectedIndex];
+                        if (!selected) return;
+
+                        const type = selected.getAttribute("data-type");
+                        const network = selected.getAttribute("data-network");
+                        const wallet = selected.getAttribute("data-wallet");
+                        const bankName = selected.getAttribute("data-bankname");
+                        const accountNumber = selected.getAttribute("data-accountnumber");
+                        const fullname = selected.getAttribute("data-fullname");
+                        const label = selected.getAttribute("data-label");
+
+                        // === CRYPTO ===
+                        if (type === "crypto") {
+                            cryptoType.textContent = network;
+
+                            walletAddress.innerHTML = `
+                <strong>Wallet Address:</strong><br>${wallet}<br><br>
+                <strong>Network:</strong> ${network}<br>
+                <strong>Label:</strong> ${label}
+            `;
+                            return;
                         }
+
+                        // === BANK ===
+                        if (type === "bank") {
+                            cryptoType.textContent = bankName;
+
+                            walletAddress.innerHTML = `
+                <strong>Bank Name:</strong> ${bankName}<br>
+                <strong>Account Number:</strong> ${accountNumber}<br>
+                <strong>Account Name:</strong> ${fullname}
+            `;
+                            return;
+                        }
+
+                        cryptoType.textContent = "---";
+                        walletAddress.textContent = "Select a method";
                     }
 
-                    method.addEventListener("change", updateWallet);
-                    type.addEventListener("change", updateWallet);
+                    typeSelect.addEventListener("change", updateWallet);
 
                     function copyWallet() {
-                        if (walletAddress.textContent !== "---") {
-                            navigator.clipboard.writeText(walletAddress.textContent);
-                            alert("Wallet address copied!");
-                        }
+                        navigator.clipboard.writeText(walletAddress.textContent);
+                        alert("Copied!");
                     }
                 </script>
+
 
 
             </div>

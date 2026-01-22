@@ -48,8 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
     if (empty($errors)) {
 
         //  Decide which DB column to check
-        $balanceColumn = $allowedAccounts[$which_account]; 
-  
+        $balanceColumn = $allowedAccounts[$which_account];
+
         mysqli_begin_transaction($connection);
 
         try {
@@ -108,7 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
 
             mysqli_commit($connection);
             $success = "Withdrawal request submitted successfully. Processing...";
-
         } catch (Exception $e) {
             mysqli_rollback($connection);
             $errors[] = $e->getMessage();
@@ -139,11 +138,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
 
 <body class="dashboard">
     <div id="main-wrapper">
-       <!-- nav -->
+        <!-- nav -->
         <?php include("../include/header.php") ?>
 
-       <!-- side nav -->
-          <?php include("../include/sidenav.php") ?>
+        <!-- side nav -->
+        <?php include("../include/sidenav.php") ?>
 
         <div class="content-body">
             <div class="container">
@@ -158,6 +157,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
                                         <p class="mb-2">Welcome To <?= $sitename ?> Management</p>
                                     </div>
                                 </div>
+                                <div class="col-auto">
+                                    <a href="./withdrawal_history/"><button class="btn btn-primary mr-2">View Withdrawal History</button></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,17 +171,72 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
 
                             <!-- Error -->
                             <div class="col-12">
-                                <?php if (!empty($errors)): ?>
-                                    <div class="alert alert-danger">
-                                        <p><?= htmlspecialchars($errors[0]) ?></p>
-                                    </div>
-                                <?php endif; ?>
+                                <?php
+                                if (isset($_POST['withdraw'])) {
 
-                                <?php if ($success): ?>
-                                    <div class="alert alert-success">
-                                        <?= htmlspecialchars($success) ?>
-                                    </div>
-                                <?php endif; ?>
+                                    $which_account   = $_POST['which_account'];
+                                    $amount          = floatval($_POST['amount']);
+                                    $bank_name       = mysqli_real_escape_string($connection, $_POST['bank_name']);
+                                    $account_number  = mysqli_real_escape_string($connection, $_POST['account_number']);
+                                    $account_name    = mysqli_real_escape_string($connection, $_POST['account_name']);
+                                    $user_id         = $_SESSION['user_id'];  // or whatever variable you use
+
+                                    $errors = [];
+
+                                    // Basic validation
+                                    if ($which_account == "Select Account") {
+                                        $errors[] = "Please select an account type.";
+                                    }
+
+                                    if ($amount <= 0) {
+                                        $errors[] = "Amount must be greater than zero.";
+                                    }
+
+                                    if (empty($bank_name) || empty($account_number) || empty($account_name)) {
+                                        $errors[] = "Please fill all bank details.";
+                                    }
+
+                                    // Fetch user's balances
+                                    $user = mysqli_query($connection, "SELECT * FROM users WHERE id = $user_id");
+                                    $u = mysqli_fetch_assoc($user);
+
+                                    // Get the selected account balance
+                                    $current_balance = $u[$which_account];
+
+                                    // Check if user has enough balance
+                                    if ($amount > $current_balance) {
+                                        $errors[] = "Insufficient balance in selected account.";
+                                    }
+
+                                    // If errors exist, display them
+                                    if (!empty($errors)) {
+                                        echo '<div class="alert alert-danger">';
+                                        foreach ($errors as $err) {
+                                            echo $err . "<br>";
+                                        }
+                                        echo '</div>';
+                                    } else {
+
+                                        // Deduct balance
+                                        $new_balance = $current_balance - $amount;
+
+                                        mysqli_query($connection, "UPDATE users SET $which_account = '$new_balance' WHERE id = $user_id");
+
+                                        // Insert withdrawal record
+                                        $stmt = $connection->prepare("
+                                                INSERT INTO withdrawals (user_id, amount, which_account, status, date , bank_name, account_number, account_name)
+                                                VALUES (?, ?, ?, 'pending', NOW(),?,?,?)
+                                            ");
+
+                                        $stmt->bind_param("idssss", $user_id, $amount, $which_account, $bank_name, $account_number, $account_name);
+                                        $stmt->execute();
+
+                                        echo '<div class="alert alert-success">Withdrawal request submitted successfully!</div>';
+                                        echo '<script>setTimeout(function(){ window.location.href = "./"; }, 2000);</script>';
+                                    }
+                                }
+                                ?>
+
 
                                 <div class="card">
                                     <div class="card-header d-flex justify-content-between align-items-center">
@@ -191,23 +248,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
                                         <form method="post">
 
                                             <div class="mb-3">
-                                                <label class="form-label">Select Account</label>
-                                                <select name="which_account" class="form-select">
-                                                    <option disabled selected hidden value="">Select</option>
-                                                    <option value="USDT(TRC20)">USDT(Trc20)</option>
-                                                    <option value="BTC">BTC</option>
-                                                    <option value="POLYGON">POLYGON</option>
+                                                <label class="mr-sm-2">Account</label>
+                                                <select name="which_account" class="form-control">
+                                                    <option selected>Select Account</option>
+                                                    <?php
+                                                    $users = mysqli_query($connection, "SELECT * FROM users WHERE id = $user_id");
+                                                    $u = mysqli_fetch_assoc($users);
+
+                                                    echo '<option value="balance">Main Balance : $' . $u['balance'] . '</option>';
+                                                    echo '<option value="loan_balance">Loan Balance : $' . $u['loan_balance'] . '</option>';
+                                                    echo '<option value="crypto_balance">Crypto Balance : $' . $u['crypto_balance'] . '</option>';
+                                                    echo '<option value="virtual_card_balance">Virtual Card Balance : $' . $u['virtual_card_balance'] . '</option>';
+                                                    ?>
                                                 </select>
+
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label">Amount to Withdraw</label>
-                                                <input name="amount" type="number" step="0.01" class="form-control" placeholder="Amount to Withdraw">
+                                                <label class="form-label">Amount</label>
+                                                <input name="amount" type="number" step="0.01" class="form-control" placeholder="Amount">
                                             </div>
 
                                             <div class="mb-3">
-                                                <label class="form-label">Withdrawal Wallet Address</label>
-                                                <input name="wallet_address" type="text" class="form-control" placeholder="withdrawal Wallet Address">
+                                                <label class="form-label">Bank Name</label>
+                                                <input name="bank_name" type="text" class="form-control" placeholder="Bank Name">
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label">Account Number</label>
+                                                <input name="account_number" type="text" class="form-control" placeholder="Account Number">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Account Name</label>
+                                                <input name="account_name" type="text" class="form-control" placeholder="Account Name">
                                             </div>
 
                                             <button type="submit" name="withdraw" class="btn btn-primary w-100">PLACE WITHDRAWAL</button>

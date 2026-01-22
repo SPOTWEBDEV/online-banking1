@@ -14,6 +14,8 @@ $sql = "
         deposits.date,
 
         users.fullname AS user_fullname,
+        users.id AS user_id,
+        users.email AS user_email,
 
         payment_account.type AS account_type,
         payment_account.routing_number,
@@ -31,6 +33,33 @@ $sql = "
 
 $query = $connection->query($sql);
 
+
+
+if (isset($_GET['approve_deposit'])) {
+    $deposit_id = mysqli_real_escape_string($connection, $_GET['approve_deposit']);
+    $amount = mysqli_real_escape_string($connection, $_GET['amount']);
+    $user_id = mysqli_real_escape_string($connection, $_GET['user_id']);
+
+    $approve_sql = "UPDATE deposits SET status = 'approved' WHERE id = $deposit_id";
+    $connection->query($approve_sql);
+    $query = $connection->query("UPDATE users SET balance = balance + $amount WHERE id = $user_id");
+
+    echo "<script>alert('Deposit approved successfully.'); window.location.href='./index.php?id=$deposit_id';</script>";
+    exit();
+}
+
+
+if (isset($_GET['decline_deposit'])) {
+    $deposit_id = mysqli_real_escape_string($connection, $_GET['decline_deposit']);
+    $amount = mysqli_real_escape_string($connection, $_GET['amount']);
+    $user_id = mysqli_real_escape_string($connection, $_GET['user_id']);
+
+    $decline_sql = "UPDATE deposits SET status = 'declined' WHERE id = $deposit_id";
+    $connection->query($decline_sql);
+
+    echo "<script>alert('Deposit declined successfully.'); window.location.href='./index.php?id=$deposit_id';</script>";
+    exit();
+}
 
 
 
@@ -88,121 +117,131 @@ $query = $connection->query($sql);
                 </div>
 
 
-                <div class="row">
-                    <?php if ($query->num_rows > 0) {
-                        $deposit = $query->fetch_assoc();
-                    ?>
-                        <div class="col-12">
+                <?php if ($query->num_rows > 0) {
+                    $deposit = $query->fetch_assoc();
+                ?>
+                    <div class="col-12">
 
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">
-                                        Deposit Details for <?php echo $deposit['user_fullname']; ?>
-                                    </h4>
-                                </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">
+                                    Deposit Details for <?php echo $deposit['user_fullname']; ?>
+                                </h4>
+                            </div>
 
-                                <div class="card-body">
-                                    <div class="table-responsive">
-                                        <table class="table">
-                                            <tbody>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <tbody>
 
-                                                <!-- Deposit Amount -->
-                                                <tr>
-                                                    <td><span class="text-primary">Deposit Amount:</span></td>
-                                                    <td><span class="text-primary">$<?php echo number_format($deposit['amount'], 2); ?></span></td>
-                                                </tr>
+                                            <tr>
+                                                <td>Account User</td>
+                                                <td><?php echo $deposit['user_fullname']; ?></td>
+                                            </tr>
+                                            <tr>
+                                                <td>User Email</td>
+                                                <td><?php echo $deposit['user_email']; ?></td>
+                                            </tr>
 
-                                                <!-- Status -->
-                                                <tr>
-                                                    <td>Status:</td>
-                                                    <td>
-                                                        <span class="badge 
+                                            <!-- Deposit Amount -->
+                                            <tr>
+                                                <td><span class="text-primary">Deposit Amount:</span></td>
+                                                <td><span class="text-primary">$<?php echo number_format($deposit['amount'], 2); ?></span></td>
+                                            </tr>
+
+                                            <!-- Status -->
+                                            <tr>
+                                                <td>Status:</td>
+                                                <td>
+                                                    <span class="badge 
                                     <?php
                                     echo ($deposit['status'] == 'pending') ? 'bg-warning' : (($deposit['status'] == 'approved') ? 'bg-success' : 'bg-danger');
                                     ?>">
-                                                            <?php echo ucfirst($deposit['status']); ?>
-                                                        </span>
-                                                    </td>
-                                                </tr>
+                                                        <?php echo ucfirst($deposit['status']); ?>
+                                                    </span>
+                                                </td>
+                                            </tr>
 
-                                                <!-- Date -->
+                                            <!-- Date -->
+                                            <tr>
+                                                <td>Date:</td>
+                                                <td><?php echo $deposit['date']; ?></td>
+                                            </tr>
+
+                                            <!-- Payment Account Used -->
+                                            <tr>
+                                                <td><strong>Payment Method Used:</strong></td>
+                                                <td><?php echo ucfirst($deposit['account_type']); ?></td>
+                                            </tr>
+
+                                            <!-- Bank Details (if bank) -->
+                                            <?php if ($deposit['bank_name'] != "") { ?>
                                                 <tr>
-                                                    <td>Date:</td>
-                                                    <td><?php echo $deposit['date']; ?></td>
+                                                    <td>Bank Name:</td>
+                                                    <td><?php echo $deposit['bank_name']; ?></td>
                                                 </tr>
 
-                                                <!-- Payment Account Used -->
                                                 <tr>
-                                                    <td><strong>Payment Method Used:</strong></td>
-                                                    <td><?php echo ucfirst($deposit['account_type']); ?></td>
+                                                    <td>Account Number:</td>
+                                                    <td><?php echo $deposit['account_number']; ?></td>
                                                 </tr>
 
-                                                <!-- Bank Details (if bank) -->
-                                                <?php if ($deposit['bank_name'] != "") { ?>
-                                                    <tr>
-                                                        <td>Bank Name:</td>
-                                                        <td><?php echo $deposit['bank_name']; ?></td>
-                                                    </tr>
+                                                <tr>
+                                                    <td>Account Name:</td>
+                                                    <td><?php echo $deposit['account_fullname']; ?></td>
+                                                </tr>
 
-                                                    <tr>
-                                                        <td>Account Number:</td>
-                                                        <td><?php echo $deposit['account_number']; ?></td>
-                                                    </tr>
+                                                <tr>
+                                                    <td>Routing Number:</td>
+                                                    <td><?php echo $deposit['routing_number']; ?></td>
+                                                </tr>
+                                            <?php } ?>
 
-                                                    <tr>
-                                                        <td>Account Holder:</td>
-                                                        <td><?php echo $deposit['account_fullname']; ?></td>
-                                                    </tr>
+                                            <!-- Crypto Wallet (if crypto) -->
+                                            <?php if ($deposit['wallet_address'] != "") { ?>
+                                                <tr>
+                                                    <td>Network:</td>
+                                                    <td><?php echo $deposit['network']; ?></td>
+                                                </tr>
 
-                                                    <tr>
-                                                        <td>Routing Number:</td>
-                                                        <td><?php echo $deposit['routing_number']; ?></td>
-                                                    </tr>
-                                                <?php } ?>
+                                                <tr>
+                                                    <td>Wallet Address:</td>
+                                                    <td><?php echo $deposit['wallet_address']; ?></td>
+                                                </tr>
 
-                                                <!-- Crypto Wallet (if crypto) -->
-                                                <?php if ($deposit['wallet_address'] != "") { ?>
-                                                    <tr>
-                                                        <td>Network:</td>
-                                                        <td><?php echo $deposit['network']; ?></td>
-                                                    </tr>
+                                                <tr>
+                                                    <td>Label:</td>
+                                                    <td><?php echo $deposit['label']; ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                            <tr>
+                                                <td>Action</td>
+                                                <td>
+                                                    <a href="<?php echo $domain ?>/admin/deposits/">
+                                                        <button class="btn btn-primary btn-sm">Back to Deposits</button>
+                                                    </a>
+                                                    <a href="?approve_deposit=<?= $deposit['id'] ?>&amount=<?= $deposit['amount'] ?>&user_id=<?= $deposit['user_id'] ?>">
+                                                        <button class="btn btn-success btn-sm approve-deposit">Approve</button>
+                                                    </a>
+                                                    <a href="?decline_deposit=<?= $deposit['id'] ?>&amount=<?= $deposit['amount'] ?>&user_id=<?= $deposit['user_id'] ?>">
+                                                        <button class="btn btn-danger btn-sm decline-deposit">Decline</button>
+                                                    </a>
+                                                </td>
 
-                                                    <tr>
-                                                        <td>Wallet Address:</td>
-                                                        <td><?php echo $deposit['wallet_address']; ?></td>
-                                                    </tr>
+                                            </tr>
 
-                                                    <tr>
-                                                        <td>Label:</td>
-                                                        <td><?php echo $deposit['label']; ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Action</td>
-                                                        <td>
-                                                            <a href="./?approve_deposit=<?= $deposit['id'] ?>">
-                                                                <button class="btn btn-success btn-sm approve-deposit">Approve</button>
-                                                            </a>
-                                                            <a href="./?decline_deposit=<?= $deposit['id'] ?>">
-                                                                <button class="btn btn-danger btn-sm decline-deposit">Decline</button>
-                                                            </a>
-                                                        </td>
-                                                    </tr>
-                                                <?php } ?>
-
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                        </tbody>
+                                    </table>
                                 </div>
-
                             </div>
+
                         </div>
+                    </div>
 
-                    <?php } else { ?>
-                        <div class='alert alert-danger'>Deposit not found</div>
-                    <?php } ?>
+                <?php } else { ?>
+                    <div class='alert alert-danger'>Deposit not found</div>
+                <?php } ?>
 
-
-                </div>
             </div>
         </div>
     </div>
