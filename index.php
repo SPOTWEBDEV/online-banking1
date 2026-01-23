@@ -59,6 +59,7 @@
 
 <body>
 
+<<<<<<< HEAD
     <!-- Start preloader -->
     <div class="loader-wrap">
         <div class="preloader">
@@ -149,6 +150,59 @@
                         <!--End Main Header Style2 Top Right-->
 
                     </div>
+=======
+    <!-- navbar -->
+    <div class="fixed-top">
+        <div class="navbar-area">
+            <!-- mobile menu -->
+            <div class="mobile-nav">
+                <a href="index.html" class="logo">
+                        <img src="images/IMG_09099.png" class="logo1" alt="logo">
+                        <img src="assets/images/IMG_09099.png" class="logo2" alt="logo">
+                    </a>
+                <div class="navbar-option">
+                    
+                    <div class="navbar-option-item">
+                        <a href="authentication.html">
+                                <i class="flaticon-login"></i>
+                            </a>
+                    </div>
+                </div>
+            </div>
+            <!-- desktop menu -->
+            <div class="main-nav main-nav-2">
+                <div class="container-fluid">
+                    <nav class="navbar navbar-expand-md navbar-light">
+                        <a class="navbar-brand" href="index.html">
+                                <img src="images/IMG_09099.png" class="logo1" alt="logo">
+                                <img src="images/IMG_09099.png" class="logo2" alt="logo">
+                            </a>
+                        <div class="collapse navbar-collapse mean-menu" id="navbarSupportedContent">
+                            <ul class="navbar-nav mx-auto">
+                                <li class="nav-item">
+                                    <a href="#home" class="nav-link dropdown-toggle active">Home</a>
+                                    
+                                </li>
+                                 
+                                <li class="nav-item">
+                                    <a href="#about" class="nav-link">About Us</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#company" class="nav-link">Company</a>
+                                </li>
+                                
+                               
+                                <li class="nav-item">
+                                    <a href="#stats" class="nav-link">Stats</a>
+                                </li>
+                                
+                                
+                            </ul>
+                        </div>
+                        <!-- navbar option -->
+                        
+                    </nav>
+>>>>>>> fb1dc9577714bcb530c84a03e0d2de2ec25d02be
                 </div>
             </div>
             <!--End Main Header Style2 Top-->
@@ -158,6 +212,7 @@
                     <div class="container">
                         <div class="main-menu__wrapper-inner">
 
+<<<<<<< HEAD
                             <div class="main-menu-style2-left">
                                 <div class="logo-box-style2">
                                     <a href="https://<?php echo $sitename ?>ibnk.com/index-2.html">
@@ -187,6 +242,32 @@
                                 <div class="main-menu-box">
                                     <a href="index.php#" class="mobile-nav__toggler">
                                         <i class="icon-menu"></i>
+=======
+        <div id="home" class="container-fluid">
+            <div class="header-inner">
+                <div class="row align-items-center justify-content-center">
+                    <div class="col-sm-12 col-md-12 col-lg-6">
+                        <div class="header-content-2">
+                            <h1>Bank smarter. Move money instantly. Grow daily.</h1>
+                            <p>
+                                Open your account in minutes, send and receive payments fast, track your balance in real-time,
+                                and build wealth with simple investment plans — all from one secure dashboard.
+                            </p>
+
+                            <ul class="section-button">
+                                <li>
+
+                                    <a href="./auth/sign_up/" class="btn1 orange-gradient btn-with-image">
+                                        <i class="fa-solid fa-bolt"></i>
+                                        Sign up
+                                    </a>
+                                </li>
+                                <li>
+
+                                    <a href="./auth/sign_in/" class="btn1 btn-with-image blue-gradient">
+                                        <i class="fa-solid fa-shield-halved"></i>
+                                        Login
+>>>>>>> fb1dc9577714bcb530c84a03e0d2de2ec25d02be
                                     </a>
 
                                     <ul class="main-menu__list one-page-scroll-menu">
@@ -230,8 +311,37 @@
                 </div>
             </nav>
 
+<<<<<<< HEAD
         </header>
 
+=======
+    <!-- home-logo-section-2 -->
+    <div id="company" class="home-logo-section-2 border-top-mob">
+        <div class="container">
+            <div class="section-title">
+                <p>Trusted by customers who value speed, safety, and simplicity.</p>
+            </div>
+            <div class="home-logo-content mt-30">
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-1.png" alt="logo"></a></div>
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-2.png" alt="logo"></a></div>
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-3.png" alt="logo"></a></div>
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-4.png" alt="logo"></a></div>
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-5.png" alt="logo"></a></div>
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-6.png" alt="logo"></a></div>
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-7.png" alt="logo"></a></div>
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-8.png" alt="logo"></a></div>
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-9.png" alt="logo"></a></div>
+                <div class="home-logo-item"><a href="#"><img src="assets/images/logo-10.png" alt="logo"></a></div>
+            </div>
+        </div>
+    </div>
+    <!-- .end home-logo-section-2 -->
+
+    <!-- home-about-section-2 -->
+    <section id="about" class="home-about-section-2 bg-off-white pt-100 pb-70 overflow-hidden">
+        <div class="container-fluid p-0">
+            <div class="home-about-content">
+>>>>>>> fb1dc9577714bcb530c84a03e0d2de2ec25d02be
 
         <div class="stricky-header stricky-header--style2 stricked-menu main-menu">
             <div class="sticky-header__content"></div><!-- /.sticky-header__content -->
@@ -399,6 +509,7 @@
                             <!--End Slide Single Features-->
                         </div>
                     </div>
+<<<<<<< HEAD
                     <!--End Single Swiper Slide-->
 
                     <!-- If we need navigation buttons -->
@@ -408,9 +519,50 @@
                         </div>
                         <div class="swiper-button-next" id="main-slider__swiper-button-prev">
                             <i class="icon-chevron right"></i>
+=======
+                    <div class="col-sm-12 col-md-12 col-lg-6 p-0">
+                        <div class="home-facility-item img-right-res pb-30">
+                            <img src="assets/images/home-entreprenour-2.png" alt="facility">
+
+
+>>>>>>> fb1dc9577714bcb530c84a03e0d2de2ec25d02be
                         </div>
                     </div>
 
+<<<<<<< HEAD
+=======
+            </div>
+        </div>
+    </section>
+
+    <!-- counter-section -->
+    <section id="stats" class="counter-section pt-100 pb-70">
+        <div class="container">
+            <div class="section-title">
+                <h2>Fast. Secure. Designed for daily finance.</h2>
+            </div>
+            <div class="counter-content">
+                <div class="counter-item">
+                    <h3><span class="counter">70+</span></span></h3>
+                    <p>Total Users</p>
+                </div>
+                <div class="counter-item">
+                    <h3><span class="counter">40k</span></h3>
+                    <p>Daily Transactions</p>
+                    <div class="counter-loader"><span></span><span></span><span></span></div>
+                </div>
+                <div class="counter-item">
+                    <h3>
+                        <spa class="counter">1000k</span>
+                    </h3>
+                    <p>Countries</p>
+                    <div class="counter-loader"><span></span><span></span><span></span></div>
+                </div>
+                <div class="counter-item">
+                    <h3><span class="counter">590+</span></span></h3>
+                    <p>Employess</p>
+                    <div class="counter-loader"><span></span><span></span><span></span></div>
+>>>>>>> fb1dc9577714bcb530c84a03e0d2de2ec25d02be
                 </div>
             </div>
         </section>
@@ -1102,6 +1254,7 @@
         </section>
         <!--End EMI Calculator Style2 Area-->
 
+<<<<<<< HEAD
         <!--Start Wealth Secure Style2 Area-->
         <section class="wealth-secure-style2-area">
             <div class="container">
@@ -1110,6 +1263,15 @@
                     <div class="sub-title">
                         <p>Don’t just make a deposit, make an investment today.</p>
                     </div>
+=======
+    <!-- home-quick-contact-section -->
+    <section class="home-quick-contact-section " style="background:#2F3A53 ;">
+        <div class="container-fluid">
+            <div class="home-quick-contact home-quick-contact-2">
+                <div class="logo-bg-icon">
+                    <div class="logo-bg-item"><img src="assets/images/circle.png" alt="icon"></div>
+                    <div class="logo-bg-item"><img src="assets/images/square.png" alt="icon"></div>
+>>>>>>> fb1dc9577714bcb530c84a03e0d2de2ec25d02be
                 </div>
                 <div class="row">
                     <div class="col-xl-12">
@@ -2329,6 +2491,87 @@
         </div>
     </div>
 
+<<<<<<< HEAD
+=======
+    <!-- footer -->
+    <footer class="footer-bg">
+        <div class="container">
+            <div class="footer-upper">
+                <div class="row justify-content-center">
+                    <div class="col-sm-12 col-md-12 col-lg-4">
+                        <div class="footer-content-item">
+                            <div class="footer-logo">
+                                <a href="./"><img src="images/IMG_09099.png" alt="logo"></a>
+                            </div>
+                            <div class="footer-details">
+                                <p>
+                                    <?php echo $sitename; ?> is built for fast payments, secure transfers, and simple investment tracking —
+                                    so you always know where your money is going.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-2">
+                        <div class="footer-content-list footer-content-item">
+                            <div class="footer-content-title">
+                                <h3>Quick Links</h3>
+                            </div>
+                            <ul class="footer-details footer-list">
+                                <li><a href="./auth/sign_up/">Register</a></li>
+                                <li><a href="./auth/sign_in/">Login</a></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-2">
+                        <div class="footer-content-list footer-content-item">
+                            <div class="footer-content-title">
+                                <h3>Features</h3>
+                            </div>
+                            <ul class="footer-details footer-list">
+                                <p>Register to get Started with many Features</p>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 col-md-4 col-lg-4">
+                        <div class="footer-content-list footer-content-item">
+                            <div class="footer-content-title">
+                                <h3>Security Note</h3>
+                            </div>
+                            <ul class="footer-details footer-list">
+                                <li> <span>Secure sessions & hashed passwords</span></li>
+                                <li> <span>Transaction status tracking</span></li>
+                                <li><span>Help available inside your dashboard</span></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="footer-lower">
+                <div class="footer-lower-item footer-copyright-text">
+                    <div class="copy-right-text text-end">
+                        <p>© <script>
+                                document.write(new Date().getFullYear())
+                            </script> <?php echo $sitename; ?>. All rights reserved.</p>
+                    </div>
+                </div>
+
+                <div class="footer-lower-item footer-social-logo">
+                    <ul class="footer-social-list">
+                        <li class="social-btn social-btn-fb"><a href="./auth/sign_up/"><i class="fa-brands fa-facebook-f"></i></a></li>
+                        <li class="social-btn social-btn-tw"><a href="./auth/sign_up/"><i class="fa-brands fa-x-twitter"></i></a></li>
+                        <li class="social-btn social-btn-ins"><a href="./auth/sign_up/"><i class="fa-brands fa-instagram"></i></a></li>
+                        <li class="social-btn social-btn-pin"><a href="./auth/sign_up/"><i class="fa-brands fa-pinterest-p"></i></a></li>
+                        <li class="social-btn social-btn-yt"><a href="./auth/sign_up/"><i class="fa-brands fa-youtube"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+>>>>>>> fb1dc9577714bcb530c84a03e0d2de2ec25d02be
 
     <div class="search-popup">
         <div class="search-popup__overlay search-toggler"></div>

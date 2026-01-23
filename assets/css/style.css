@@ -498,7 +498,7 @@ a {
 a:hover,
 a:active {
     text-decoration: none;
-    color: #ec600d;
+    color: #2F3A53;
 }
 
 ul,
@@ -675,11 +675,11 @@ button:active {
 }
 
 .orange-gradient {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: #2F3A53;
 }
 
 .blue-gradient {
-    background: linear-gradient(90deg, #0856e6 0%, #2f74f4 100%);
+    background: #2F3A53;
 }
 
 .section-title {
@@ -971,7 +971,7 @@ button:active {
 }
 
 .main-nav nav .navbar-nav .nav-item a.active {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -984,7 +984,7 @@ button:active {
 }
 
 .main-nav nav .navbar-nav .nav-item:hover>a {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -1014,7 +1014,7 @@ button:active {
 }
 
 .main-nav nav .navbar-nav .nav-item .dropdown-menu li:hover>a {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -1049,7 +1049,7 @@ button:active {
 }
 
 .mean-container .mean-nav ul li a.active {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -1135,7 +1135,7 @@ button:active {
 }
 
 .navbar-option-item .dropdown-item:hover {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -1424,7 +1424,7 @@ button:active {
     position: absolute;
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     left: 0;
     top: 0;
     transition: width 0.7s;
@@ -1485,7 +1485,7 @@ button:active {
     top: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     transition: all 0.4s linear;
 }
 
@@ -1573,7 +1573,7 @@ button:active {
 }
 
 .home-feature-carousel .item:hover .feature-carousel-details .btn1 {
-    color: #f20f10;
+    color: #2F3A53;
 }
 
 .home-feature-carousel .item:hover .feature-carousel-details .btn1:before {
@@ -1896,7 +1896,7 @@ button:active {
 }
 
 .home-service-start p a.blue-gradient:hover {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -1907,7 +1907,7 @@ button:active {
 }
 
 .home-service-start p a.orange-gradient:hover {
-    background: linear-gradient(90deg, #0856e6 0%, #2f74f4 100%);
+    background: #2F3A53;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -1990,7 +1990,7 @@ button:active {
 .home-service-text-2 a:after {
     content: "Read More +";
     position: absolute;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     width: 100%;
@@ -2101,7 +2101,7 @@ button:active {
 }
 
 .availability-orange-dark {
-    background: #f20f10;
+    background: #2F3A53;
     color: #fff;
 }
 
@@ -2440,7 +2440,7 @@ button:active {
 .download-option p {
     font-size: 20px;
     font-weight: 400;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -2805,7 +2805,7 @@ button:active {
 
 .main-nav-2 .navbar-option-item .btn1:hover {
     background-color: #fff;
-    color: #f20f10;
+    color: #2F3A53;
 }
 
 .main-nav-2.is-sticky .language-option {
@@ -2813,8 +2813,8 @@ button:active {
 }
 
 .main-nav-2.is-sticky .navbar-option-item .btn1 {
-    border: 1px solid #f20f10;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    border: 1px solid #2F3A53;
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     transition: all 0.3s linear;
     color: #fff;
 }
@@ -3156,7 +3156,7 @@ button:active {
 }
 
 .main-nav-3 nav .navbar-nav .nav-item .dropdown-menu .nav-item a.active {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -3174,7 +3174,7 @@ button:active {
 
 .main-nav-3 .navbar-option-item .btn1:hover {
     background-color: #fff;
-    color: #f20f10;
+    color: #2F3A53;
 }
 
 .main-nav-3.is-sticky nav .navbar-nav .nav-item>a {
@@ -3183,20 +3183,20 @@ button:active {
 
 .main-nav-3.is-sticky nav .navbar-nav .nav-item>a.active {
     color: transparent;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .main-nav-3.is-sticky nav .navbar-nav .nav-item:hover>a {
     color: transparent;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .main-nav-3.is-sticky nav .navbar-nav .nav-item .dropdown-menu .nav-item a.active {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -3206,8 +3206,8 @@ button:active {
 }
 
 .main-nav-3.is-sticky .navbar-option-item .btn1 {
-    border: 1px solid #f20f10;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    border: 1px solid #2F3A53;
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     transition: all 0.3s linear;
     color: #fff;
 }
@@ -3791,7 +3791,7 @@ button:active {
 }
 
 .blog-details-content p.blog-tag-name {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     position: relative;
@@ -3805,7 +3805,7 @@ button:active {
     display: flex;
     width: 30px;
     height: 1px;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     bottom: 3px;
     position: relative;
     margin-right: 8px;
@@ -4120,7 +4120,7 @@ button:active {
 
 .blog-people-reply-action p {
     font-size: 15px;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     cursor: pointer;
@@ -4197,7 +4197,7 @@ button:active {
 }
 
 .help-block.with-errors {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 14px;
@@ -4218,7 +4218,7 @@ button:active {
 }
 
 .submit-post-info.text-danger {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent !important;
@@ -4263,7 +4263,7 @@ button:active {
 }
 
 .muted-text.muted-text-orange {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -4410,7 +4410,7 @@ button:active {
 }
 
 .blog-recent-item a:hover .blog-post-name {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -4486,7 +4486,7 @@ button:active {
 }
 
 .blog-category-name a:hover {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -4537,7 +4537,7 @@ button:active {
 }
 
 .blog-sidebar-tag-list li a:hover {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -4722,7 +4722,7 @@ button:active {
 .box-card-icon span i:before {
     font-size: 50px;
     margin: 0;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -4758,7 +4758,7 @@ button:active {
 
 .box-card-link {
     margin-top: auto;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 18px;
@@ -4825,7 +4825,7 @@ button:active {
     position: absolute;
     width: 0;
     height: 100%;
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     top: 0;
     left: 0;
     transition: all 0.8s ease-in-out;
@@ -5053,7 +5053,7 @@ button:active {
 }
 
 .authentication-link a {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     text-decoration: underline;
@@ -5276,7 +5276,7 @@ button:active {
 }
 
 .blog-post-item:hover .blog-post-title a {
-    background: linear-gradient(90deg, #f20f10 0%, #ec600d 100%);
+    background: linear-gradient(90deg, #2F3A53 0%, #2F3A53 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -5390,15 +5390,15 @@ button:active {
 @media all and (-ms-high-contrast: none),
 (-ms-high-contrast: active) {
     .main-nav nav .navbar-nav .nav-item a.active {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .main-nav nav .navbar-nav .nav-item:hover>a {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .main-nav nav .navbar-nav .nav-item .dropdown-menu li:hover>a {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .main-nav-3 {
@@ -5416,22 +5416,22 @@ button:active {
         background: transparent;
     }
     .main-nav-3 nav .navbar-nav .nav-item .dropdown-menu .nav-item a.active {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .main-nav-3.is-sticky nav .navbar-nav .nav-item>a {
         color: #0b2154;
     }
     .main-nav-3.is-sticky nav .navbar-nav .nav-item>a.active {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .main-nav-3.is-sticky nav .navbar-nav .nav-item:hover>a {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .main-nav-3.is-sticky nav .navbar-nav .nav-item .dropdown-menu .nav-item a.active {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .mean-container .mean-nav {
@@ -5441,7 +5441,7 @@ button:active {
         margin-top: 59px;
     }
     .mean-container .mean-nav ul li a.active {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .navbar-option-item .dropdown-menu {
@@ -5458,7 +5458,7 @@ button:active {
         transition: all 0.2s ease-in-out;
     }
     .navbar-option-item .dropdown-item:hover {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .counter-item h3 {
@@ -5476,23 +5476,23 @@ button:active {
     }
     .home-service-text a:after,
     .home-service-text-2 a:after {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .download-option p {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .home-service-start p a.blue-gradient {
-        color: #0856e6;
+        color: #2F3A53;
         background: transparent;
     }
     .home-service-start p a.blue-gradient:hover {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .home-service-start p a.orange-gradient {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .home-service-start p a.orange-gradient:hover {
@@ -5500,7 +5500,7 @@ button:active {
         background: transparent;
     }
     .help-block.with-errors {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .submit-post-info.text-success {
@@ -5508,31 +5508,31 @@ button:active {
         background: transparent;
     }
     .submit-post-info.text-danger {
-        color: #f20f10 !important;
+        color: #2F3A53 !important;
         background: transparent;
     }
     .authentication-link a {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .blog-post-item:hover .blog-post-title a {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .blog-details-content p.blog-tag-name {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .blog-people-reply-action p {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .blog-sidebar-tag-list li a:hover {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
     .blog-recent-item a:hover .blog-post-name {
-        color: #f20f10;
+        color: #2F3A53;
         background: transparent;
     }
 }
