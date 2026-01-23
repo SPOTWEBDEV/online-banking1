@@ -270,8 +270,8 @@ function money($amount)
                                                     <div class="row justify-content-between align-items-center">
                                                         <div class="col-5">
                                                             <div class="d-flex">
-                                                                <p class="me-3">Status</p>
-                                                                <p><strong>Active</strong></p>
+                                                                <!-- <p class="me-3">Status</p>
+                                                                <p><strong>Active</strong></p> -->
                                                             </div>
                                                             <div class="d-flex">
                                                                 <p class="me-3">Currency</p>
@@ -281,8 +281,7 @@ function money($amount)
                                                         <div class="col-xl-7">
                                                             <div class="d-flex justify-content-between">
                                                                 <div class="ms-3">
-                                                                    <p>Credit Limit</p>
-                                                                    <p><strong><?php echo $user['limit']  ?> USD</strong></p>
+                                                                    </p>
                                                                 </div>
                                                                 <div id="circle3"></div>
                                                             </div>
