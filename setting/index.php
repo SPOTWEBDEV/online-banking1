@@ -90,7 +90,7 @@ if (!isset($_SESSION['user_id'])) {
                                     if (empty($errors)) {
                                         $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
                                         $newFileName = uniqid('profile_', true) . "." . $ext;
-                                        $uploadDir = __DIR__ . "/<?php echo $domain ?>/images/avatar/";
+                                        $uploadDir = "../images/avatar/";
 
                                         if (!is_dir($uploadDir)) {
                                             mkdir($uploadDir, 0755, true);
@@ -100,8 +100,8 @@ if (!isset($_SESSION['user_id'])) {
 
                                         if (move_uploaded_file($file['tmp_name'], $destination)) {
 
-                                            $relativePath = "/<?php echo $domain ?>/images/avatar/" . $newFileName;
-                                            $upload_path = "/<?php echo $domain ?>/images/avatar/" . $newFileName;
+                                            // $relativePath = "../images/avatar/" . $newFileName;
+                                            $upload_path = "/images/avatar/" . $newFileName;
                                             $sql = "UPDATE users SET user_profile = ? WHERE id = ?";
                                             $stmt = mysqli_prepare($connection, $sql);
                                             mysqli_stmt_bind_param($stmt, "si", $upload_path, $user_id);
@@ -146,7 +146,7 @@ if (!isset($_SESSION['user_id'])) {
                                                 <div class="row g-3">
                                                     <div class="col-xxl-12 col-12 mb-3">
                                                         <div class="d-flex align-items-center">
-                                                            <img class="me-3 rounded-circle me-0 me-sm-3" src="<?php echo $domain?><?= $userProfile ?? '<?php echo $domain ?>/images/avatar/3.jpg'  ?> " width="55" height="55" alt="">
+                                                            <img class="me-3 rounded-circle me-0 me-sm-3" src="..<?php echo $userProfile?>" width="55" height="55" alt="">
                                                             <div class="media-body">
                                                                 <h4 class="mb-0"><?= $userName ?></h4>
                                                             </div>
