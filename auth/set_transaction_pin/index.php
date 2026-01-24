@@ -148,8 +148,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         @media(max-width:400px) {
             .pin-box {
-                width: 98%;
-                padding: 10px;
+                width: 95%;
+                padding: 15px;
             }
 
             .keypad button {
@@ -190,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             </div>
 
             <!-- NUM PAD -->
-            <div class="row keypad g-3 mt-2">
+            <div class="row keypad g-2 mt-2">
                 <?php
                 $keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, "del", 0, "ok"];
                 foreach ($keys as $key) {
