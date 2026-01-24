@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                     echo "
                     <script>
                      setTimeout(() => {
-          window.location.href = '{$domain}/dashboard/'
-                 }, 2500);
+          window.location.href = '../set_transaction_pin/';
+                 }, 1000);
                   </script>
                     ";
                 } else {
