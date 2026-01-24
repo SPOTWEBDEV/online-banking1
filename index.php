@@ -2236,7 +2236,7 @@
                                             <div class="text">
                                                 <h3>Help Desk</h3>
                                                 <p>Send a Mail: <a
-                                                        href="mailto:info@templatepath.com">support@zentrapb.com</a>
+                                                        href="mailto:<?php echo $siteemail ?>"><?php echo $siteemail ?></a>
                                                 </p>
                                             </div>
                                         </li>
@@ -2310,14 +2310,14 @@
             </span>
             <div class="logo-box">
                 <a href="images/IMG_09099.png" aria-label="logo image">
-                    <img src="assets_h/images/resources/mobile-nav-logo.png" alt="" />
+                    <img style="width: 80px;" src="images/IMG_09099.png" alt="" />
                 </a>
             </div>
             <div class="mobile-nav__container"></div>
             <ul class="mobile-nav__contact list-unstyled">
                 <li>
                     <i class="fa fa-envelope"></i>
-                    <a href="mailto:info@<?php echo $sitename ?>ibnk.com">info@<?php echo $sitename ?>ibnk.com</a>
+                    <a href="mailto:<?php echo $sitemail ?>"><?php echo $siteemail ?></a>
                 </li>
             </ul>
             <div class="mobile-nav__social">
