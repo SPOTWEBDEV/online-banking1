@@ -45,11 +45,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     window.location.href = '../../dashboard/';
                 }, 1500);
             </script>";
-
         } else {
             $message = "PINs do not match!";
         }
-
     } else {
         // User verifies PIN
         if ($db_pin !== null && password_verify($entered_pin, $db_pin)) {
@@ -58,7 +56,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 window.location.href = '../../dashboard/';
             </script>";
             exit;
-
         } else {
             $message = "Incorrect PIN";
         }
@@ -75,27 +72,34 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Set Transaction PIN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
 
     <!-- Bootstrap -->
-   <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
+    <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?php echo $domain ?>/vendor/toastr/toastr.min.css">
 
     <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #eef3f5;
+
             background: #2F3A53;
-            
+
         }
 
         .pin-box {
-            max-width: 380px;
+            width: 380px;
             margin: 90px auto;
             background: #fff;
             padding: 30px;
             border-radius: 14px;
-            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.08);
             text-align: center;
         }
 
@@ -141,148 +145,164 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         .ok-btn {
             background: #198754 !important;
         }
+
+        @media(max-width:400px) {
+            .pin-box {
+                width: 98%;
+                padding: 10px;
+            }
+
+            .keypad button {
+                padding: 12px;
+                font-size: 17px;
+                border-radius: 7px;
+
+            }
+
+        }
     </style>
 </head>
 
 <body>
 
-<div class="pin-box">
-    <h3 class="mb-3">
-        <?php echo $has_pin ? "Enter Transaction PIN" : "Create Transaction PIN"; ?>
-    </h3>
+    <div class="pin-box">
+        <h3 class="mb-3">
+            <?php echo $has_pin ? "Enter Transaction PIN" : "Create Transaction PIN"; ?>
+        </h3>
 
-    <?php if (!empty($message)) { ?>
-        <div class="alert alert-warning py-2">
-            <?= $message ?>
-        </div>
-    <?php } ?>
+        <?php if (!empty($message)) { ?>
+            <div class="alert alert-warning py-2">
+                <?= $message ?>
+            </div>
+        <?php } ?>
 
-    <form method="POST" id="pinForm">
+        <form method="POST" id="pinForm">
 
-        <input type="hidden" name="pin" id="pinInput">
-        <input type="hidden" name="confirm_pin" id="confirmPinInput">
+            <input type="hidden" name="pin" id="pinInput">
+            <input type="hidden" name="confirm_pin" id="confirmPinInput">
 
-        <!-- PIN DOTS -->
-        <div class="pin-dots">
-            <div class="dot" id="d1"></div>
-            <div class="dot" id="d2"></div>
-            <div class="dot" id="d3"></div>
-            <div class="dot" id="d4"></div>
-        </div>
+            <!-- PIN DOTS -->
+            <div class="pin-dots">
+                <div class="dot" id="d1"></div>
+                <div class="dot" id="d2"></div>
+                <div class="dot" id="d3"></div>
+                <div class="dot" id="d4"></div>
+            </div>
 
-        <!-- NUM PAD -->
-        <div class="row keypad g-3 mt-2">
-            <?php
-            $keys = [1,2,3,4,5,6,7,8,9,"del",0,"ok"];
-            foreach ($keys as $key) {
+            <!-- NUM PAD -->
+            <div class="row keypad g-3 mt-2">
+                <?php
+                $keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, "del", 0, "ok"];
+                foreach ($keys as $key) {
 
-                if ($key === "del") {
-                    echo '
+                    if ($key === "del") {
+                        echo '
                         <div class="col-4">
                             <button type="button" class="delete-btn" id="deleteBtn">⌫</button>
                         </div>';
-                } elseif ($key === "ok") {
-                    echo '
+                    } elseif ($key === "ok") {
+                        echo '
                         <div class="col-4">
                             <button type="submit" class="ok-btn">OK</button>
                         </div>';
-                } else {
-                    echo '
+                    } else {
+                        echo '
                         <div class="col-4">
-                            <button type="button" class="num-btn" data-num="'.$key.'">'.$key.'</button>
+                            <button type="button" class="num-btn" data-num="' . $key . '">' . $key . '</button>
                         </div>';
+                    }
                 }
+                ?>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        let pin = "";
+        let confirmPin = "";
+        let stage = "<?php echo $has_pin ? 'verify' : 'create'; ?>";
+
+        const dots = [
+            document.getElementById("d1"),
+            document.getElementById("d2"),
+            document.getElementById("d3"),
+            document.getElementById("d4")
+        ];
+
+        function refreshDots() {
+            dots.forEach((dot, i) => {
+                if (i < pin.length) dot.classList.add("filled");
+                else dot.classList.remove("filled");
+            });
+        }
+
+        document.querySelectorAll(".num-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                if (pin.length < 4) {
+                    pin += btn.dataset.num;
+                    refreshDots();
+                }
+            });
+        });
+
+        // Delete
+        document.getElementById("deleteBtn").onclick = () => {
+            pin = pin.slice(0, -1);
+            refreshDots();
+        };
+
+        // Submit
+        document.getElementById("pinForm").onsubmit = function(e) {
+
+            if (pin.length !== 4) {
+                e.preventDefault();
+                return;
             }
-            ?>
-        </div>
 
-    </form>
-</div>
+            if (stage === "create") {
 
-<script>
-let pin = "";
-let confirmPin = "";
-let stage = "<?php echo $has_pin ? 'verify' : 'create'; ?>";
+                if (confirmPin === "") {
+                    confirmPin = pin;
+                    pin = "";
+                    refreshDots();
 
-const dots = [
-    document.getElementById("d1"),
-    document.getElementById("d2"),
-    document.getElementById("d3"),
-    document.getElementById("d4")
-];
+                    // Show bootstrap alert
+                    document.querySelector(".alert")?.remove();
+                    document.querySelector(".pin-box")
+                        .insertAdjacentHTML("afterbegin",
+                            `<div class="alert alert-info py-2">Confirm PIN</div>`
+                        );
 
-function refreshDots() {
-    dots.forEach((dot, i) => {
-        if (i < pin.length) dot.classList.add("filled");
-        else dot.classList.remove("filled");
-    });
-}
+                    e.preventDefault();
+                    return;
+                }
 
-document.querySelectorAll(".num-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        if (pin.length < 4) {
-            pin += btn.dataset.num;
-            refreshDots();
-        }
-    });
-});
+                if (confirmPin !== pin) {
+                    e.preventDefault();
+                    pin = "";
+                    confirmPin = "";
+                    refreshDots();
 
-// Delete
-document.getElementById("deleteBtn").onclick = () => {
-    pin = pin.slice(0, -1);
-    refreshDots();
-};
+                    document.querySelector(".alert")?.remove();
+                    document.querySelector(".pin-box")
+                        .insertAdjacentHTML("afterbegin",
+                            `<div class="alert alert-danger py-2">PINs do not match!</div>`
+                        );
 
-// Submit
-document.getElementById("pinForm").onsubmit = function (e) {
+                    return;
+                }
 
-    if (pin.length !== 4) {
-        e.preventDefault();
-        return;
-    }
+                document.getElementById("pinInput").value = confirmPin;
+                document.getElementById("confirmPinInput").value = pin;
+            } else {
+                document.getElementById("pinInput").value = pin;
+            }
+        };
+    </script>
 
-    if (stage === "create") {
-
-        if (confirmPin === "") {
-            confirmPin = pin;
-            pin = "";
-            refreshDots();
-
-            // Show bootstrap alert
-            document.querySelector(".alert")?.remove();
-            document.querySelector(".pin-box")
-                .insertAdjacentHTML("afterbegin",
-                    `<div class="alert alert-info py-2">Confirm PIN</div>`
-                );
-
-            e.preventDefault();
-            return;
-        }
-
-        if (confirmPin !== pin) {
-            e.preventDefault();
-            pin = "";
-            confirmPin = "";
-            refreshDots();
-
-            document.querySelector(".alert")?.remove();
-            document.querySelector(".pin-box")
-                .insertAdjacentHTML("afterbegin",
-                    `<div class="alert alert-danger py-2">PINs do not match!</div>`
-                );
-
-            return;
-        }
-
-        document.getElementById("pinInput").value = confirmPin;
-        document.getElementById("confirmPinInput").value = pin;
-    } else {
-        document.getElementById("pinInput").value = pin;
-    }
-};
-</script>
-
-<script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>
+
 </html>
