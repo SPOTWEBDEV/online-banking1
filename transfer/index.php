@@ -58,6 +58,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors[] = "Narration must not be more than 255 characters.";
     }
 
+            // Check user balance before allowing transfer
+        $bal_sql = "SELECT balance FROM users WHERE id = ? LIMIT 1";
+        $bal_stmt = mysqli_prepare($connection, $bal_sql);
+
+        if (!$bal_stmt) {
+            $errors[] = "Server error.";
+        } else {
+            mysqli_stmt_bind_param($bal_stmt, "i", $user_id);
+            mysqli_stmt_execute($bal_stmt);
+            mysqli_stmt_bind_result($bal_stmt, $user_balance);
+            mysqli_stmt_fetch($bal_stmt);
+            mysqli_stmt_close($bal_stmt);
+
+            if ($user_balance < (float)$amount) {
+                $errors[] = "Insufficient balance for this transfer.";
+            }
+        }
+
+       
+
+
     if (empty($errors)) {
 
         // Generate OTP (6 digits)

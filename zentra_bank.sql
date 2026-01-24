@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 22, 2026 at 10:06 PM
+-- Generation Time: Jan 24, 2026 at 10:15 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -120,7 +120,10 @@ INSERT INTO `bank_transfers` (`id`, `user_id`, `receiver_account_number`, `recei
 (4, 3, '48858589595', '', 'Ally Bank', '12345678909', '5895949', 50.00, '578355', '2026-01-21 13:37:49', 'completed', '2026-01-21 12:32:49', '2026-01-22 09:51:57', 'he ask for it'),
 (5, 2, '48858589595', '', 'Bank of America', '12345678909', '5895949', 1000.00, '978348', '2026-01-22 07:11:51', 'completed', '2026-01-22 06:06:51', '2026-01-22 06:14:20', 'he ask for it'),
 (6, 2, '48858589595', 'American Express National Bank', 'Ezea Ugochukwu micheal', '12345678909', '5895949', 300.00, '344672', '2026-01-22 10:12:33', 'pending', '2026-01-22 09:07:33', '2026-01-22 09:07:33', 'he ask for it...'),
-(7, 4, '4444444444444', 'Citizens Bank', 'john doe', '5555555555555555', '44444', 1000.00, '259418', '2026-01-22 18:04:19', 'completed', '2026-01-22 16:59:19', '2026-01-22 17:06:42', 'sgwrrrrrrrr');
+(7, 4, '4444444444444', 'Citizens Bank', 'john doe', '5555555555555555', '44444', 1000.00, '259418', '2026-01-22 18:04:19', 'completed', '2026-01-22 16:59:19', '2026-01-22 17:06:42', 'sgwrrrrrrrr'),
+(8, 4, '4444444444444', 'Chase Bank', 'john doe', '5555555555', '333333333333333333', 5000.00, '280172', '2026-01-24 10:05:55', 'pending', '2026-01-24 09:00:55', '2026-01-24 09:00:55', 'sgwrrrrrrrr'),
+(9, 4, '4444444444444', 'Chase Bank', 'john doe', '5555555555', '333333333333333333', 5000.00, '192301', '2026-01-24 10:07:27', 'pending', '2026-01-24 09:02:27', '2026-01-24 09:02:27', 'sgwrrrrrrrr'),
+(10, 4, '4444444444444', 'Huntington National Bank', 'john doe', '5555555555555555', '333333333333333333', 1000000.00, '476246', '2026-01-24 10:08:50', 'completed', '2026-01-24 09:03:50', '2026-01-24 09:07:34', 'sgwrrrrrrrr');
 
 -- --------------------------------------------------------
 
@@ -286,7 +289,7 @@ INSERT INTO `users` (`id`, `fullname`, `email`, `password`, `user_profile`, `cre
 (1, 'Ayogu Chimezie', 'ayoguchimezie00@gmail.com', '$2y$10$3TDQcP9cgdC812dL4L89P.Ih6KRnDso5o27O.ufH5mE2/zThcN1si', '/images/avatar/profile_696a3fcc9a25d0.85272167.jpeg', '2026-01-15 13:11:50', 0.00, 0.00, 400000.00, 0.00, '5000', 'active', NULL, NULL),
 (2, 'Ezea Ugochukwu micheal', 'spotwebdev.com@gmail.com', '$2y$10$.XTST3H2SnvIc8gGMGTL3.dDKh1Mnd0uInDm.9K.f.wd9/rZBe29y', NULL, '2026-01-20 23:15:35', 1000.00, 200.00, 0.00, 0.00, '5000', 'active', NULL, NULL),
 (3, 'jenny rose', 'jennyrose@gmail.com', '$2y$10$Ky0ZxlH/cppRIhUquEsomuUsrU1vpO1XmBQhuhWaOsfz2fpEtNvIa', NULL, '2026-01-21 11:26:02', 20.00, 0.00, 0.00, 0.00, '5000', 'active', NULL, NULL),
-(4, ' bestkind', 'bestkind444@gmail.com', '$2y$10$iizruajCHJ6Kw5RJSjBxXOPABUDKnUPEENd3Hl2KQjOUf7/3ekbzG', NULL, '2026-01-22 12:36:18', 4999000.00, 20000.00, 10000.00, 28000.00, '5000', 'active', '2409986573216222', '2030-01-22');
+(4, ' bestkind', 'bestkind444@gmail.com', '$2y$10$iizruajCHJ6Kw5RJSjBxXOPABUDKnUPEENd3Hl2KQjOUf7/3ekbzG', NULL, '2026-01-22 12:36:18', 3999000.00, 20000.00, 10000.00, 28000.00, '5000', 'active', '2409986573216222', '2030-01-22');
 
 -- --------------------------------------------------------
 
@@ -414,7 +417,7 @@ ALTER TABLE `bank_list`
 -- AUTO_INCREMENT for table `bank_transfers`
 --
 ALTER TABLE `bank_transfers`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `deposits`

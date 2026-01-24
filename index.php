@@ -110,7 +110,7 @@
                                 </div>
                                 <p>
                                     Get upto 4%* on our Savings Account Balances with <?php echo $sitename ?> Bank.
-                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                 </p>
                             </div>
                         </div>
@@ -120,21 +120,21 @@
                         <div class="main-header-style2__top-right">
                             <div class="header-menu-style1">
                                 <ul>
-                                    <li><a href="index.php#">Careers</a></li>
-                                    <li><a href="index.php#">Faq’s</a></li>
-                                    <li><a href="index.php#">Offers</a></li>
-                                    <li><a href="index.php#">Calendar</a></li>
+                                    <li><a href="./#">Careers</a></li>
+                                    <li><a href="./#">Faq’s</a></li>
+                                    <li><a href="./#">Offers</a></li>
+                                    <li><a href="./#">Calendar</a></li>
                                 </ul>
                             </div>
                             <div class="box-search-style1">
-                                <a href="index.php#" class="search-toggler">
+                                <a href="./#" class="search-toggler">
                                     <span class="icon-search"></span>
                                     Search
                                 </a>
                             </div>
                             <div class="language-switcher">
                                 <div id="polyglotLanguageSwitcher">
-                                    <form action="index.php#">
+                                    <form action="./#">
                                         <select id="polyglot-language-options">
                                             <option id="en" value="en" selected>English</option>
                                             <option id="fr" value="fr">French</option>
@@ -160,7 +160,7 @@
 
                             <div class="main-menu-style2-left">
                                 <div class="logo-box-style2">
-                                    <a href="https://<?php echo $sitename ?>ibnk.com/index-2.html">
+                                    <a href="#">
                                         <img style="width:200px !important;" src="images/IMG_09099.png" alt="Awesome Logo" title="">
                                     </a>
                                 </div>
@@ -185,25 +185,25 @@
                             <div class="main-menu-style2-right">
 
                                 <div class="main-menu-box">
-                                    <a href="index.php#" class="mobile-nav__toggler">
+                                    <a href="./#" class="mobile-nav__toggler">
                                         <i class="icon-menu"></i>
                                     </a>
 
                                     <ul class="main-menu__list one-page-scroll-menu">
                                         <li class="scrollToLink">
-                                            <a href="index.php#home">Home</a>
+                                            <a href="./#home">Home</a>
                                         </li>
                                         <li class="scrollToLink">
-                                            <a href="index.php#about">About</a>
+                                            <a href="./#about">About</a>
                                         </li>
                                         <li class="scrollToLink">
-                                            <a href="index.php#service">Services</a>
+                                            <a href="./#service">Services</a>
                                         </li>
                                         <li class="scrollToLink">
-                                            <a href="index.php#news">News</a>
+                                            <a href="./#news">News</a>
                                         </li>
                                         <li class="scrollToLink">
-                                            <a href="index.php#contact">Get In Touch</a>
+                                            <a href="./#contact">Get In Touch</a>
                                         </li>
                                         <li class="">
                                             <a href="./auth/sign_up/">Investment</a>
@@ -287,7 +287,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="image-layer" style="background-image: url(assets_h/images/slides/slide-v2-1.jpg);">
+                        <div class="image-layer" style="background-image: url(assets_h/images/slides/slide-v2-1.png);">
                             <!--Start Slide Single Features-->
                             <div class="slide-single-features one">
                                 <span class="icon-accept"></span>
@@ -384,7 +384,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="image-layer" style="background-image: url(assets_h/images/slides/slide-v2-3.jpg);">
+                        <div class="image-layer" style="background-image: url(assets_h/images/slides/slide-v2-3.png);">
                             <!--Start Slide Single Features-->
                             <div class="slide-single-features one">
                                 <span class="icon-accept"></span>
@@ -465,7 +465,7 @@
                                             </div>
                                         </div>
                                         <div class="title-box">
-                                            <h3><a href="index.php#">For Over Four Decades Our Bank</a></h3>
+                                            <h3><a href="./#">For Over Four Decades Our Bank</a></h3>
                                         </div>
                                     </div>
                                 </div>
@@ -482,7 +482,7 @@
                                             </div>
                                         </div>
                                         <div class="title-box">
-                                            <h3><a href="index.php#">Passion & Professional Management</a></h3>
+                                            <h3><a href="./#">Passion & Professional Management</a></h3>
                                         </div>
                                     </div>
                                 </div>
@@ -534,9 +534,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v1-1.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Savings &<br> CDs</a></h3>
+                                                <h3><a href="./#">Savings &<br> CDs</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -547,9 +547,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v1-2.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Online &<br> Mobile</a></h3>
+                                                <h3><a href="./#">Online &<br> Mobile</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -560,9 +560,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v1-3.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Cosumer<br> Loan</a></h3>
+                                                <h3><a href="./#">Cosumer<br> Loan</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -574,9 +574,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v1-4.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Invest &<br> Insure</a></h3>
+                                                <h3><a href="./#">Invest &<br> Insure</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -587,9 +587,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v1-5.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Credit &<br> Debit Cards</a></h3>
+                                                <h3><a href="./#">Credit &<br> Debit Cards</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -598,7 +598,7 @@
                                             <!--Start Single Features Of Banking-->
                                             <div class="single-features-of-banking more-services">
                                                 <div class="more-service-box">
-                                                    <a href="index.php#"><span class="icon-add"></span></a>
+                                                    <a href="./#"><span class="icon-add"></span></a>
                                                     <h3>More Service</h3>
                                                 </div>
                                             </div>
@@ -630,9 +630,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v2-1.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Commercial<br> C/A</a></h3>
+                                                <h3><a href="./#">Commercial<br> C/A</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -643,9 +643,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v2-2.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Online &<br> Mobile</a></h3>
+                                                <h3><a href="./#">Online &<br> Mobile</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -656,9 +656,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v2-3.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Business<br> Loan</a></h3>
+                                                <h3><a href="./#">Business<br> Loan</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -669,9 +669,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v2-4.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Invest &<br> Insure</a></h3>
+                                                <h3><a href="./#">Invest &<br> Insure</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -682,9 +682,9 @@
                                                 <div class="icon-holder">
                                                     <img src="assets_h/images/icon/banking-features-v2-5.png" alt="">
                                                 </div>
-                                                <h3><a href="index.php#">Cash<br> Management</a></h3>
+                                                <h3><a href="./#">Cash<br> Management</a></h3>
                                                 <div class="btn-box">
-                                                    <a href="index.php#"><span class="icon-right-arrow"></span></a>
+                                                    <a href="./#"><span class="icon-right-arrow"></span></a>
                                                 </div>
                                             </div>
                                             <!--End Single Features Of Banking-->
@@ -694,7 +694,7 @@
                                             <div
                                                 class="single-features-of-banking single-features-of-banking--style2 more-services">
                                                 <div class="more-service-box">
-                                                    <a href="index.php#"><span class="icon-add"></span></a>
+                                                    <a href="./#"><span class="icon-add"></span></a>
                                                     <h3>More Service</h3>
                                                 </div>
                                             </div>
@@ -834,7 +834,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="btns-box">
-                                                        <a class="btn-one" href="index.php#">
+                                                        <a class="btn-one" href="./#">
                                                             <span class="txt">Apply Online</span>
                                                         </a>
                                                     </div>
@@ -847,7 +847,7 @@
                                                                     <span class="icon-right-arrow"></span>
                                                                 </div>
                                                                 <div class="text">
-                                                                    <a href="index.php#">Interest Amount</a>
+                                                                    <a href="./#">Interest Amount</a>
                                                                     <p>$720,260</p>
                                                                 </div>
                                                             </div>
@@ -858,7 +858,7 @@
                                                                     <span class="icon-right-arrow"></span>
                                                                 </div>
                                                                 <div class="text">
-                                                                    <a href="index.php#">Total Amount Payble</a>
+                                                                    <a href="./#">Total Amount Payble</a>
                                                                     <p>$720,260</p>
                                                                 </div>
                                                             </div>
@@ -944,7 +944,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="btns-box">
-                                                        <a class="btn-one" href="index.php#">
+                                                        <a class="btn-one" href="./#">
                                                             <span class="txt">Apply Online</span>
                                                         </a>
                                                     </div>
@@ -957,7 +957,7 @@
                                                                     <span class="icon-right-arrow"></span>
                                                                 </div>
                                                                 <div class="text">
-                                                                    <a href="index.php#">Interest Amount</a>
+                                                                    <a href="./#">Interest Amount</a>
                                                                     <p>$720,260</p>
                                                                 </div>
                                                             </div>
@@ -968,7 +968,7 @@
                                                                     <span class="icon-right-arrow"></span>
                                                                 </div>
                                                                 <div class="text">
-                                                                    <a href="index.php#">Total Amount Payble</a>
+                                                                    <a href="./#">Total Amount Payble</a>
                                                                     <p>$720,260</p>
                                                                 </div>
                                                             </div>
@@ -1054,7 +1054,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="btns-box">
-                                                        <a class="btn-one" href="index.php#">
+                                                        <a class="btn-one" href="./#">
                                                             <span class="txt">Apply Online</span>
                                                         </a>
                                                     </div>
@@ -1067,7 +1067,7 @@
                                                                     <span class="icon-right-arrow"></span>
                                                                 </div>
                                                                 <div class="text">
-                                                                    <a href="index.php#">Interest Amount</a>
+                                                                    <a href="./#">Interest Amount</a>
                                                                     <p>$720,260</p>
                                                                 </div>
                                                             </div>
@@ -1078,7 +1078,7 @@
                                                                     <span class="icon-right-arrow"></span>
                                                                 </div>
                                                                 <div class="text">
-                                                                    <a href="index.php#">Total Amount Payble</a>
+                                                                    <a href="./#">Total Amount Payble</a>
                                                                     <p>$720,260</p>
                                                                 </div>
                                                             </div>
@@ -1146,7 +1146,7 @@
                                         <img src="assets_h/images/resources/wealth-secure-v2-1.jpg" alt="">
                                     </div>
                                     <div class="inner-title">
-                                        <h3><a href="index.php#">Trade FX</a></h3>
+                                        <h3><a href="./#">Trade FX</a></h3>
                                     </div>
                                 </div>
                                 <div class="text-box">
@@ -1166,7 +1166,7 @@
                                         <img src="assets_h/images/resources/wealth-secure-v2-2.jpg" alt="">
                                     </div>
                                     <div class="inner-title">
-                                        <h3><a href="index.php#">Multi Currency a/c</a></h3>
+                                        <h3><a href="./#">Multi Currency a/c</a></h3>
                                     </div>
                                 </div>
                                 <div class="text-box">
@@ -1185,7 +1185,7 @@
                                         <img src="assets_h/images/resources/wealth-secure-v2-3.jpg" alt="">
                                     </div>
                                     <div class="inner-title">
-                                        <h3><a href="index.php#">Mutual Funds</a></h3>
+                                        <h3><a href="./#">Mutual Funds</a></h3>
                                     </div>
                                 </div>
                                 <div class="text-box">
@@ -1206,7 +1206,7 @@
                                         <img src="assets_h/images/resources/wealth-secure-v2-4.jpg" alt="">
                                     </div>
                                     <div class="inner-title">
-                                        <h3><a href="index.php#">Pension Scheme</a></h3>
+                                        <h3><a href="./#">Pension Scheme</a></h3>
                                     </div>
                                 </div>
                                 <div class="text-box">
@@ -1227,7 +1227,7 @@
                                         <img src="assets_h/images/resources/wealth-secure-v2-1.jpg" alt="">
                                     </div>
                                     <div class="inner-title">
-                                        <h3><a href="index.php#">Trade FX</a></h3>
+                                        <h3><a href="./#">Trade FX</a></h3>
                                     </div>
                                 </div>
                                 <div class="text-box">
@@ -1247,7 +1247,7 @@
                                         <img src="assets_h/images/resources/wealth-secure-v2-2.jpg" alt="">
                                     </div>
                                     <div class="inner-title">
-                                        <h3><a href="index.php#">Multi Currency a/c</a></h3>
+                                        <h3><a href="./#">Multi Currency a/c</a></h3>
                                     </div>
                                 </div>
                                 <div class="text-box">
@@ -1266,7 +1266,7 @@
                                         <img src="assets_h/images/resources/wealth-secure-v2-3.jpg" alt="">
                                     </div>
                                     <div class="inner-title">
-                                        <h3><a href="index.php#">Mutual Funds</a></h3>
+                                        <h3><a href="./#">Mutual Funds</a></h3>
                                     </div>
                                 </div>
                                 <div class="text-box">
@@ -1287,7 +1287,7 @@
                                         <img src="assets_h/images/resources/wealth-secure-v2-4.jpg" alt="">
                                     </div>
                                     <div class="inner-title">
-                                        <h3><a href="index.php#">Pension Scheme</a></h3>
+                                        <h3><a href="./#">Pension Scheme</a></h3>
                                     </div>
                                 </div>
                                 <div class="text-box">
@@ -1366,7 +1366,7 @@
                                     to be welcomed every avoided.</p>
                             </div>
                             <div class="btns-box">
-                                <a class="btn-one" href="index.php#">
+                                <a class="btn-one" href="./#">
                                     <span class="txt">Online Booking</span>
                                 </a>
                             </div>
@@ -1375,7 +1375,7 @@
                                     <span class="icon-faq"></span>
                                 </div>
                                 <p>Have queries? Click below link</p>
-                                <a href="index.php#"><span class="icon-right-arrow"></span>faq’s</a>
+                                <a href="./#"><span class="icon-right-arrow"></span>faq’s</a>
                             </div>
                         </div>
                     </div>
@@ -1479,14 +1479,14 @@
                     <div class="col-xl-4">
                         <div class="features-style4-title-box">
                             <div class="sec-title">
-                                <h2><?php echo $sitename ?> Bank<br> Super Savings<br> a/c in 5 Mins</h2>
+                                <h2><?php echo $sitename ?><br> Super Savings<br> a/c in 5 Mins</h2>
                                 <div class="sub-title">
                                     <p>Blinded by desire that they cannot foresee
                                         pain & trouble that are bound.</p>
                                 </div>
                             </div>
                             <div class="btns-box">
-                                <a class="btn-one" href="index.php#">
+                                <a class="btn-one" href="./#">
                                     <span class="txt">Open an Account</span>
                                 </a>
                             </div>
@@ -1573,10 +1573,10 @@
                             <h3>Get 10% Cashback on Xfinity Restuarant.</h3>
                             <div class="bottom">
                                 <div class="btn-box">
-                                    <a href="index.php#"><span class="icon-right-arrow"></span>Know More</a>
+                                    <a href="./#"><span class="icon-right-arrow"></span>Know More</a>
                                 </div>
                                 <div class="share-btn">
-                                    <a href="index.php#"><span class="icon-share"></span>Share</a>
+                                    <a href="./#"><span class="icon-share"></span>Share</a>
                                 </div>
                             </div>
                         </div>
@@ -1598,10 +1598,10 @@
                             <h3>Get 10% Cashback on Xfinity Restuarant.</h3>
                             <div class="bottom">
                                 <div class="btn-box">
-                                    <a href="index.php#"><span class="icon-right-arrow"></span>Know More</a>
+                                    <a href="./#"><span class="icon-right-arrow"></span>Know More</a>
                                 </div>
                                 <div class="share-btn">
-                                    <a href="index.php#"><span class="icon-share"></span>Share</a>
+                                    <a href="./#"><span class="icon-share"></span>Share</a>
                                 </div>
                             </div>
                         </div>
@@ -1617,7 +1617,7 @@
                                 <h3>Subscribe Us</h3>
                                 <p>Subscribe us & Stay updated.</p>
                             </div>
-                            <form class="subscribe-form-style1" action="index.php#">
+                            <form class="subscribe-form-style1" action="./#">
                                 <div class="input-box">
                                     <input type="email" name="email" placeholder="Email address">
                                     <div class="inner-icon">
@@ -1649,10 +1649,10 @@
                             <h3>Get 10% Cashback on Xfinity Restuarant.</h3>
                             <div class="bottom">
                                 <div class="btn-box">
-                                    <a href="index.php#"><span class="icon-right-arrow"></span>Know More</a>
+                                    <a href="./#"><span class="icon-right-arrow"></span>Know More</a>
                                 </div>
                                 <div class="share-btn">
-                                    <a href="index.php#"><span class="icon-share"></span>Share</a>
+                                    <a href="./#"><span class="icon-share"></span>Share</a>
                                 </div>
                             </div>
                         </div>
@@ -1674,10 +1674,10 @@
                             <h3>Get 10% Cashback on Xfinity Restuarant.</h3>
                             <div class="bottom">
                                 <div class="btn-box">
-                                    <a href="index.php#"><span class="icon-right-arrow"></span>Know More</a>
+                                    <a href="./#"><span class="icon-right-arrow"></span>Know More</a>
                                 </div>
                                 <div class="share-btn">
-                                    <a href="index.php#"><span class="icon-share"></span>Share</a>
+                                    <a href="./#"><span class="icon-share"></span>Share</a>
                                 </div>
                             </div>
                         </div>
@@ -1688,7 +1688,7 @@
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="view-all-offer-btn">
-                            <a href="index.php#"><span class="icon-right-arrow"></span>View All Offers</a>
+                            <a href="./#"><span class="icon-right-arrow"></span>View All Offers</a>
                         </div>
                     </div>
                 </div>
@@ -1768,12 +1768,12 @@
                                     <div class="bottom">
                                         <div class="meta-box">
                                             <ul class="meta-info">
-                                                <li><span class="icon-clock"></span> <a href="index.php#">6 Mins Read</a></li>
-                                                <li><span class="icon-comment"></span> <a href="index.php#">10 Cmnts</a></li>
+                                                <li><span class="icon-clock"></span> <a href="./#">6 Mins Read</a></li>
+                                                <li><span class="icon-comment"></span> <a href="./#">10 Cmnts</a></li>
                                             </ul>
                                         </div>
                                         <div class="share-btn">
-                                            <a href="index.php#"><span class="icon-share"></span></a>
+                                            <a href="./#"><span class="icon-share"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -1810,12 +1810,12 @@
                                     <div class="bottom">
                                         <div class="meta-box">
                                             <ul class="meta-info">
-                                                <li><span class="icon-clock"></span> <a href="index.php#">4 Mins Read</a></li>
-                                                <li><span class="icon-comment"></span> <a href="index.php#">10 Cmnts</a></li>
+                                                <li><span class="icon-clock"></span> <a href="./#">4 Mins Read</a></li>
+                                                <li><span class="icon-comment"></span> <a href="./#">10 Cmnts</a></li>
                                             </ul>
                                         </div>
                                         <div class="share-btn">
-                                            <a href="index.php#"><span class="icon-share"></span></a>
+                                            <a href="./#"><span class="icon-share"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -1852,12 +1852,12 @@
                                     <div class="bottom">
                                         <div class="meta-box">
                                             <ul class="meta-info">
-                                                <li><span class="icon-clock"></span> <a href="index.php#">3 Mins Read</a></li>
-                                                <li><span class="icon-comment"></span> <a href="index.php#">10 Cmnts</a></li>
+                                                <li><span class="icon-clock"></span> <a href="./#">3 Mins Read</a></li>
+                                                <li><span class="icon-comment"></span> <a href="./#">10 Cmnts</a></li>
                                             </ul>
                                         </div>
                                         <div class="share-btn">
-                                            <a href="index.php#"><span class="icon-share"></span></a>
+                                            <a href="./#"><span class="icon-share"></span></a>
                                         </div>
                                     </div>
                                 </div>
@@ -2040,27 +2040,27 @@
 
                             <div class="bottom-box">
                                 <div class="btn-box">
-                                    <a href="index.php#"><i class="fas fa-arrow-down"></i> Customer Care</a>
+                                    <a href="./#"><i class="fas fa-arrow-down"></i> Customer Care</a>
                                 </div>
                                 <div class="footer-social-link-style1">
                                     <ul class="clearfix">
                                         <li>
-                                            <a href="index.php#">
+                                            <a href="./#">
                                                 <i class="fab fa-youtube"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="index.php#">
+                                            <a href="./#">
                                                 <i class="fab fa-instagram"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="index.php#">
+                                            <a href="./#">
                                                 <i class="fab fa-twitter"></i>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="index.php#">
+                                            <a href="./#">
                                                 <i class="fab fa-facebook-f"></i>
                                             </a>
                                         </li>
@@ -2157,7 +2157,7 @@
                                             pleasure is to be welcomed every pleasures business it frequently occur
                                             that pleasures have to be repudiated.</p>
                                         <div class="btn-box">
-                                            <a href="index.php#"><span class="icon-right-arrow"></span> More About Us</a>
+                                            <a href="./#"><span class="icon-right-arrow"></span> More About Us</a>
                                         </div>
                                     </div>
                                 </div>
@@ -2169,11 +2169,11 @@
                                             <div class="single-footer-widget single-footer-widget--link-box">
                                                 <div class="footer-widget-links">
                                                     <ul>
-                                                        <li><a href="index.php#">Home Loan</a></li>
-                                                        <li><a href="index.php#">Car Loan</a></li>
-                                                        <li><a href="index.php#">Two Wheeler Loan</a></li>
-                                                        <li><a href="index.php#">Personal Loan</a></li>
-                                                        <li><a href="index.php#">Tractor Loan</a></li>
+                                                        <li><a href="./#">Home Loan</a></li>
+                                                        <li><a href="./#">Car Loan</a></li>
+                                                        <li><a href="./#">Two Wheeler Loan</a></li>
+                                                        <li><a href="./#">Personal Loan</a></li>
+                                                        <li><a href="./#">Tractor Loan</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -2183,11 +2183,11 @@
                                             <div class="single-footer-widget single-footer-widget--link-box">
                                                 <div class="footer-widget-links">
                                                     <ul>
-                                                        <li><a href="index.php#">Cards</a></li>
-                                                        <li><a href="index.php#">Deposits</a></li>
-                                                        <li><a href="index.php#">Payments</a></li>
-                                                        <li><a href="index.php#">Insurance</a></li>
-                                                        <li><a href="index.php#">Locker Facility</a></li>
+                                                        <li><a href="./#">Cards</a></li>
+                                                        <li><a href="./#">Deposits</a></li>
+                                                        <li><a href="./#">Payments</a></li>
+                                                        <li><a href="./#">Insurance</a></li>
+                                                        <li><a href="./#">Locker Facility</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -2197,11 +2197,11 @@
                                             <div class="single-footer-widget single-footer-widget--link-box">
                                                 <div class="footer-widget-links">
                                                     <ul>
-                                                        <li><a href="index.php#">Career</a></li>
-                                                        <li><a href="index.php#">News Room</a></li>
-                                                        <li><a href="index.php#">Interest Rates</a></li>
-                                                        <li><a href="index.php#">Gold Rate Today</a></li>
-                                                        <li><a href="index.php#">Charges & Fees</a></li>
+                                                        <li><a href="./#">Career</a></li>
+                                                        <li><a href="./#">News Room</a></li>
+                                                        <li><a href="./#">Interest Rates</a></li>
+                                                        <li><a href="./#">Gold Rate Today</a></li>
+                                                        <li><a href="./#">Charges & Fees</a></li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -2255,7 +2255,7 @@
                                         </div>
                                     </div>
                                     <div class="form-box1">
-                                        <form class="zip-form" action="index.php#">
+                                        <form class="zip-form" action="./#">
                                             <input id="zip" name="zip" type="number" placeholder="Enter Zip Code...">
                                             <button type="submit">
                                                 <i class="icon-right-arrow"></i>Find
@@ -2278,14 +2278,14 @@
                     <div class="bottom-inner">
                         <div class="footer-menu">
                             <ul>
-                                <li><a href="index.php#">&copy; 2022 <?php echo $sitename ?> </a></li>
-                                <li><a href="index.php#">Privacy Policy</a></li>
-                                <li><a href="index.php#">Terms & Conditions</a></li>
-                                <li><a href="index.php#">Sitemap</a></li>
+                                <li><a href="./#">&copy; 2022 <?php echo $sitename ?> </a></li>
+                                <li><a href="./#">Privacy Policy</a></li>
+                                <li><a href="./#">Terms & Conditions</a></li>
+                                <li><a href="./#">Sitemap</a></li>
                             </ul>
                         </div>
                         <div class="scrool-top-btn-style2">
-                            <a href="index.php#" data-target="html" class="scroll-to-target scroll-to-top--style2">
+                            <a href="./#" data-target="html" class="scroll-to-target scroll-to-top--style2">
                                 <i class="icon-diagonal-arrow"></i>Back to Top
                             </a>
                         </div>
@@ -2321,10 +2321,10 @@
                 </li>
             </ul>
             <div class="mobile-nav__social">
-                <a href="index.php#" class="fab fa-twitter"></a>
-                <a href="index.php#" class="fab fa-facebook-square"></a>
-                <a href="index.php#" class="fab fa-pinterest-p"></a>
-                <a href="index.php#" class="fab fa-instagram"></a>
+                <a href="./#" class="fab fa-twitter"></a>
+                <a href="./#" class="fab fa-facebook-square"></a>
+                <a href="./#" class="fab fa-pinterest-p"></a>
+                <a href="./#" class="fab fa-instagram"></a>
             </div>
         </div>
     </div>
@@ -2333,7 +2333,7 @@
     <div class="search-popup">
         <div class="search-popup__overlay search-toggler"></div>
         <div class="search-popup__content">
-            <form action="index.php#">
+            <form action="./#">
                 <label for="search" class="sr-only">search here</label>
                 <input type="text" id="search" placeholder="Search Here..." />
                 <button type="submit" aria-label="search submit" class="thm-btn">
