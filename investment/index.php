@@ -1,35 +1,13 @@
 <?php
 include("../server/connection.php");
+include("../server/auth/client.php");
 
-if (!isset($_SESSION['user_id']) || !is_numeric($_SESSION['user_id'])) {
-    header("location: {$domain}/auth/sign_in/");
-    exit;
-}
 
-$user_id = (int) $_SESSION['user_id'];
 
+$user_balance = (float) $client['balance'];
 $errors = [];
-$success = "";
 
 
-$user_balance = 0.00;
-$bal_sql = "SELECT balance FROM users WHERE id = ? LIMIT 1";
-$bal_stmt = mysqli_prepare($connection, $bal_sql);
-if ($bal_stmt) {
-    mysqli_stmt_bind_param($bal_stmt, "i", $user_id);
-    mysqli_stmt_execute($bal_stmt);
-    $bal_res = mysqli_stmt_get_result($bal_stmt);
-    if ($bal_row = mysqli_fetch_assoc($bal_res)) {
-        $user_balance = (float) $bal_row['balance'];
-    }
-    mysqli_stmt_close($bal_stmt);
-} else {
-    $errors[] = "Server error: failed to fetch user balance.";
-}
-
-/**
- * ✅ ACTIVATE INVESTMENT (check balance first)
- */
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment'])) {
 
     $plan_id = isset($_POST['plan_id']) ? trim($_POST['plan_id']) : '';
@@ -134,7 +112,7 @@ if (!$plan_stmt) {
         /* ===== Layout ===== */
         .invest-grid {
             display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 22px;
         }
 
@@ -147,24 +125,17 @@ if (!$plan_stmt) {
         /* ===== Nice Card ===== */
         .invest-card {
             border-radius: 22px;
-            padding: 20px;
+            padding: 10px;
             background-color: white;
             color: black;
             box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.08);
             position: relative;
             overflow: hidden;
+            
         }
 
-        .invest-card:before {
-            content: "";
-            position: absolute;
-            width: 280px;
-            height: 280px;
-            /* background: radial-gradient(circle, rgba(41, 197, 255, 0.28), transparent 60%); */
-            top: -140px;
-            right: -140px;
-        }
+      
 
         .invest-top {
             display: flex;
@@ -281,17 +252,16 @@ if (!$plan_stmt) {
             width: 100%;
             height: 56px;
             border-radius: 14px;
-            background: rgba(0, 0, 0, 0.20);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            border: 2px solid black;
             outline: none;
             padding: 0 16px;
-            color: #ffffff;
+            color: black;
             font-size: 15px;
             margin-bottom: 12px;
         }
 
         .invest-input::placeholder {
-            color: rgba(255, 255, 255, 0.45);
+            color: black;
         }
 
         .invest-btn {
@@ -299,7 +269,7 @@ if (!$plan_stmt) {
             height: 56px;
             border-radius: 14px;
             border: none;
-            background: linear-gradient(90deg, #29c5ff, #1f89a8);
+            background: #2F3A53;
             color: #06121a;
             font-weight: 900;
             letter-spacing: 1px;
@@ -307,11 +277,12 @@ if (!$plan_stmt) {
             cursor: pointer;
             font-size: 15px;
             text-transform: uppercase;
-            box-shadow: 0 14px 28px rgba(41, 197, 255, 0.22);
+           
+            color: white;
         }
 
         .invest-btn:hover {
-            filter: brightness(1.03);
+            /* filter: brightness(1.03); */
         }
 
         /* ===== Small note ===== */
@@ -342,19 +313,17 @@ if (!$plan_stmt) {
                     <div class="col-12">
                         <div class="page-title">
                             <div class="row align-items-center justify-content-between">
-                                <div class="col-xl-6">
+                                <div class="col-6">
                                     <div class="page-title-content">
                                         <h3>Investment</h3>
                                         <p class="mb-2">Welcome To <?= htmlspecialchars($sitename) ?> Management</p>
-
-                                      
                                         <div class="balance-chip mt-2">
                                             <small>Your Balance:</small>
-                                            <span>$<?= number_format((float) htmlspecialchars($bal_sql), 2) ?></span>
+                                            <span>$<?= number_format($client['balance'] ,2) ?></span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-auto">
+                                <div class="col-auto mt-2">
                                     <a href="./investment_history/"><button class="btn btn-primary mr-2">View Investment History</button></a>
                                 </div>
                             </div>
@@ -426,7 +395,7 @@ if (!$plan_stmt) {
 
                                 <form class="invest-form" method="post">
                                     <input type="hidden" name="plan_id" value="<?= $plan_id ?>">
-                                    <input class="invest-input" type="number" name="amount_invested" placeholder="Enter Amount" required>
+                                    <input class="invest-input"  type="number" name="amount_invested" placeholder="Enter Amount" required>
                                     <button class="invest-btn" type="submit" name="activate_investment">ACTIVATE</button>
                                 </form>
 

@@ -71,7 +71,7 @@ $user_id = $_SESSION['user_id'];
                                 investments.status AS status
                             FROM investment_plans
                             INNER JOIN investments ON investment_plans.id = investments.plan_id
-                            WHERE Investments.user_id = ?
+                            WHERE investments.user_id = ?
                             ORDER BY Investments.id DESC
                         ";
 
