@@ -2,23 +2,20 @@
 include("../../server/connection.php");
 
 $success = "";
-$emailErr = "";
+$accountnumberErr = "";
 $passwordErr = "";
 
 
-$email = "";
+$accountnumber = "";
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
-    $email    = $_POST['email'];
+    $accountnumber    = $_POST['accountnumber'];
     $password = $_POST['password'];
     $hasError = false;
 
-    if (empty($email)) {
-        $emailErr = "Email is required";
-        $hasError = true;
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $emailErr = "Invalid email format";
+    if (empty($accountnumber)) {
+        $accountnumberErr = "account number is required";
         $hasError = true;
     }
 
@@ -30,42 +27,42 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
     if (!$hasError) {
-        $sql = "SELECT id, fullname, email, password FROM users WHERE email = ?";
-        $stmt = mysqli_prepare($connection, $sql);
+        $sql = "SELECT id, fullname, accountnumber, password, is_approved FROM users WHERE accountnumber = ?";
+$stmt = mysqli_prepare($connection, $sql);
 
-        if ($stmt) {
-            mysqli_stmt_bind_param($stmt, "s", $email);
-            mysqli_stmt_execute($stmt);
-            mysqli_stmt_store_result($stmt);
+if ($stmt) {
+    mysqli_stmt_bind_param($stmt, "s", $accountnumber);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
 
-            if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $id, $fullname, $db_email, $db_password);
-                mysqli_stmt_fetch($stmt);
+    if (mysqli_stmt_num_rows($stmt) > 0) {
+        mysqli_stmt_bind_result($stmt, $id, $fullname, $db_accountnumber, $db_password, $is_approved);
+        mysqli_stmt_fetch($stmt);
 
-                if (password_verify($password, $db_password ?? "")) {
-                    $success = "Login successful. Welcome, $fullname!";
-
-                    
-                    $_SESSION['user_id'] = $id;
-                    $_SESSION['fullname'] = $fullname;
-                    echo "
-                    <script>
-                     setTimeout(() => {
-          window.location.href = '../set_transaction_pin/';
-                 }, 1000);
-                  </script>
-                    ";
-                } else {
-                    $passwordErr = "invalid credential";
-                }
-            } else {
-                $emailErr = "No account found ";
-            }
-
-            mysqli_stmt_close($stmt);
+        if (!password_verify($password, $db_password ?? "")) {
+            $passwordErr = "Invalid credentials";
+        } elseif ($is_approved == 0) {
+            $accountnumberErr = "Your account has not been verified yet. Please check your email inbox.";
         } else {
-            $success = "Database error: " . mysqli_error($connection);
+            $success = "Login successful. Welcome, $fullname!";
+
+            $_SESSION['user_id'] = $id;
+            $_SESSION['fullname'] = $fullname;
+
+            echo "
+            <script>
+                setTimeout(() => {
+                    window.location.href = '../set_transaction_pin/';
+                }, 1000);
+            </script>";
         }
+    } else {
+        $accountnumberErr = "No account found with this account number";
+    }
+
+    mysqli_stmt_close($stmt);
+}
+
     }
 }
 ?>
@@ -111,9 +108,9 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                 <form action="" method="POST">
                                     <div class="row">
                                         <div class="col-12 mb-3">
-                                            <label class="form-label">Email</label>
-                                            <input name="email" type="text" class="form-control" value="<?= htmlspecialchars($email) ?>" />
-                                            <small style="color:red"><?= $emailErr ?></small>
+                                            <label class="form-label">Account Number</label>
+                                            <input name="accountnumber" type="text" class="form-control" value="<?= htmlspecialchars($accountnumber) ?>" />
+                                            <small style="color:red"><?= $accountnumberErr ?></small>
                                         </div>
                                         <div class="col-12 mb-3">
                                             <label class="form-label">Password</label>

@@ -104,75 +104,95 @@ $query = $connection->query($sql);
 
                                 <div class="table-responsive">
                                     <table class="table">
-                                        <tbody>
+                                       <tbody>
 
-                                            <tr>
-                                                <td><strong>Full Name:</strong></td>
-                                                <td><?php echo $user['fullname']; ?></td>
-                                            </tr>
+<tr>
+    <td><strong>ID:</strong></td>
+    <td><?= $user['id']; ?></td>
+</tr>
 
-                                            <tr>
-                                                <td><strong>Email:</strong></td>
-                                                <td><?php echo $user['email']; ?></td>
-                                            </tr>
+<tr>
+    <td><strong>Full Name:</strong></td>
+    <td><?= $user['fullname']; ?></td>
+</tr>
 
-                                            <tr>
-                                                <td><strong>Account Created:</strong></td>
-                                                <td><?php echo $user['created_at']; ?></td>
-                                            </tr>
+<tr>
+    <td><strong>Email:</strong></td>
+    <td><?= $user['email']; ?></td>
+</tr>
 
-                                            <tr>
-                                                <td><strong>Main Balance:</strong></td>
-                                                <td>$<?php echo number_format($user['balance'], 2); ?></td>
-                                            </tr>
+<tr>
+    <td><strong>Account Number:</strong></td>
+    <td><?= $user['accountnumber']; ?></td>
+</tr>
 
-                                            <tr>
-                                                <td><strong>Loan Balance:</strong></td>
-                                                <td>$<?php echo number_format($user['loan_balance'], 2); ?></td>
-                                            </tr>
+<tr>
+    <td><strong>Country:</strong></td>
+    <td><?= $user['country']; ?></td>
+</tr>
 
-                                            <tr>
-                                                <td><strong>Crypto Balance:</strong></td>
-                                                <td>$<?php echo number_format($user['crypto_balance'], 2); ?></td>
-                                            </tr>
+<tr>
+    <td><strong>Date of Birth:</strong></td>
+    <td><?= $user['date_of_birth']; ?></td>
+</tr>
 
-                                            <tr>
-                                                <td><strong>Virtual Card Balance:</strong></td>
-                                                <td>$<?php echo number_format($user['virtual_card_balance'], 2); ?></td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>Account Status:</strong></td>
-                                                <td>
-                                                    <span class="badge text-white <?php echo $status_color; ?>">
-                                                        <?php echo ucfirst($user['status']); ?>
-                                                    </span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <strong>Action</strong>
-                                                </td>
-                                                <td>
-                                                    <?php
+<tr>
+    <td><strong>Account Created:</strong></td>
+    <td><?= $user['created_at']; ?></td>
+</tr>
 
-                                                    if( $user['status'] !== 'active' ){ ?>
-                                                        <a href="./?activate_user=<?= $user['id'] ?>">
-                                                            <button class="btn btn-success btn-sm activate-user">Activate User</button>
-                                                        </a>    
-                                                    <?php } else { ?>
-                                                       
-                                                       <form method="POST">
-                                                            <input type="hidden" name="user_id" value="<?= $user['id'] ?>">
-                                                            <input type="text" name="deactivation_reason" class="form-control mb-2" placeholder="Reason for deactivation" required>
-                                                            <button type="submit" name="deactivate_user" class="btn btn-danger btn-sm deactivate-user">Deactivate User</button>
-                                                       </form>
-                                                        
-                                                    <?php }
-                                                    ?>
-                                                </td>
-                                            </tr>
+<tr>
+    <td><strong>Main Balance:</strong></td>
+    <td>$<?= number_format($user['balance'], 2); ?></td>
+</tr>
 
-                                        </tbody>
+<tr>
+    <td><strong>Loan Balance:</strong></td>
+    <td>$<?= number_format($user['loan_balance'], 2); ?></td>
+</tr>
+
+<tr>
+    <td><strong>Crypto Balance:</strong></td>
+    <td>$<?= number_format($user['crypto_balance'], 2); ?></td>
+</tr>
+
+<tr>
+    <td><strong>Virtual Card Balance:</strong></td>
+    <td>$<?= number_format($user['virtual_card_balance'], 2); ?></td>
+</tr>
+
+<tr>
+    <td><strong>Limits:</strong></td>
+    <td><?= $user['limits']; ?></td>
+</tr>
+
+<tr>
+    <td><strong>Virtual Card Number:</strong></td>
+    <td><?= $user['virtual_card_number']; ?></td>
+</tr>
+
+<tr>
+    <td><strong>Card Expiry Date:</strong></td>
+    <td><?= $user['virtual_card_expiring_date']; ?></td>
+</tr>
+
+<tr>
+    <td><strong>Account Approved:</strong></td>
+    <td>
+        <?= $user['is_approved'] ? '<span class="badge bg-success">Yes</span>' : '<span class="badge bg-warning">No</span>'; ?>
+    </td>
+</tr>
+
+<tr>
+    <td><strong>Status:</strong></td>
+    <td>
+        <span class="badge text-white <?= $status_color; ?>">
+            <?= ucfirst($user['status']); ?>
+        </span>
+    </td>
+</tr>
+
+</tbody>
                                     </table>
                                 </div>
 

@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment']
         $amount_decimal = (float) $amount_invested;
         $plan_id_int = (int) $plan_id;
 
-    
+
         if ($user_balance < $amount_decimal) {
             $errors[] = "Insufficient balance";
         } else {
@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment']
             mysqli_begin_transaction($connection);
 
             try {
-               
+
                 $insert_sql = "
                     INSERT INTO investments (user_id, plan_id, amount_invested)
                     VALUES (?, ?, ?)
@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment']
                 }
                 mysqli_stmt_close($stmt);
 
-               
+
                 $upd_stmt = mysqli_prepare($connection, "UPDATE users SET balance = balance - ? WHERE id = ? AND balance >= ?");
                 if (!$upd_stmt) {
                     throw new Exception("Server error: failed to update balance.");
@@ -109,189 +109,66 @@ if (!$plan_stmt) {
     <link rel="stylesheet" href="<?= $domain ?>/vendor/toastr/toastr.min.css">
 
     <style>
-        /* ===== Layout ===== */
-        .invest-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 22px;
-        }
-
-        @media (max-width: 991px) {
-            .invest-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* ===== Nice Card ===== */
         .invest-card {
-            border-radius: 22px;
-            padding: 10px;
-            background-color: white;
-            color: black;
-            box-shadow: 0 18px 55px rgba(0, 0, 0, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            position: relative;
-            overflow: hidden;
-            
+            border-radius: 18px;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.25s ease;
+            border: 1px solid #eee;
         }
 
-      
-
-        .invest-top {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 14px;
-            position: relative;
-            z-index: 2;
+        .invest-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
         }
 
-        .invest-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.10);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color:black;
-            flex: 0 0 auto;
-        }
-
+        /* Header */
         .invest-title {
-            margin: 0;
-            font-weight: 900;
-            letter-spacing: .8px;
-            text-transform: uppercase;
-            font-size: 16px;
-            color: #06121a;
+            font-size: 18px;
+            font-weight: 700;
+            color: #111;
         }
 
-        .invest-sub {
-            margin-top: 4px;
-            font-size: 13px;
-            color: black;
-        }
-
-        /* ===== Plan Details Block ===== */
+        /* Plan details */
         .plan-details {
-            position: relative;
-            z-index: 2;
-            margin-top: 10px;
-            padding: 14px;
-            border-radius: 16px;
-            background: white;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            background: #f9fafb;
         }
 
         .plan-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+            padding: 8px 0;
             font-size: 14px;
         }
 
-        .plan-row:last-child {
-            border-bottom: 0;
+        /* Highlight profit */
+        .plan-row.highlight {
+            font-size: 16px;
+            font-weight: bold;
+            color: #16a34a;
         }
 
-        .plan-label {
-            color:black;
-            font-weight: 600;
-        }
-
-        .plan-value {
-            color: black;
-            font-weight: 800;
-        }
-
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 10px;
-            border-radius: 999px;
-            background: rgba(41, 197, 255, 0.14);
-            color: #bfefff;
-            border: 1px solid rgba(41, 197, 255, 0.25);
-            font-size: 12px;
-            font-weight: 800;
-        }
-
-        /* ===== Balance chip ===== */
-        .balance-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 14px;
-            border-radius: 14px;
-            background: white;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            color: #06121a;
-            font-weight: 800;
-            font-size: 14px;
-        }
-
-        .balance-chip small {
-            opacity: .65;
-            font-weight: 700;
-        }
-
-        /* ===== Input + button ===== */
-        .invest-form {
-            position: relative;
-            z-index: 2;
-            margin-top: 14px;
-        }
-
+        /* Input */
         .invest-input {
-            width: 100%;
-            height: 56px;
-            border-radius: 14px;
-            border: 2px solid black;
-            outline: none;
-            padding: 0 16px;
-            color: black;
-            font-size: 15px;
-            margin-bottom: 12px;
+            border: 1px solid #ddd;
+            height: 50px;
         }
 
-        .invest-input::placeholder {
-            color: black;
-        }
-
+        /* Button */
         .invest-btn {
-            width: 100%;
-            height: 56px;
-            border-radius: 14px;
-            border: none;
-            background: #2F3A53;
-            color: #06121a;
-            font-weight: 900;
-            letter-spacing: 1px;
-            z-index: -1 !important;
-            cursor: pointer;
-            font-size: 15px;
-            text-transform: uppercase;
-           
+            background: #2563eb;
             color: white;
+            font-weight: 600;
+            border-radius: 10px;
+            height: 50px;
         }
 
         .invest-btn:hover {
-            /* filter: brightness(1.03); */
-        }
-
-        /* ===== Small note ===== */
-        .plan-note {
-            margin-top: 10px;
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.55);
-            position: relative;
-            z-index: 2;
+            background: #1d4ed8;
         }
     </style>
 </head>
@@ -319,7 +196,7 @@ if (!$plan_stmt) {
                                         <p class="mb-2">Welcome To <?= htmlspecialchars($sitename) ?> Management</p>
                                         <div class="balance-chip mt-2">
                                             <small>Your Balance:</small>
-                                            <span>$<?= number_format($client['balance'] ,2) ?></span>
+                                            <span>$<?= number_format($client['balance'], 2) ?></span>
                                         </div>
                                     </div>
                                 </div>
@@ -346,7 +223,7 @@ if (!$plan_stmt) {
                     </div>
                 <?php } ?>
 
-              
+
                 <div class="invest-grid mt-3">
 
                     <?php if (!empty($plans)) : ?>
@@ -366,11 +243,11 @@ if (!$plan_stmt) {
                                     </div>
                                     <div>
                                         <h4 class="invest-title"><?= htmlspecialchars($plan_name) ?></h4>
-                                      
+
                                     </div>
                                 </div>
 
-                              
+
                                 <div class="plan-details">
                                     <div class="plan-row">
                                         <span class="plan-label">Plan Name</span>
@@ -387,16 +264,16 @@ if (!$plan_stmt) {
                                         <span class="plan-value">$<?= number_format($profit_per_day, 2) ?></span>
                                     </div>
 
-                                    <div class="plan-row">
-                                        <span class="plan-label">Total Profit</span>
-                                        <span class="plan-value">$<?= number_format($total_profit, 2) ?></span>
+                                    <div class="plan-row highlight">
+                                        <span>Total Profit</span>
+                                        <span>$<?= number_format($total_profit, 2) ?></span>
                                     </div>
                                 </div>
 
-                                <form class="invest-form" method="post">
+                                <form class="invest-form mt-4 d-flex flex-wrap gap-2" method="post">
                                     <input type="hidden" name="plan_id" value="<?= $plan_id ?>">
-                                    <input class="invest-input"  type="number" name="amount_invested" placeholder="Enter Amount" required>
-                                    <button class="invest-btn" type="submit" name="activate_investment">ACTIVATE</button>
+                                    <input style="width:400px !important ; min-width: 100%;" class="invest-input px-2 " type="number" name="amount_invested" placeholder="Enter Amount" required>
+                                    <button style="border: none;" class="invest-btn b-none" type="submit" name="activate_investment">ACTIVATE</button>
                                 </form>
 
                                 <!-- <div class="plan-note">
@@ -412,34 +289,7 @@ if (!$plan_stmt) {
                 </div>
             </div>
 
-            <!-- FOOTER (kept intact) -->
-            <!-- <div class="footer">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-6">
-                            <div class="copyright">
-                                <p>© Copyright
-                                    <script>
-                                        var CurrentYear = new Date().getFullYear()
-                                        document.write(CurrentYear)
-                                    </script>
-                                    <a href="#"><?= htmlspecialchars($sitename) ?></a> | All Rights Reserved
-                                </p>
-                            </div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="footer-social">
-                                <ul>
-                                    <li><a href="#"><i class="fi fi-brands-facebook"></i></a></li>
-                                    <li><a href="#"><i class="fi fi-brands-twitter"></i></a></li>
-                                    <li><a href="#"><i class="fi fi-brands-linkedin"></i></a></li>
-                                    <li><a href="#"><i class="fi fi-brands-youtube"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
+
 
         </div>
 

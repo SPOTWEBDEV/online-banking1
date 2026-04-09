@@ -89,8 +89,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 
         $insert_sql = "INSERT INTO bank_transfers 
-            (user_id, receiver_account_number, receiver_name, receiver_bank, routing_number, swift_code, amount, narration, otp_code, otp_expires_at) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ?)";
+            (user_id, receiver_account_number, receiver_name, receiver_bank, routing_number, swift_code, amount, narration, otp_code, otp_expires_at,created_at) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? , ? , NOW())";
         $stmt = mysqli_prepare($connection, $insert_sql);
 
         if (!$stmt) {
@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $errors[] = "Failed to create transfer: " . mysqli_stmt_error($stmt);
             } else {
                 $transfer_id = mysqli_insert_id($connection);
-                $success = "Transfer created successfully";
+                $success = "Your transfer is being processed. You will receive a notification once it is successful.";
             }
 
             mysqli_stmt_close($stmt);

@@ -1,6 +1,7 @@
 <?php
 include("../server/connection.php");
-
+include("../server/auth/client.php");
+include("../mailer/index.php"); 
 if (!isset($_SESSION['user_id'])) {
     header("location: {$domain}/auth/sign_in/");
 }
@@ -8,6 +9,9 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = (int) $_SESSION['user_id'];
 $errors = [];
 $success = "";
+
+
+$fullname = $client['fullname'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
 
@@ -31,10 +35,90 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['deposit'])) {
         mysqli_stmt_bind_param($stmt, "isd", $user_id, $type, $amount);
 
         if (mysqli_stmt_execute($stmt)) {
-            $success = "Deposit submitted successfully. Awaiting confirmation.";
-        } else {
-            $errors[] = "Deposit failed. Please try again.";
-        }
+
+    $success = "Deposit submitted successfully. Awaiting confirmation.";
+
+    
+
+        $body = "
+<html>
+<body style='margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f1f2f3;'>
+
+<!-- Preheader (hidden preview text) -->
+<div style='display:none;font-size:1px;color:#f1f2f3;max-height:0;max-width:0;opacity:0;overflow:hidden;'>
+We have received your deposit request on your account.
+</div>
+
+<div style='max-width:600px;margin:20px auto;background:#ffffff;border-radius:6px;border:1px solid #e6e6e6;'>
+
+    <div style='background:#131722;padding:16px;text-align:center;'>
+        <h2 style='color:#ffffff;font-size:20px;margin:0;'>Deposit Request Received</h2>
+    </div>
+
+    <div style='padding:20px;color:#333;font-size:14px;line-height:1.6;'>
+
+        <p>Dear $fullname,</p>
+
+        <p>
+            This message is to confirm that we have received your deposit request on your
+            <strong>$sitename</strong> account.
+        </p>
+
+        <p><strong>Deposit summary:</strong></p>
+
+        <table width='100%' cellpadding='6' cellspacing='0' style='border-collapse:collapse;'>
+            <tr>
+                <td style='border:1px solid #ddd;'>Amount</td>
+                <td style='border:1px solid #ddd;'><strong>$amount</strong></td>
+            </tr>
+            <tr>
+                <td style='border:1px solid #ddd;'>Status</td>
+                <td style='border:1px solid #ddd;'>Pending review</td>
+            </tr>
+        </table>
+
+        <p style='margin-top:15px;'>
+            Your request is currently being reviewed. You will be notified once it has been completed.
+        </p>
+
+        <p>
+            If you did not initiate this request or need assistance, please contact our support team at
+            <a href='mailto:$siteemail'>$siteemail</a>.
+        </p>
+
+        <p>
+            Thank you for choosing <strong>$sitename</strong>.
+        </p>
+
+        <p>
+            Kind regards,<br>
+            The $sitename Team
+        </p>
+
+    </div>
+
+    <div style='text-align:center;font-size:12px;color:#777;padding:12px;background:#fafafa;border-top:1px solid #e6e6e6;'>
+        $sitename · Secure Online Services<br>
+        <a href='$domain' style='color:#777;text-decoration:none;'>$domain</a><br><br>
+        &copy; " . date('Y') . " $sitename. All rights reserved.
+    </div>
+
+</div>
+
+</body>
+</html>";
+
+
+        $to   = $client['email'];
+        $subj = "Initial Deposit Received – $sitename";
+
+        smtpmailer($to, $subj, $body);
+    
+
+} else {
+    $errors[] = "Deposit failed. Please try again.";
+}
+
 
         mysqli_stmt_close($stmt);
     }

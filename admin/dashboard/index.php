@@ -15,18 +15,6 @@ $withdrawal = $connection->query("SELECT SUM(amount) AS total_withdrawal , count
 // Total loan requests
 $loan = $connection->query("SELECT SUM(loan_amount) AS total_loan , count(id) as loan_count FROM loan_requests")->fetch_assoc();
 
-echo json_encode([
-    "success" => true,
-    "data" => [
-        "deposit" => $deposit['total_deposit'] ?? 0,
-        "investment" => $investment['total_investment'] ?? 0,
-        "withdrawal" => $withdrawal['total_withdrawal'] ?? 0,
-        "loan" => $loan['total_loan'] ?? 0
-    ]
-]);
-
-
-
 
 ?>
 
@@ -37,7 +25,7 @@ echo json_encode([
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ekash : Personal Finance Management Admin Dashboard HTML Template</title>
+    <title><?php echo $sitename ?></title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
     <!-- Custom Stylesheet -->
@@ -173,9 +161,9 @@ echo json_encode([
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                    <div class="breadcrumbs"><a href="index.html#">Home </a>
+                                    <div class="breadcrumbs"><a href="#">Home </a>
                                         <span><i class="fi fi-rr-angle-small-right"></i></span>
-                                        <a href="index.html#">Dashboard</a>
+                                        <a href="#">Dashboard</a>
                                     </div>
                                 </div>
                             </div>

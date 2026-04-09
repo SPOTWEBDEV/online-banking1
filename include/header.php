@@ -1,3 +1,35 @@
+  <?php
+  
+  $user_id = $_SESSION['user_id'];
+  
+  /* =========================
+   FETCH USER DATA
+   ========================= */
+$sql2 = "SELECT fullname, user_profile FROM users WHERE id = ?";
+$stmt2 = mysqli_prepare($connection, $sql2);
+mysqli_stmt_bind_param($stmt2, "i", $user_id);
+mysqli_stmt_execute($stmt2);
+$result = mysqli_stmt_get_result($stmt2);
+$user   = mysqli_fetch_assoc($result);
+mysqli_stmt_close($stmt2);
+
+$userName    = $user['fullname'];
+$userProfile = $user['user_profile'];
+
+// ✅ Default avatar fallback
+$defaultAvatar = $domain . "images/avatar/avatar.svg";
+
+if (empty($userProfile)) {
+    $userProfile = $defaultAvatar;
+}else{
+  $userProfile = $domain . '/' . $userProfile ; 
+}
+  
+  
+  
+  ?>
+  
+  
   <div class="header">
             <div class="container">
                 <div class="row">
@@ -79,7 +111,11 @@
                                 
                                 <div class="dropdown profile_log dropdown">
                                     <div data-bs-toggle="dropdown">
-                                        <div class="user icon-menu active"><span><i class="fi fi-rr-user"></i></span></div>
+                                        <img src="<?= htmlspecialchars($userProfile) ?>"
+                                         class="rounded-circle"
+                                         width="55"
+                                         height="55"
+                                         alt="Profile Image">
                                     </div>
                                     <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu dropdown-menu-end">
                                         <div class="user-email">

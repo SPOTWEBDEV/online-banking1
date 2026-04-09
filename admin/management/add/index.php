@@ -80,7 +80,7 @@ include("../../controllers/management.php");
                                                 <select name="plan_name" class="form-control">
                                                     <option selected>Select Plan</option>
                                                     <?php
-                                                    $users = mysqli_query($connection, "SELECT plan_name FROM investment_plans ORDER BY id ASC");
+                                                    $users = mysqli_query($connection, "SELECT plan_name , id FROM investment_plans ORDER BY id ASC");
                                                     while ($u = mysqli_fetch_assoc($users)) {
                                                         echo '<option value="' . $u['id'] . '">' . $u['plan_name'] . '</option>';
                                                     }
@@ -199,66 +199,83 @@ include("../../controllers/management.php");
 
                             </div>
 
-                            <div class="card">
+                            
+<div class="card">
 
+    <div class="card-header">
+        <h4 class="card-title">Add Transfer</h4>
+    </div>
 
-                                <div class="card-header">
-                                    <h4 class="card-title">Add Deposit To User</h4>
-                                </div>
+    <div class="card-body">
 
-                                <div class="card-body">
+        <form method="POST" class="form-style">
 
-                                    <form method="POST" class="form-style">
+            <!-- Select User -->
+            <label>User</label>
+            <select name="user_id" class="form-control" required>
+                <option value="">Select User</option>
+                <?php
+                $users = mysqli_query($connection, "SELECT id, fullname FROM users ORDER BY fullname ASC");
+                while ($u = mysqli_fetch_assoc($users)) {
+                    echo '<option value="'.$u['id'].'">'.$u['fullname'].'</option>';
+                }
+                ?>
+            </select>
+<label class="mt-3">Transaction Type</label>
+<select name="state" id="stateSelect" class="form-control" required>
+    <option value="">Select Type</option>
+    <option value="to">Credit (Add to Balance)</option>
+    <option value="from">Debit (Remove from Balance)</option>
+</select>
+            <!-- Receiver Name -->
+<label class="mt-3" id="nameLabel">Receiver Name</label>
+<input type="text" name="receiver_name" class="form-control" required>
 
-                                        <label>User</label>
-                                        <select name="user_id" class="form-control">
-                                            <option selected>Select User</option>
-                                            <?php
-                                            $users = mysqli_query($connection, "SELECT id, fullname FROM users ORDER BY fullname ASC");
-                                            while ($u = mysqli_fetch_assoc($users)) {
-                                                echo '<option value="' . $u['id'] . '">' . $u['fullname'] . '</option>';
-                                            }
-                                            ?>
-                                        </select>
+<!-- Receiver Bank -->
+<label class="mt-3" id="bankLabel">Receiver Bank</label>
+<input type="text" name="receiver_bank" class="form-control" required>
 
-                                        <label class="mt-3">Method (e.g. Bank Transfer, Crypto, Paystack)</label>
-                                        <select name="type" class="form-control">
-                                            <option selected>Select Method</option>
-                                            <?php
-                                            $users = mysqli_query($connection, "SELECT id, type FROM payment_account");
-                                            while ($u = mysqli_fetch_assoc($users)) {
-                                                echo '<option value="' . $u['id'] . '">' . $u['type'] . '</option>';
-                                            }
-                                            ?>
-                                        </select>
-                                        
+<!-- Account Number -->
+<label class="mt-3" id="accountLabel">Receiver Account Number</label>
+<input type="text" name="receiver_account_number" class="form-control" required>
 
+            <!-- Routing Number -->
+            <label class="mt-3">Routing Number</label>
+            <input type="text" name="routing_number" class="form-control">
 
-                                        <label>Amount</label>
-                                        <input type="number" step="0.01" name="amount" class="form-control" required>
+            <!-- Swift Code -->
+            <label class="mt-3">SWIFT Code</label>
+            <input type="text" name="swift_code" class="form-control">
 
-                                        <label>Status</label>
-                                        <select name="status" class="form-control">
-                                            <option value="pending">Pending</option>
-                                            <option value="approved">Approved</option>
-                                            <option value="failed">Failed</option>
-                                        </select>
+            <!-- Amount -->
+            <label class="mt-3">Amount</label>
+            <input type="number" step="0.01" name="amount" class="form-control" required>
 
-                                        <label>Date</label>
-                                        <input type="date"  name="date" class="form-control" required>
+            <!-- Narration -->
+            <label class="mt-3">Narration</label>
+            <textarea name="narration" class="form-control" rows="3"></textarea>
 
-                                        <button type="submit" name="add_deposit" class="btn-submit mt-3 btn btn-success w-100">Submit Deposit</button>
+            <!-- Status -->
+            <label class="mt-3">Status</label>
+            <select name="status" class="form-control">
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="failed">Failed</option>
+            </select>
 
-                                    </form>
+            <!-- Date -->
+            <label class="mt-3">Date</label>
+            <input type="datetime-local" name="created_at" class="form-control" required>
 
+            <button type="submit" name="add_transfer" class="btn btn-success w-100 mt-3">
+                Submit Transfer
+            </button>
 
-                                </div>
+        </form>
 
+    </div>
 
-
-
-                            </div>
-
+</div>
 
                         </div>
                     </div>
@@ -297,7 +314,28 @@ include("../../controllers/management.php");
     <script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 
-    <script src="<?php echo $domain ?>/js/scripts.js"></script>
+    <script src="<?php echo $domain ?>/js/scripts.js"></script><script>
+document.getElementById("stateSelect").addEventListener("change", function () {
+
+    const state = this.value;
+
+    const nameLabel = document.getElementById("nameLabel");
+    const bankLabel = document.getElementById("bankLabel");
+    const accountLabel = document.getElementById("accountLabel");
+
+    if (state === "to") {
+        // CREDIT → money coming IN
+        nameLabel.innerText = "Sender Name";
+        bankLabel.innerText = "Sender Bank";
+        accountLabel.innerText = "Sender Account Number";
+    } else if (state === "from") {
+        // DEBIT → money going OUT
+        nameLabel.innerText = "Receiver Name";
+        bankLabel.innerText = "Receiver Bank";
+        accountLabel.innerText = "Receiver Account Number";
+    }
+});
+</script>
 </body>
 
 </html>

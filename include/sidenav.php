@@ -25,14 +25,14 @@
             <li>
                 <a href="<?= $domain ?>/transfer/">
                     <span><i class="fi fi-rr-exchange"></i></span>
-                    <span class="nav-text">Transfers</span>
+                    <span class="nav-text">International Money Transfers</span>
                 </a>
             </li>
 
             <li>
                 <a href="<?php echo $domain ?>/investment/">
                     <span><i class="fi fi-rr-chart-line-up"></i></span>
-                    <span class="nav-text">Investment</span>
+                    <span class="nav-text">Investment Plan</span>
                 </a>
             </li>
 
@@ -46,7 +46,7 @@
             <li>
                 <a href="<?php echo $domain ?>/loan/">
                     <span><i class="fi fi-rr-hand-holding-usd"></i></span>
-                    <span class="nav-text">Loan</span>
+                    <span class="nav-text">Loan and Mortgage</span>
                 </a>
             </li>
 

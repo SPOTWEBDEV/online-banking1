@@ -1,10 +1,6 @@
 <?php
 include("../../server/connection.php");
-// chunk_split($rawCardNumber, 4, ' ');
-// echo implode(' ', str_split($row['virtual_card_number'], 4));
-// $expDisplay = date('m/y', strtotime($row['virtual_card_expiring_date']));
-// If you want without leading zero: n/y
-// $expDisplay = date('n/y', strtotime($row['virtual_card_expiring_date']));
+include("../../mailer/index.php"); 
 
 
 
@@ -19,6 +15,15 @@ $exist_err = "";
 $fullname = "";
 $email = "";
 $accept_terms = "";
+
+$dobErr = "";
+$countryErr = "";
+$ssnErr = "";
+
+$date_of_birth = "";
+$country = "";
+$ssn = "";
+
 
 function generateUniqueCardNumber($connection) {
     while (true) {
@@ -47,6 +52,33 @@ function generateUniqueCardNumber($connection) {
         }
     }
 }
+function generateUniqueAccountNumber($connection) {
+    while (true) {
+        // 12 digits, first digit 1–9
+        $account = strval(random_int(1, 9));
+        for ($i = 0; $i < 11; $i++) {
+            $account .= strval(random_int(0, 9));
+        }
+
+        $sql = "SELECT id FROM users WHERE accountnumber = ? LIMIT 1";
+        $stmt = mysqli_prepare($connection, $sql);
+        if (!$stmt) {
+            throw new Exception("server error");
+        }
+
+        mysqli_stmt_bind_param($stmt, "s", $account);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_store_result($stmt);
+
+        $exists = mysqli_stmt_num_rows($stmt) > 0;
+        mysqli_stmt_close($stmt);
+
+        if (!$exists) {
+            return $account;
+        }
+    }
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
@@ -55,8 +87,40 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $password = $_POST['password'] ?? '';
     $accept_terms = isset($_POST['acceptTerms']) ? $_POST['acceptTerms'] : "";
     $confirmPassword = $_POST['confirmPassword'] ?? '';
+    $date_of_birth = $_POST['date_of_birth'] ?? '';
+$country = $_POST['country'] ?? '';
+$ssn = $_POST['ssn'] ?? '';
+
 
     $hasError = false;
+    
+    // Date of birth
+if (empty($date_of_birth)) {
+    $dobErr = "Date of birth is required";
+    $hasError = true;
+} else {
+    $dob = new DateTime($date_of_birth);
+    $today = new DateTime();
+    $age = $today->diff($dob)->y;
+
+    if ($age < 18) {
+        $dobErr = "You must be at least 18 years old";
+        $hasError = true;
+    }
+}
+
+// Country
+if (empty($country)) {
+    $countryErr = "Country is required";
+    $hasError = true;
+}
+
+// SSN
+if (empty($ssn)) {
+    $ssnErr = "SSN is required";
+    $hasError = true;
+}
+
 
     // VALIDATION
     if (empty($fullname)) {
@@ -109,33 +173,162 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
         // 1) Generate unique card number
         try {
-            $virtualCardNumber = generateUniqueCardNumber($connection);
-        } catch (Exception $e) {
-            $success = $e->getMessage();
-            $hasError = true;
-        }
+    $virtualCardNumber = generateUniqueCardNumber($connection);
+    $accountNumber = generateUniqueAccountNumber($connection);
+} catch (Exception $e) {
+    $success = $e->getMessage();
+    $hasError = true;
+}
+
 
         $virtualCardExpiry = (new DateTime())->modify('+4 years')->format('Y-m-d');
 
         if (!$hasError) {
-            $sql = "INSERT INTO users (fullname, email, password, virtual_card_number, virtual_card_expiring_date)
-                    VALUES (?, ?, ?, ?, ?)";
+             $token = bin2hex(random_bytes(32));
+             
+            $sql = "INSERT INTO users (
+    fullname,
+    email,
+    password,
+    accountnumber,
+    virtual_card_number,
+    virtual_card_expiring_date,
+    verification_token,
+    date_of_birth,
+    country,
+    ssn
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
             $stmt = mysqli_prepare($connection, $sql);
 
             if ($stmt) {
-                mysqli_stmt_bind_param(
-                    $stmt,
-                    "sssss",
-                    $fullname,
-                    $email,
-                    $hashedPassword,
-                    $virtualCardNumber,
-                    $virtualCardExpiry
-                );
+               mysqli_stmt_bind_param(
+    $stmt,
+    "ssssssssss",
+    $fullname,
+    $email,
+    $hashedPassword,
+    $accountNumber,
+    $virtualCardNumber,
+    $virtualCardExpiry,
+    $token,
+    $date_of_birth,
+    $country,
+    $ssn
+);
+
+
 
                 mysqli_stmt_execute($stmt);
 
                 if (mysqli_stmt_affected_rows($stmt) > 0) {
+                  $verify_link = $domain. "/auth/verify/?token=" . $token;
+                
+                    $body = "
+                        <html>
+                        <body style='margin: 0; padding: 0; font-family: Roboto, sans-serif; background: #131722;'>
+                        <section style='width: 100%; background-color: #f1f2f3; color: #333;'>
+                        <div style='width: 100%; max-width: 600px; margin: 0 auto;'>
+                        <div style='padding: 20px; background-color: #131722; text-align: center;'>
+                        <h2 style='color: #fff; font-size: 24px;'>Welcome aboard, $fullname!</h2>
+                        </div>
+                        <div style='padding: 20px; background: #fff; border-radius: 0 0 8px 8px;'>
+                        <p>Dear $fullname</p>
+                        <p>Please verify your account by clicking the button below:</p>
+                        <a href='$verify_link'
+				       style='background:#00c853; color:#fff; padding:10px 20px; border-radius:6px; text-decoration:none;'>
+				       Verify My Account
+				    </a>
+				
+				    <p>If the button doesn't work, use this link:</p>
+				    <p>$verify_link</p>
+                        <p>Thank you for joining Zentra Bank, your trusted platform for secure online banking and smart investment solutions. We’re excited to welcome you to a digital banking experience designed for convenience, growth, and peace of mind.</p>
+                        <p>By choosing Zentra Bank, you gain access to seamless online banking tools alongside tailored investment opportunities. Our experienced team is dedicated to helping you manage your finances efficiently while working toward your long-term financial goals.</p>
+                        <p>To get started, simply fund your account and explore our range of online banking features and investment plans. Enjoy secure transactions, real-time account access, and opportunities to grow your wealth—all in one place.</p>
+                        <p>For any inquiries or assistance, feel free to reach out to our support team at <a href='mailto:$siteemail'>$siteemail</a>.</p>
+                        <p>Best regards,</p>
+                        <p>The $sitename  Team</p>
+                        
+                        </div>
+                        <div style='text-align: center; color: #666; margin-top: 20px; font-size: 12px;'> 
+                        &copy; 2020 $sitename  . All rights reserved. 
+                        </div>
+                        </div>
+                        </section>
+                        </body>
+                        </html>";
+                
+                    $to = $email;
+                    $subj = "Welcome to $sitename  ! ";
+                    $result = smtpmailer($to, $subj, $body);
+                    
+                    $account_body = "
+<html>
+<body style='font-family:Arial;background:#f4f6f8;padding:20px;'>
+<div style='max-width:600px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;'>
+
+<div style='background:#131722;padding:20px;text-align:center;'>
+<h2 style='color:#fff;'>Your Account Details</h2>
+</div>
+
+<div style='padding:20px;'>
+<p>Hello <strong>$fullname</strong>,</p>
+
+<table width='100%' cellpadding='10' cellspacing='0' style='border-collapse:collapse;'>
+
+<tr>
+<td style='border:1px solid #ddd;background:#f9f9f9;'><strong>Account Name</strong></td>
+<td style='border:1px solid #ddd;'>$fullname</td>
+</tr>
+
+<tr>
+<td style='border:1px solid #ddd;background:#f9f9f9;'><strong>Account Number</strong></td>
+<td style='border:1px solid #ddd;'>$accountNumber</td>
+</tr>
+
+<tr>
+<td style='border:1px solid #ddd;background:#f9f9f9;'><strong>Account Type</strong></td>
+<td style='border:1px solid #ddd;'>Current Account</td>
+</tr>
+
+<tr>
+<td style='border:1px solid #ddd;background:#f9f9f9;'><strong>Currency</strong></td>
+<td style='border:1px solid #ddd;'>USD (U.S. Dollar)</td>
+</tr>
+
+<tr>
+<td style='border:1px solid #ddd;background:#f9f9f9;'><strong>Status</strong></td>
+<td style='border:1px solid #ddd;color:green;'><strong>Active</strong></td>
+</tr>
+
+</table>
+
+<p style='margin-top:20px;'>
+You can now log in and start banking with <strong>$sitename</strong>.
+</p>
+
+<p>
+Need help? Contact us at <a href='mailto:$siteemail'>$siteemail</a>
+</p>
+
+<p>— The $sitename Team</p>
+</div>
+
+<div style='text-align:center;font-size:12px;color:#666;padding:10px;'>
+&copy; " . date('Y') . " $sitename. All rights reserved.
+</div>
+
+</div>
+</body>
+</html>
+";
+
+smtpmailer($email, "Your $sitename Account Details", $account_body);
+
+                    
+                    
+                    
                     $success = "User registered successfully";
 
                     // clear form values
@@ -230,6 +423,67 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                             <input name="email" type="text" class="form-control" value="<?= htmlspecialchars($email) ?>" />
                                             <small style="color:red"><?= $emailErr ?></small>
                                         </div>
+                                        
+                                        <div class="col-12 mb-3">
+    <label class="form-label">Date of Birth</label>
+    <input type="date" name="date_of_birth" class="form-control"
+           value="<?= htmlspecialchars($date_of_birth) ?>">
+    <small style="color:red"><?= $dobErr ?></small>
+</div>
+<div class="col-12 mb-3">
+    <label class="form-label">SSN</label>
+    <input type="text" name="ssn" class="form-control" maxlength="10">
+    <small style="color:red"><?= $ssnErr ?></small>
+</div>
+
+<div class="col-12 mb-3">
+    <label class="form-label">Country</label>
+    <select name="country" class="form-control">
+        <option value="">-- Select Country --</option>
+
+        <?php
+        $countries = [
+            "Afghanistan","Albania","Algeria","Andorra","Angola",
+            "Argentina","Armenia","Australia","Austria","Azerbaijan",
+            "Bahamas","Bahrain","Bangladesh","Barbados","Belgium",
+            "Belize","Benin","Bolivia","Brazil","Bulgaria",
+            "Cambodia","Cameroon","Canada","Chile","China","Colombia",
+            "Costa Rica","Croatia","Cuba","Cyprus","Czech Republic",
+            "Denmark","Dominican Republic",
+            "Ecuador","Egypt","Estonia","Ethiopia",
+            "Finland","France",
+            "Georgia","Germany","Ghana","Greece",
+            "Haiti","Honduras","Hong Kong","Hungary",
+            "Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy",
+            "Jamaica","Japan","Jordan",
+            "Kazakhstan","Kenya","Kuwait",
+            "Latvia","Lebanon","Liberia","Lithuania","Luxembourg",
+            "Malaysia","Maldives","Mexico","Monaco","Morocco",
+            "Nepal","Netherlands","New Zealand","Nigeria","Norway",
+            "Oman",
+            "Pakistan","Panama","Peru","Philippines","Poland","Portugal",
+            "Qatar",
+            "Romania","Russia","Rwanda",
+            "Saudi Arabia","Senegal","Singapore","Slovakia","Slovenia","South Africa","South Korea","Spain","Sri Lanka","Sweden","Switzerland",
+            "Thailand","Tunisia","Turkey",
+            "Uganda","Ukraine","United Arab Emirates","United Kingdom","United States",
+            "Uruguay",
+            "Venezuela","Vietnam",
+            "Yemen",
+            "Zambia","Zimbabwe"
+        ];
+
+        foreach ($countries as $c) {
+            $selected = ($country === $c) ? 'selected' : '';
+            echo "<option value=\"$c\" $selected>$c</option>";
+        }
+        ?>
+    </select>
+    <small style="color:red"><?= $countryErr ?></small>
+</div>
+
+
+
 
                                         <div class="col-12 mb-3">
                                             <label class="form-label">Password</label>

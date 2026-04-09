@@ -1,6 +1,8 @@
 <?php
 error_reporting(E_ALL);
-ini_set('display_errors', 1);
+ini_set('display_errors', 0); // ❌ don't show errors to users
+ini_set('log_errors', 1);     // ✅ log errors instead
+ini_set('error_log', 'error.log'); // file where errors will be saved
 
 function checkUrlProtocol($url)
 {
@@ -32,25 +34,12 @@ if ($request === 'https') {
     if (!$connection) {
         die("Connection failed: " . mysqli_connect_error());
     }
-} elseif ($request === 'http') {
-    $sitename = "Zentra Bank";
-    $domain = "http://localhost/zentra-bank";
-    define("USER", "root");
-    define("PASSWORD", "");
-    define("DATABASE", "zentra_bank");
-
-
-    $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
-
-    if (!$connection) {
-        die("Connection failed: " . mysqli_connect_error());
-    }
 } else {
     $sitename = "Zentra Bank";
     $domain = "http://localhost/zentra-bank";
     define("USER", "root");
     define("PASSWORD", "");
-    define("DATABASE", "zentra_bank");
+    define("DATABASE", "zentra-bank");
 
 
     $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);

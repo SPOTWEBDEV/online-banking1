@@ -87,7 +87,7 @@ $user_id = $_SESSION['user_id'];
     FROM deposits
     INNER JOIN users ON deposits.user_id = users.id
     WHERE deposits.user_id = ?
-    ORDER BY deposits.id DESC
+    ORDER BY deposits.date DESC
     LIMIT ? OFFSET ?
 ";
 

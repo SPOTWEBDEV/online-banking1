@@ -1,0 +1,5 @@
+[10-Apr-2026 01:27:54 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Table 'zentra_bank.users' doesn't exist in engine in C:\xampp\htdocs\zentra-bank\auth\sign_in\index.php:31
+Stack trace:
+#0 C:\xampp\htdocs\zentra-bank\auth\sign_in\index.php(31): mysqli_prepare(Object(mysqli), 'SELECT id, full...')
+#1 {main}
+  thrown in C:\xampp\htdocs\zentra-bank\auth\sign_in\index.php on line 31

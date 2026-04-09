@@ -1,0 +1,30 @@
+[20-Mar-2026 21:03:07 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Investments.id' in 'order clause' in /home/thestrat/zentrapb.com/investment/investment_history/index.php:78
+Stack trace:
+#0 /home/thestrat/zentrapb.com/investment/investment_history/index.php(78): mysqli_prepare()
+#1 {main}
+  thrown in /home/thestrat/zentrapb.com/investment/investment_history/index.php on line 78
+[26-Mar-2026 10:02:54 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Investments.id' in 'order clause' in /home/thestrat/zentrapb.com/investment/investment_history/index.php:78
+Stack trace:
+#0 /home/thestrat/zentrapb.com/investment/investment_history/index.php(78): mysqli_prepare()
+#1 {main}
+  thrown in /home/thestrat/zentrapb.com/investment/investment_history/index.php on line 78
+[26-Mar-2026 10:02:58 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Investments.id' in 'order clause' in /home/thestrat/zentrapb.com/investment/investment_history/index.php:78
+Stack trace:
+#0 /home/thestrat/zentrapb.com/investment/investment_history/index.php(78): mysqli_prepare()
+#1 {main}
+  thrown in /home/thestrat/zentrapb.com/investment/investment_history/index.php on line 78
+[26-Mar-2026 10:03:09 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Investments.id' in 'order clause' in /home/thestrat/zentrapb.com/investment/investment_history/index.php:78
+Stack trace:
+#0 /home/thestrat/zentrapb.com/investment/investment_history/index.php(78): mysqli_prepare()
+#1 {main}
+  thrown in /home/thestrat/zentrapb.com/investment/investment_history/index.php on line 78
+[26-Mar-2026 10:05:18 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Investments.id' in 'order clause' in /home/thestrat/zentrapb.com/investment/investment_history/index.php:78
+Stack trace:
+#0 /home/thestrat/zentrapb.com/investment/investment_history/index.php(78): mysqli_prepare()
+#1 {main}
+  thrown in /home/thestrat/zentrapb.com/investment/investment_history/index.php on line 78
+[26-Mar-2026 14:10:35 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'Investments.id' in 'order clause' in /home/thestrat/zentrapb.com/investment/investment_history/index.php:78
+Stack trace:
+#0 /home/thestrat/zentrapb.com/investment/investment_history/index.php(78): mysqli_prepare()
+#1 {main}
+  thrown in /home/thestrat/zentrapb.com/investment/investment_history/index.php on line 78

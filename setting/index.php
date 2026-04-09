@@ -21,6 +21,8 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?php echo $domain ?>/vendor/toastr/toastr.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
 </head>
 
 <body class="dashboard">
@@ -57,223 +59,246 @@ if (!isset($_SESSION['user_id'])) {
 
                         </div>
                         <div class="row">
-
-                            <?php
-                            $user_id = $_SESSION['user_id'];
-                            $success = "";
-                            $errors = [];
+<?php
 
 
-                            if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_FILES['profile_image'])) {
-                                $file = $_FILES['profile_image'];
+$user_id = $_SESSION['user_id'];
+$success = "";
+$errors  = [];
 
+/* =========================
+   HANDLE PROFILE IMAGE UPLOAD
+   ========================= */
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_FILES['profile_image'])) {
 
-                                if ($file['error'] !== 0) {
-                                    $errors[] = "Error uploading file.";
-                                } else {
-                                    if ($file['size'] > 2 * 1024 * 1024) {
-                                        $errors[] = "File size must be less than 2MB.";
-                                    }
+    $file = $_FILES['profile_image'];
 
+    if ($file['error'] !== 0) {
+        $errors[] = "Error uploading file.";
+    } else {
 
-                                    $finfo = new finfo(FILEINFO_MIME_TYPE);
-                                    $mimeType = $finfo->file($file['tmp_name']);
+        if ($file['size'] > 2 * 1024 * 1024) {
+            $errors[] = "File size must be less than 2MB.";
+        }
 
+        $finfo    = new finfo(FILEINFO_MIME_TYPE);
+        $mimeType = $finfo->file($file['tmp_name']);
 
+        $allowedTypes = [
+            'image/jpeg' => 'jpg',
+            'image/png'  => 'png'
+        ];
 
-                                    $allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-                                    if (!in_array($mimeType, $allowedTypes)) {
-                                        $errors[] = "Only JPG, PNG, and GIF images are allowed.";
-                                    }
+        if (!array_key_exists($mimeType, $allowedTypes)) {
+            $errors[] = "Only JPG and PNG images are allowed.";
+        }
 
+        if (empty($errors)) {
 
-                                    if (empty($errors)) {
-                                        $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
-                                        $newFileName = uniqid('profile_', true) . "." . $ext;
-                                        $uploadDir = "../images/avatar/";
+            $ext         = $allowedTypes[$mimeType];
+            $newFileName = uniqid('profile_', true) . "." . $ext;
 
-                                        if (!is_dir($uploadDir)) {
-                                            mkdir($uploadDir, 0755, true);
-                                        }
+            // ✅ Correct filesystem path
+            $uploadDir = __DIR__ . "/../images/avatar/";
 
-                                        $destination = $uploadDir . $newFileName;
+            if (!is_dir($uploadDir)) {
+                mkdir($uploadDir, 0755, true);
+            }
 
-                                        if (move_uploaded_file($file['tmp_name'], $destination)) {
+            $destination = $uploadDir . $newFileName;
 
-                                            // $relativePath = "../images/avatar/" . $newFileName;
-                                            $upload_path = "/images/avatar/" . $newFileName;
-                                            $sql = "UPDATE users SET user_profile = ? WHERE id = ?";
-                                            $stmt = mysqli_prepare($connection, $sql);
-                                            mysqli_stmt_bind_param($stmt, "si", $upload_path, $user_id);
+            if (move_uploaded_file($file['tmp_name'], $destination)) {
 
-                                            if (mysqli_stmt_execute($stmt)) {
-                                                $success = "Profile image uploaded successfully!";
-                                            } else {
-                                                $errors[] = "Failed to update database.";
-                                            }
-                                            mysqli_stmt_close($stmt);
-                                        } else {
-                                            $errors[] = "Failed to move uploaded file.";
-                                        }
-                                    }
-                                }
-                            }
+                // ✅ Store RELATIVE path only
+                $upload_path = "images/avatar/" . $newFileName;
 
-                            // / Fetch current profile
-                            $sql2 = "SELECT fullname, user_profile FROM users WHERE id = ?";
-                            $stmt2 = mysqli_prepare($connection, $sql2);
-                            mysqli_stmt_bind_param($stmt2, "i", $user_id);
-                            mysqli_stmt_execute($stmt2);
-                            $result = mysqli_stmt_get_result($stmt2);
-                            $user = mysqli_fetch_assoc($result);
-                            mysqli_stmt_close($stmt2);
-                            $userProfile = $user['user_profile'];
-                            $userName = $user['fullname'];
+                $sql  = "UPDATE users SET user_profile = ? WHERE id = ?";
+                $stmt = mysqli_prepare($connection, $sql);
+                mysqli_stmt_bind_param($stmt, "si", $upload_path, $user_id);
 
-                            ?>
+                if (mysqli_stmt_execute($stmt)) {
+                    $success = "Profile image uploaded successfully!";
+                } else {
+                    $errors[] = "Failed to update database.";
+                }
 
+                mysqli_stmt_close($stmt);
 
+            } else {
+                $errors[] = "Failed to move uploaded file.";
+            }
+        }
+    }
+}
 
+/* =========================
+   FETCH USER DATA
+   ========================= */
+$sql2 = "SELECT fullname, user_profile FROM users WHERE id = ?";
+$stmt2 = mysqli_prepare($connection, $sql2);
+mysqli_stmt_bind_param($stmt2, "i", $user_id);
+mysqli_stmt_execute($stmt2);
+$result = mysqli_stmt_get_result($stmt2);
+$user   = mysqli_fetch_assoc($result);
+mysqli_stmt_close($stmt2);
 
-                            <div class="row">
-                                <div class="col-xxl-6 col-xl-6 col-lg-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Upload Profile</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form action="#" method="post" enctype="multipart/form-data">
-                                                <div class="row g-3">
-                                                    <div class="col-xxl-12 col-12 mb-3">
-                                                        <div class="d-flex align-items-center">
-                                                            <img class="me-3 rounded-circle me-0 me-sm-3" src="..<?php echo $userProfile?>" width="55" height="55" alt="">
-                                                            <div class="media-body">
-                                                                <h4 class="mb-0"><?= $userName ?></h4>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xxl-12 col-12 mb-3">
-                                                        <div class="form-file">
-                                                            <input type="file" class="form-file-input" name="profile_image" id="customFile">
-                                                            <label class="form-file-label" for="customFile">
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-xxl-12 col-12 mb-3">
-                                                        <button class="btn btn-primary">Upload</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
+$userName    = $user['fullname'];
+$userProfile = $user['user_profile'];
+
+// ✅ Default avatar fallback
+$defaultAvatar = "images/avatar/avatar.svg";
+
+if (empty($userProfile) || !file_exists(__DIR__ . "/../" . $userProfile)) {
+    $userProfile = $defaultAvatar;
+}
+?>
+
+<!-- =========================
+     UPLOAD PROFILE CARD
+     ========================= -->
+<div class="row">
+    <div class="col-xxl-6 col-xl-6 col-lg-6">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title">Upload Profile</h4>
+            </div>
+            <div class="card-body">
+
+                <?php if (!empty($errors)): ?>
+                    <div class="alert alert-danger">
+                        <?php foreach ($errors as $err) echo "<p>$err</p>"; ?>
+                    </div>
+                <?php endif; ?>
+
+                <?php if (!empty($success)): ?>
+                    <div class="alert alert-success"><?= $success ?></div>
+                <?php endif; ?>
+
+                <form action="#" method="post" enctype="multipart/form-data">
+                    <div class="row g-3">
+
+                        <div class="col-12 mb-3">
+                            <div class="d-flex align-items-center">
+
+                                <!-- Profile Image + Verified -->
+                                <div class="position-relative d-inline-block me-3">
+                                    <img src="../<?= htmlspecialchars($userProfile) ?>"
+                                         class="rounded-circle"
+                                         width="55"
+                                         height="55"
+                                         alt="Profile Image">
+
+                                    <!-- VERIFIED BADGE -->
+                                   <!-- <span class="position-absolute bottom-0 end-0 text-success">
+                                        <i class="fas fa-check-circle text-white"></i>
+                                    </span> -->
+                                    <span style="font-weight: 300;" class="position-absolute bottom-2 end-0  badge bg-success">
+				        ✔ Verified
+				    </span>
                                 </div>
 
-                                <?php
-
-
-
-                                //Handle password change
-                                if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['old_password'], $_POST['new_password'])) {
-
-                                    $old_password = trim($_POST['old_password']);
-                                    $new_password = trim($_POST['new_password']);
-
-
-                                    if (empty($old_password) || empty($new_password)) {
-                                        $errors[] = "All fields are required.";
-                                    }
-                                    if (strlen($new_password) < 6) {
-                                        $errors[] = "minimum of six character required.";
-                                    }
-
-
-                                    $sql3 = "SELECT password FROM users WHERE id = ?";
-                                    $stmt3 = mysqli_prepare($connection, $sql3);
-                                    mysqli_stmt_bind_param($stmt3, "s", $user_id);
-                                    mysqli_stmt_execute($stmt3);
-                                    $result = mysqli_stmt_get_result($stmt3);
-                                    $user = mysqli_fetch_assoc($result);
-                                    mysqli_stmt_close($stmt3);
-
-                                    if (!$user) {
-                                        $errors[] = "User not found.";
-                                    } else {
-                                        $current_hash = $user['password'];
-
-
-                                        if (!password_verify($old_password, $current_hash)) {
-                                            $errors[] = "Old password is incorrect.";
-                                        }
-                                    }
-
-
-                                    if (empty($errors)) {
-                                        $new_hash = password_hash($new_password, PASSWORD_DEFAULT);
-
-                                        $sql_update = "UPDATE users SET password = ? WHERE id = ?";
-                                        $stmt_update = mysqli_prepare($connection, $sql_update);
-                                        mysqli_stmt_bind_param($stmt_update, "si", $new_hash, $user_id);
-
-                                        if (mysqli_stmt_execute($stmt_update)) {
-                                            $success = "Password changed successfully!";
-                                        } else {
-                                            $errors[] = "Failed to update password.";
-                                        }
-                                        mysqli_stmt_close($stmt_update);
-                                    }
-                                }
-
-                                ?>
-
-
-
-                                <div class="col-xxl-6 col-xl-6 col-lg-6">
-                                    <div class="card">
-                                        <div class="card-header">
-                                            <h4 class="card-title">Password Setting</h4>
-                                        </div>
-                                        <div class="card-body">
-                                            <form action="#" method="post">
-                                                <?php if (!empty($errors)): ?>
-                                                    <div class="alert alert-danger">
-                                                        <?php foreach ($errors as $err) echo "<p>$err</p>"; ?>
-                                                    </div>
-                                                <?php endif; ?>
-
-                                                <?php if (!empty($success)): ?>
-                                                    <div class="alert alert-success"><?= $success ?></div>
-                                                <?php endif; ?>
-
-                                                <div class="row g-3">
-                                                    <div class="col-12 mb-3">
-                                                        <label class="form-label">Old Password</label>
-                                                        <input type="password" name="old_password" class="form-control" placeholder="**********" required>
-                                                    </div>
-                                                    <div class="col-12 mb-3">
-                                                        <label class="form-label">New Password</label>
-                                                        <input type="password" name="new_password" class="form-control" placeholder="**********" required>
-                                                    </div>
-                                                    <div class="col-12 mb-3">
-                                                        <button type="submit" class="btn btn-primary">Change</button>
-                                                    </div>
-                                                </div>
-                                            </form>
-
-                                        </div>
-                                    </div>
+                                <div>
+                                    <h4 class="mb-0"><?= htmlspecialchars($userName) ?></h4>
                                 </div>
-
-
-
-
-                                <!-- don't delete we will use it later just commented it out -->
-                               
-
-
-
                             </div>
-
                         </div>
+
+                        <div class="col-12 mb-3">
+                            <input type="file" name="profile_image" class="form-control" required>
+                        </div>
+
+                        <div class="col-12 mb-3">
+                            <button class="btn btn-primary">Upload</button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<?php
+/* =========================
+   HANDLE PASSWORD CHANGE
+   ========================= */
+if ($_SERVER['REQUEST_METHOD'] === "POST" && isset($_POST['old_password'], $_POST['new_password'])) {
+
+    $old_password = trim($_POST['old_password']);
+    $new_password = trim($_POST['new_password']);
+
+    if (empty($old_password) || empty($new_password)) {
+        $errors[] = "All fields are required.";
+    }
+
+    if (strlen($new_password) < 6) {
+        $errors[] = "Minimum of 6 characters required.";
+    }
+
+    $sql3 = "SELECT password FROM users WHERE id = ?";
+    $stmt3 = mysqli_prepare($connection, $sql3);
+    mysqli_stmt_bind_param($stmt3, "i", $user_id);
+    mysqli_stmt_execute($stmt3);
+    $result = mysqli_stmt_get_result($stmt3);
+    $user   = mysqli_fetch_assoc($result);
+    mysqli_stmt_close($stmt3);
+
+    if (!$user || !password_verify($old_password, $user['password'])) {
+        $errors[] = "Old password is incorrect.";
+    }
+
+    if (empty($errors)) {
+        $new_hash = password_hash($new_password, PASSWORD_DEFAULT);
+
+        $sql_update = "UPDATE users SET password = ? WHERE id = ?";
+        $stmt_update = mysqli_prepare($connection, $sql_update);
+        mysqli_stmt_bind_param($stmt_update, "si", $new_hash, $user_id);
+
+        if (mysqli_stmt_execute($stmt_update)) {
+            $success = "Password changed successfully!";
+        } else {
+            $errors[] = "Failed to update password.";
+        }
+
+        mysqli_stmt_close($stmt_update);
+    }
+}
+?>
+
+<!-- =========================
+     PASSWORD CHANGE CARD
+     ========================= -->
+<div class="col-xxl-6 col-xl-6 col-lg-6">
+    <div class="card">
+        <div class="card-header">
+            <h4 class="card-title">Password Setting</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="row g-3">
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Old Password</label>
+                        <input type="password" name="old_password" class="form-control" required>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label class="form-label">New Password</label>
+                        <input type="password" name="new_password" class="form-control" required>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <button class="btn btn-primary">Change</button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
+
                     </div>
                 </div>
             </div>

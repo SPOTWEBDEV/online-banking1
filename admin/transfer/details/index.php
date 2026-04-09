@@ -55,7 +55,22 @@ if(isset($_GET['decline_transfers']) && isset($_GET['amount']) && isset($_GET['u
 
 }
 
+// DELETE TRANSFER
+if(isset($_GET['delete_transfer'])) {
+    $transfer_id = mysqli_real_escape_string($connection, $_GET['delete_transfer']);
 
+    $connection->query("DELETE FROM bank_transfers WHERE id='$transfer_id'");
+
+    echo "<script>
+        if(confirm('Are you sure you want to delete this transfer?')) {
+            alert('Transfer deleted successfully.');
+            window.location.href='../index.php';
+        } else {
+            window.history.back();
+        }
+    </script>";
+    exit();
+}
 
 
 ?>
@@ -199,6 +214,9 @@ if(isset($_GET['decline_transfers']) && isset($_GET['amount']) && isset($_GET['u
                                                         </a>
                                                         <a href="?decline_transfers=<?= $transfer['id'] ?>&amount=<?= $transfer['amount'] ?>&user_id=<?= $transfer['user_id'] ?>">
                                                             <button class="btn btn-danger btn-sm decline-deposit">Decline</button>
+                                                        </a>
+                                                        <a href="?delete_transfer=<?= $transfer['id'] ?>">
+                                                            <button class="btn btn-danger btn-sm decline-deposit">Delete Transfer</button>
                                                         </a>
                                                     </td>
                                                 </tr>

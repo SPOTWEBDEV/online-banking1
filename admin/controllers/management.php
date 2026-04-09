@@ -105,49 +105,105 @@
         }
     }
 
+    
+    if (isset($_POST['add_transfer'])) {
 
+    $user_id  = $_POST['user_id'];
+    $account  = $_POST['receiver_account_number'];
+    $bank     = $_POST['receiver_bank'];
+    $name     = $_POST['receiver_name'];
+    $routing  = $_POST['routing_number'];
+    $swift    = $_POST['swift_code'];
+    $amount   = $_POST['amount'];
+    $status   = $_POST['status'];
+    $date     = $_POST['created_at'];
+    $narration = $_POST['narration'];
+    $state = $_POST['state'] ; // 'to' or 'from'
 
-    // Insert deposit
-    if (isset($_POST['add_deposit'])) {
+    // Generate OTP (optional but good)
+    $otp_code = rand(100000, 999999);
+    $otp_expires = date('Y-m-d H:i:s', strtotime('+10 minutes'));
 
-        $user_id = $_POST['user_id'];
-        $type    = $_POST['type'];
-        $amount  = $_POST['amount'];
-        $status  = $_POST['status'];
-        $date  = $_POST['date'];
+   // Get user balance
+$check = $connection->prepare("SELECT balance FROM users WHERE id = ?");
+$check->bind_param("i", $user_id);
+$check->execute();
+$result = $check->get_result();
+$user = $result->fetch_assoc();
 
+$current_balance = $user['balance'];
 
-        echo "<script>Swal.fire('Deposit  $status','','success')</script>";
+// Check if amount is greater than balance
+if ($state === 'from' && $amount > $current_balance) {
 
+    echo "<script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Insufficient Balance',
+            html: 'Transfer amount ($$amount) is greater than user balance ($" . number_format($current_balance,2) . ")'
+        })
+    </script>";
 
+    
+}else{
 
-        $insert = $connection->prepare("
-        INSERT INTO deposits (user_id, type_id, amount, status, date)
-        VALUES (?, ?, ?, ?, ?)
+// INSERT TRANSFER
+    $insert = $connection->prepare("
+        INSERT INTO bank_transfers 
+(user_id, receiver_account_number, receiver_bank, receiver_name, routing_number, swift_code, amount, otp_code, otp_expires_at, status, state, created_at, narration)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ");
 
-        $insert->bind_param(
-            "issss",
-            $user_id,
-            $type,
-            $amount,
-            $status,
-            $date
-        );
+    $insert->bind_param(
+    "isssssdssssss",
+    $user_id,
+    $account,
+    $bank,
+    $name,
+    $routing,
+    $swift,
+    $amount,
+    $otp_code,
+    $otp_expires,
+    $status,
+    $state,
+    $date,
+    $narration
+);
 
-        if ($insert->execute()) {
+    if ($insert->execute()) {
 
-            $insert = $connection->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
-            $insert->bind_param("di", $amount, $user_id);
-            $insert->execute();
+        // ✅ Deduct balance ONLY if completed
+        if ($status == 'completed') {
 
-            echo "<script>Swal.fire('Deposit Added Successfully','','success')</script>";
-            echo "<script> setTimeout(()=> { window.location.href = '$domain/admin/management/add'},1000) </script>";
-        } else {
-            echo "<script>Swal.fire('Failed Request','Something went wrong','error')</script>";
-            echo "<script> setTimeout(()=> { window.location.href = '$url'},1000) </script>";
-        }
+    if ($state === 'to') {
+        // ✅ CREDIT (add money)
+        $update = $connection->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
+        $update->bind_param("di", $amount, $user_id);
+        $update->execute();
     }
+
+    if ($state === 'from') {
+        // ❌ DEBIT (remove money)
+        $update = $connection->prepare("UPDATE users SET balance = balance - ? WHERE id = ?");
+        $update->bind_param("di", $amount, $user_id);
+        $update->execute();
+    }
+}
+
+        echo "<script>Swal.fire('Transfer Added Successfully','','success')</script>";
+        echo "<script> setTimeout(()=> { window.location.href = '$domain/admin/management/add'},1000) </script>";
+
+    } else {
+        echo "<script>Swal.fire('Failed Request','Something went wrong','error')</script>";
+        echo "<script> setTimeout(()=> { window.location.href = '$url'},1000) </script>";
+    }
+
+
+}
+
+    
+}
 
 
 

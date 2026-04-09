@@ -1,0 +1,17 @@
+[25-Mar-2026 09:48:58 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Too many connections in /home/thestrat/zentrapb.com/server/connection.php:32
+Stack trace:
+#0 /home/thestrat/zentrapb.com/server/connection.php(32): mysqli_connect()
+#1 /home/thestrat/zentrapb.com/admin/deposits/index.php(2): include('/home/thestrat/...')
+#2 {main}
+  thrown in /home/thestrat/zentrapb.com/server/connection.php on line 32
+[25-Mar-2026 09:49:03 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Too many connections in /home/thestrat/zentrapb.com/server/connection.php:32
+Stack trace:
+#0 /home/thestrat/zentrapb.com/server/connection.php(32): mysqli_connect()
+#1 /home/thestrat/zentrapb.com/admin/deposits/index.php(2): include('/home/thestrat/...')
+#2 {main}
+  thrown in /home/thestrat/zentrapb.com/server/connection.php on line 32
+[03-Apr-2026 12:29:06 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Unknown column 'deposits.created_at' in 'order clause' in /home/thestrat/zentrapb.com/admin/deposits/index.php:79
+Stack trace:
+#0 /home/thestrat/zentrapb.com/admin/deposits/index.php(79): mysqli_prepare()
+#1 {main}
+  thrown in /home/thestrat/zentrapb.com/admin/deposits/index.php on line 79

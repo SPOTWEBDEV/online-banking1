@@ -1,0 +1,5 @@
+[25-Mar-2026 13:20:39 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/thestrat/zentrapb.com/server/connection.php on line 65
+[25-Mar-2026 13:22:52 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/thestrat/zentrapb.com/server/connection.php on line 65
+[26-Mar-2026 10:03:50 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/thestrat/zentrapb.com/server/connection.php on line 65
+[26-Mar-2026 14:10:11 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/thestrat/zentrapb.com/server/connection.php on line 65
+[26-Mar-2026 14:10:15 UTC] PHP Notice:  session_start(): Ignoring session_start() because a session is already active in /home/thestrat/zentrapb.com/server/connection.php on line 65

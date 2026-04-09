@@ -1,12 +1,5 @@
 <?php
 include("../../server/connection.php");
-
-// if (!isset($_SESSION['user_id'])) {
-//     header("location: ./signin.php");
-//     exit;
-// }
-
-$user_id = $_SESSION['user_id'];
 ?>
 
 
@@ -52,7 +45,7 @@ $user_id = $_SESSION['user_id'];
                                     </div>
                                 </div>
                                 <div class="col-auto">
-                                     <a href="./details/"><button class="btn btn-primary mr-2">View Deposit History</button></a>
+                                     <!--<a href="./details/"><button class="btn btn-primary mr-2">View Deposit History</button></a>-->
                                 </div>
                             </div>
                         </div>
@@ -80,7 +73,7 @@ $user_id = $_SESSION['user_id'];
                             FROM deposits
                             INNER JOIN users ON deposits.user_id = users.id
                             INNER JOIN payment_account ON payment_account.id = deposits.type_id
-                            ORDER BY deposits.id DESC
+                            ORDER BY deposits.date DESC
                         ";
 
                         $stmt = mysqli_prepare($connection, $sql);

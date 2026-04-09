@@ -62,6 +62,24 @@ if (isset($_GET['decline_deposit'])) {
 }
 
 
+if (isset($_GET['delete_deposit'])) {
+    $deposit_id = mysqli_real_escape_string($connection, $_GET['delete_deposit']);
+
+    // Optional: check if deposit exists first
+    $check = $connection->query("SELECT * FROM deposits WHERE id = $deposit_id");
+
+    if ($check->num_rows > 0) {
+
+        // Delete deposit
+        $connection->query("DELETE FROM deposits WHERE id = $deposit_id");
+
+        echo "<script>alert('Deposit deleted successfully.'); window.location.href='./index.php';</script>";
+        exit();
+
+    } else {
+        echo "<script>alert('Deposit not found.');</script>";
+    }
+}
 
 ?>
 
@@ -214,21 +232,24 @@ if (isset($_GET['decline_deposit'])) {
                                                     <td><?php echo $deposit['label']; ?></td>
                                                 </tr>
                                             <?php } ?>
-                                            <tr>
-                                                <td>Action</td>
-                                                <td>
-                                                    <a href="<?php echo $domain ?>/admin/deposits/">
-                                                        <button class="btn btn-primary btn-sm">Back to Deposits</button>
-                                                    </a>
-                                                    <a href="?approve_deposit=<?= $deposit['id'] ?>&amount=<?= $deposit['amount'] ?>&user_id=<?= $deposit['user_id'] ?>">
-                                                        <button class="btn btn-success btn-sm approve-deposit">Approve</button>
-                                                    </a>
-                                                    <a href="?decline_deposit=<?= $deposit['id'] ?>&amount=<?= $deposit['amount'] ?>&user_id=<?= $deposit['user_id'] ?>">
-                                                        <button class="btn btn-danger btn-sm decline-deposit">Decline</button>
-                                                    </a>
-                                                </td>
-
-                                            </tr>
+                                            <td>
+                                                <a href="<?php echo $domain ?>/admin/deposits/">
+                                                    <button class="btn btn-primary btn-sm">Back</button>
+                                                </a>
+                                            
+                                                <a href="?approve_deposit=<?= $deposit['id'] ?>&amount=<?= $deposit['amount'] ?>&user_id=<?= $deposit['user_id'] ?>">
+                                                    <button class="btn btn-success btn-sm">Approve</button>
+                                                </a>
+                                            
+                                                <a href="?decline_deposit=<?= $deposit['id'] ?>&amount=<?= $deposit['amount'] ?>&user_id=<?= $deposit['user_id'] ?>">
+                                                    <button class="btn btn-danger btn-sm">Decline</button>
+                                                </a>
+                                            
+                                                <a href="?delete_deposit=<?= $deposit['id'] ?>" 
+                                                   onclick="return confirm('Are you sure you want to DELETE this deposit?')">
+                                                    <button class="btn btn-dark btn-sm">Delete</button>
+                                                </a>
+                                            </td>
 
                                         </tbody>
                                     </table>
