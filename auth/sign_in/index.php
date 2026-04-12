@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
         $hasError = true;
     }
 
- 
+
     if (empty($password)) {
         $passwordErr = "Password is required";
         $hasError = true;
@@ -28,41 +28,40 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     if (!$hasError) {
         $sql = "SELECT id, fullname, accountnumber, password, is_approved FROM users WHERE accountnumber = ?";
-$stmt = mysqli_prepare($connection, $sql);
+        $stmt = mysqli_prepare($connection, $sql);
 
-if ($stmt) {
-    mysqli_stmt_bind_param($stmt, "s", $accountnumber);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_store_result($stmt);
+        if ($stmt) {
+            mysqli_stmt_bind_param($stmt, "s", $accountnumber);
+            mysqli_stmt_execute($stmt);
+            mysqli_stmt_store_result($stmt);
 
-    if (mysqli_stmt_num_rows($stmt) > 0) {
-        mysqli_stmt_bind_result($stmt, $id, $fullname, $db_accountnumber, $db_password, $is_approved);
-        mysqli_stmt_fetch($stmt);
+            if (mysqli_stmt_num_rows($stmt) > 0) {
+                mysqli_stmt_bind_result($stmt, $id, $fullname, $db_accountnumber, $db_password, $is_approved);
+                mysqli_stmt_fetch($stmt);
 
-        if (!password_verify($password, $db_password ?? "")) {
-            $passwordErr = "Invalid credentials";
-        } elseif ($is_approved == 0) {
-            $accountnumberErr = "Your account has not been verified yet. Please check your email inbox.";
-        } else {
-            $success = "Login successful. Welcome, $fullname!";
+                if (!password_verify($password, $db_password ?? "")) {
+                    $passwordErr = "Invalid credentials";
+                } elseif ($is_approved == 0) {
+                    $accountnumberErr = "Your account has not been verified yet. Please check your email inbox.";
+                } else {
+                    $success = "Login successful. Welcome, $fullname!";
 
-            $_SESSION['user_id'] = $id;
-            $_SESSION['fullname'] = $fullname;
+                    $_SESSION['user_id'] = $id;
+                    $_SESSION['fullname'] = $fullname;
 
-            echo "
+                    echo "
             <script>
                 setTimeout(() => {
                     window.location.href = '../set_transaction_pin/';
                 }, 1000);
             </script>";
+                }
+            } else {
+                $accountnumberErr = "No account found with this account number";
+            }
+
+            mysqli_stmt_close($stmt);
         }
-    } else {
-        $accountnumberErr = "No account found with this account number";
-    }
-
-    mysqli_stmt_close($stmt);
-}
-
     }
 }
 ?>
@@ -81,7 +80,7 @@ if ($stmt) {
 </head>
 
 <body class="dashboard">
-   
+
     <div class="authincation">
         <div class="container">
             <div class="row justify-content-center align-items-center g-0">

@@ -1,6 +1,7 @@
 
 <?php
 include("../../server/connection.php");
+include("../../server/auth/admin.php");
 
 ?>
 
