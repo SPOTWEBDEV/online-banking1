@@ -1,5 +1,6 @@
 <?php
 include("../../server/connection.php");
+include("../../server/auth/admin.php");
 
 // if (!isset($_SESSION['user_id'])) {
 //     header("location: ./signin.php");

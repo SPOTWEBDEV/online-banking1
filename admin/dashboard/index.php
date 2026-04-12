@@ -1,7 +1,7 @@
 <?php
 
 include("../../server/connection.php");
-
+include("../../server/auth/admin.php");
 
 // Total deposit
 $deposit = $connection->query("SELECT SUM(amount) AS total_deposit , count(id) as deposit_count FROM deposits")->fetch_assoc();
