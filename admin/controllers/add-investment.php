@@ -13,8 +13,8 @@
     <?php
 
 
-  $url = $domain . '/admin/investment/add';
-   
+    $url = $domain . '/admin/investment/add';
+
     // Only allow POST requests
     if (isset($_POST['investment'])) {
 
@@ -22,32 +22,36 @@
         $duration       = $_POST['duration'] ?? null;
         $profit_per_day = $_POST['profit_per_day'] ?? null;
         $total_profit   = $_POST['total_profit'] ?? null;
+        $min_amount = $_POST['min_amount'] ?? null;
+        $max_amount = $_POST['max_amount'] ?? null;
 
-        // Simple validation
-        if (!$plan_name || !$duration || !$profit_per_day || !$total_profit) {
-            
-            echo "<script>Swal.fire('You have an input error','Make sure to fill all input','warning')</script>";
-            echo "<script> setTimeout(()=> { window.location.href = '$url'},1000) </script>";
-        }
+        if (!$plan_name || !$duration || !$profit_per_day || !$total_profit || !$min_amount || !$max_amount) {
+    echo "<script>Swal.fire('You have an input error','Make sure to fill all input','warning')</script>";
+    echo "<script> setTimeout(()=> { window.location.href = '$url'},1000) </script>";
+    exit;
+}
 
-        $sql = "INSERT INTO investment_plans (plan_name, duration, profit_per_day, total_profit)
-            VALUES (?, ?, ?, ?)";
+       $sql = "INSERT INTO investment_plans 
+(plan_name, duration, profit_per_day, total_profit, min_amount, max_amount)
+VALUES (?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($connection, $sql);
         mysqli_stmt_bind_param(
-            $stmt,
-            "sidd",
-            $plan_name,
-            $duration,
-            $profit_per_day,
-            $total_profit
-        );
+    $stmt,
+    "sidddd",
+    $plan_name,
+    $duration,
+    $profit_per_day,
+    $total_profit,
+    $min_amount,
+    $max_amount
+);
 
         if (mysqli_stmt_execute($stmt)) {
             echo "<script>Swal.fire('Investment Plan Added Successfully','','success')</script>";
             echo "<script> setTimeout(()=> { window.location.href = '$domain/admin/investment/'},1000) </script>";
         } else {
-           
+
             echo "<script>Swal.fire('Add Investment Request','','warning')</script>";
             echo "<script> setTimeout(()=> { window.location.href = '$url'},1000) </script>";
         }

@@ -2,9 +2,7 @@
 include("../server/connection.php");
 include("../server/auth/client.php");
 include("../mailer/index.php"); 
-if (!isset($_SESSION['user_id'])) {
-    header("location: {$domain}/auth/sign_in/");
-}
+include("../server/auth/client.php");
 
 $user_id = (int) $_SESSION['user_id'];
 $errors = [];
@@ -113,6 +111,13 @@ We have received your deposit request on your account.
         $subj = "Initial Deposit Received – $sitename";
 
         smtpmailer($to, $subj, $body);
+
+
+        echo "<script>
+                setTimeout(function() {
+                    window.location.href = './deposits_history/';
+                }, 2000);
+              </script>";
     
 
 } else {

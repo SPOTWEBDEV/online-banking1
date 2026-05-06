@@ -205,10 +205,6 @@ $query = $connection->query($sql);
 </tr>
 <?php } ?>
 
-<tr>
-    <td>Date:</td>
-    <td><?php echo $transfer['date']; ?></td>
-</tr>
 <?php } elseif ($type == 'withdrawal') { ?>
 
     <tr>
@@ -277,7 +273,7 @@ $query = $connection->query($sql);
 
 <tr>
     <td>Date:</td>
-    <td><?php echo $transfer['date']; ?></td>
+    <td><?php echo ($transfer['date'] ?? $transfer['created_at'] ); ?></td>
 </tr>
 
 <?php } ?>

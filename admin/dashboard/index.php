@@ -157,7 +157,7 @@ $loan = $connection->query("SELECT SUM(loan_amount) AS total_loan , count(id) as
                                 <div class="col-xl-4">
                                     <div class="page-title-content">
                                         <h3>Dashboard</h3>
-                                        <p class="mb-2">Welcome Ekash Finance Management</p>
+                                        <p class="mb-2">Welcome <?php echo $sitename ?> Finance Management</p>
                                     </div>
                                 </div>
                                 <div class="col-auto">
@@ -283,7 +283,7 @@ $loan = $connection->query("SELECT SUM(loan_amount) AS total_loan , count(id) as
                                     var CurrentYear = new Date().getFullYear()
                                     document.write(CurrentYear)
                                 </script>
-                                <a href="index.html#">Ekash</a> I All Rights Reserved
+                                <a href="index.html#"><?php echo $sitename ?></a> I All Rights Reserved
                             </p>
                         </div>
                     </div>

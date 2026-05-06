@@ -1,0 +1,2 @@
+[04-May-2026 18:08:23 Europe/Berlin] PHP Warning:  include(../../server/auth/admin.php): Failed to open stream: No such file or directory in C:\xampp\htdocs\zentra-bank-c\admin\management\add\index.php on line 3
+[04-May-2026 18:08:23 Europe/Berlin] PHP Warning:  include(): Failed opening '../../server/auth/admin.php' for inclusion (include_path='C:\xampp\php\PEAR') in C:\xampp\htdocs\zentra-bank-c\admin\management\add\index.php on line 3

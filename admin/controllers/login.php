@@ -21,7 +21,7 @@
             $query = mysqli_query($connection, "SELECT * FROM `admin` WHERE  `email` = '$email' AND `password` = '$pass'");
             if (mysqli_num_rows($query) > 0) {
                 $getDetails = mysqli_fetch_assoc($query);
-                $_SESSION['logged_in'] = true;
+                $_SESSION['admin'] = true;
                 $_SESSION['id'] = $getDetails['id'];
 
                 echo "<script> Swal.fire('Authenticated','Account Login Successfull','success')</script>";

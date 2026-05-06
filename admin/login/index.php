@@ -1,6 +1,6 @@
 <?php
 include("../../server/connection.php");
-include("../controllers/login.php");
+
 
 
 $success = "";
@@ -41,12 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                 mysqli_stmt_bind_result($stmt, $id, $db_email, $db_password);
                 mysqli_stmt_fetch($stmt);
 
-                if (!password_verify($password, $db_password ?? "")) {
+                if ($password !== $db_password) {
                     $passwordErr = "Invalid credentials";
                 }else {
                     $success = "Login successful.";
 
-                    $_SESSION['id'] = $id;
+                    $_SESSION['admin'] = $id;
 
                     echo "
             <script>
@@ -99,7 +99,14 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                             <div class="auth-form">
                                 <h4>Sign In</h4>
                                 <?php if (!empty($success)) { ?>
-                                    <div class="alert alert-success"><?= htmlspecialchars($success) ?></div>
+                                    <div class="alert alert-success"><?= $success ?></div>
+                                <?php } ?>
+
+                                <?php if (!empty($emailErr)) { ?>
+                                    <div class="alert alert-danger"><?= $emailErr  ?></div>
+                                <?php } ?>
+                                <?php if (!empty($passwordErr)) { ?>
+                                    <div class="alert alert-danger"><?= $passwordErr  ?></div>
                                 <?php } ?>
                                 <form  method="POST">
                                     <div class="row">

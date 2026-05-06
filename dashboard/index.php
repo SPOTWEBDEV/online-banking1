@@ -1,10 +1,6 @@
 <?php
 include("../server/connection.php");
-if (!isset($_SESSION['user_id'])) {
-    header("location: {$domain}/auth/sign_in/");
-    exit;
-}
-
+include("../server/auth/client.php");
 
 $user_id = $_SESSION['user_id'];
 
@@ -183,7 +179,7 @@ function money($amount)
                                                                 </div>
                                                             </a>
                                                         </div>
-                                                        
+
                                                         <div class="col-xl-4 col-lg-4 col-md-4 col-sm-12">
                                                             <a href="<?php echo $domain ?>/transfer/" class="d-block text-decoration-none">
                                                                 <div class="stat-widget-1">
@@ -202,7 +198,7 @@ function money($amount)
                                                             </a>
                                                         </div>
 
-                                                        
+
 
                                                     </div>
                                                 </div>
@@ -218,8 +214,8 @@ function money($amount)
                                                     <div class="wallet-total-balance">
                                                         <p class="mb-0">Total Balance</p>
                                                         <h2>
-							$<?php echo number_format($balance + $crypto_balance + $virtual_card_balance + $loan_balance, 2); ?>
-							</h2>
+                                                            $<?php echo number_format($balance + $crypto_balance + $virtual_card_balance + $loan_balance, 2); ?>
+                                                        </h2>
                                                     </div>
                                                     <div class="funds-credit">
                                                         <p class="mb-0">Personal Balance</p>
@@ -264,7 +260,7 @@ function money($amount)
                                                     <img src="<?php echo $domain ?>/images/cc/visa.png" alt="">
                                                 </div>
                                                 <div class="cc-number">
-                                                    <h6><?=  $cardNumber ?></h6>
+                                                    <h6><?= $cardNumber ?></h6>
                                                 </div>
                                                 <div class="cc-holder-exp">
                                                     <h5><?php echo $fullname  ?></h5>
@@ -334,30 +330,30 @@ function money($amount)
                     <div class="col-12">
                         <div class="d-none d-md-block">
                             <div class="card">
-                            <div class="card-header">
-                                <h4 class="card-title">Transaction History</h4>
-                            </div>
-                            <div class="card-body">
-                                <div class="transaction-table">
-                                    <div class="table-responsive">
-                                        <table class="table mb-0 table-responsive-sm">
-                                            <thead>
-                                                <tr>
-                                                    
-                                                    <th>Transaction Type</th>
-                                                    
-                                                    <th>Amount</th>
-                                                    <th>Date</th>
-                                                    <th>Status</th>
-                                                    <th>Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php
-                            // Use UNION ALL to stack the tables. 
-                            // We add 'type' to know where the data came from.
-                            // We use NULL or '' for missing columns in deposits/withdrawals.
-                            $query = $connection->query("
+                                <div class="card-header">
+                                    <h4 class="card-title">Transaction History</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="transaction-table">
+                                        <div class="table-responsive">
+                                            <table class="table mb-0 table-responsive-sm">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Transaction Type</th>
+
+                                                        <th>Amount</th>
+                                                        <th>Date</th>
+                                                        <th>Status</th>
+                                                        <th>Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <?php
+                                                    // Use UNION ALL to stack the tables. 
+                                                    // We add 'type' to know where the data came from.
+                                                    // We use NULL or '' for missing columns in deposits/withdrawals.
+                                                    $query = $connection->query("
     SELECT * FROM (
         -- Transfers
         SELECT 
@@ -409,191 +405,193 @@ function money($amount)
     LIMIT 5
 ");
 
-if ($query->num_rows > 0) {
-    while ($transfer = $query->fetch_assoc()) { ?>
-        <tr>
-          
-            <?php
-                // Determine display type and badge color
-                if ($transfer['type'] == 'deposit') {
-                    $displayType = 'Credit';
-                    $typeClass = 'bg-success'; // green
-                } else { // withdrawal or transfer
-                    $displayType = 'Debit';
-                    $typeClass = 'bg-danger'; // red
-                }
-                if (in_array($transfer['status'], ['completed', 'success', 'approved'])) {
-                            $statusText = 'Successful';
-                        } else {
-                            $statusText = ucfirst($transfer['status']);
-                        }
-                ?>
-            <td><h6 class="mb-1" style="text-transform:capitalize">
-                        <?php 
-                           if ($transfer['type'] == 'transfer'){
-                                echo $transfer['state'] == 'to' ? 'Transfer to ' . $transfer['transaction_name'] : 'Transfer from '  . $transfer['transaction_name'] ;
-                           }else{
-                              echo $transfer['transaction_name'] ?? ucfirst($transfer['type']); 
-                           }
-                           
-                         ?>
-                         
-                    </h6>
-               
-                 <small>
-			<?php 
-			if ($transfer['type'] == 'deposit' || $transfer['state'] == 'from') {
-			    echo 'Credit';
-			} else {
-			    echo 'Debit';
-			}
-			?>
-	       </small>
-            </td>
-            <td>$<?php echo number_format($transfer['amount']); ?></td>
-            <td><?php echo date('d M Y, h:i A', strtotime($transfer['created_at'])); ?></td>
-            <td>
-                <span class="badge text-white <?php
-                    echo ($transfer['status'] == 'pending') ? 'bg-warning' : 
-                         (($transfer['status'] == 'completed' || $transfer['status'] == 'success'  || $transfer['status'] == 'approved') ? 'bg-success' : 'bg-danger'); ?>">
-                    <?php echo $statusText  ?>
-                </span>
-            </td>
-            <td>
-                <!-- You can use the 'type' column here to link to different detail pages if needed -->
-                <a href="../transaction/?id=<?php echo $transfer['id']; ?>&type=<?php echo $transfer['type']; ?>"> 
-                    <span class="badge p-2 bg-info text-white">View Details</span>
-                </a>
-                            </td>
-        </tr>
-   
-    <?php } } else {
-            echo '<tr><td colspan="8" class="text-center text-danger">No history found.</td></tr>';
-        }
-?>
+                                                    if ($query->num_rows > 0) {
+                                                        while ($transfer = $query->fetch_assoc()) { ?>
+                                                            <tr>
+
+                                                                <?php
+                                                                // Determine display type and badge color
+                                                                if ($transfer['type'] == 'deposit') {
+                                                                    $displayType = 'Credit';
+                                                                    $typeClass = 'bg-success'; // green
+                                                                } else { // withdrawal or transfer
+                                                                    $displayType = 'Debit';
+                                                                    $typeClass = 'bg-danger'; // red
+                                                                }
+                                                                if (in_array($transfer['status'], ['completed', 'success', 'approved'])) {
+                                                                    $statusText = 'Successful';
+                                                                } else {
+                                                                    $statusText = ucfirst($transfer['status']);
+                                                                }
+                                                                ?>
+                                                                <td>
+                                                                    <h6 class="mb-1" style="text-transform:capitalize">
+                                                                        <?php
+                                                                        if ($transfer['type'] == 'transfer') {
+                                                                            echo $transfer['state'] == 'to' ? 'Transfer to ' . $transfer['transaction_name'] : 'Transfer from '  . $transfer['transaction_name'];
+                                                                        } else if ($transfer['type'] == 'deposit') {
+                                                                            echo  'Account Funded Via ' . $transfer['transaction_name'];
+                                                                        } else {
+                                                                            echo $transfer['transaction_name'] ?? ucfirst($transfer['type']);
+                                                                        }
+
+                                                                        ?>
+
+                                                                    </h6>
+
+                                                                    <small>
+                                                                        <?php
+                                                                        if ($transfer['type'] == 'deposit' || $transfer['state'] == 'from') {
+                                                                            echo 'Credit';
+                                                                        } else {
+                                                                            echo 'Debit';
+                                                                        }
+                                                                        ?>
+                                                                    </small>
+                                                                </td>
+                                                                <td>$<?php echo number_format($transfer['amount']); ?></td>
+                                                                <td><?php echo date('d M Y, h:i A', strtotime($transfer['created_at'])); ?></td>
+                                                                <td>
+                                                                    <span class="badge text-white <?php
+                                                                                                    echo ($transfer['status'] == 'pending') ? 'bg-warning' : (($transfer['status'] == 'completed' || $transfer['status'] == 'success'  || $transfer['status'] == 'approved') ? 'bg-success' : 'bg-danger'); ?>">
+                                                                        <?php echo $statusText  ?>
+                                                                    </span>
+                                                                </td>
+                                                                <td>
+                                                                    <!-- You can use the 'type' column here to link to different detail pages if needed -->
+                                                                    <a href="../transaction/?id=<?php echo $transfer['id']; ?>&type=<?php echo $transfer['type']; ?>">
+                                                                        <span class="badge p-2 bg-info text-white">View Details</span>
+                                                                    </a>
+                                                                </td>
+                                                            </tr>
+
+                                                    <?php }
+                                                    } else {
+                                                        echo '<tr><td colspan="8" class="text-center text-danger">No history found.</td></tr>';
+                                                    }
+                                                    ?>
 
 
 
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <div class="d-block d-md-none">
+                            <?php
+                            if ($query->num_rows > 0) {
+                                // reset pointer
+                                $query->data_seek(0);
+
+                                while ($transfer = $query->fetch_assoc()) {
+
+                                    if ($transfer['type'] == 'deposit') {
+                                        $displayType = 'Credited';
+                                        $typeClass = 'bg-success';
+                                    } else {
+                                        $displayType = 'Debited';
+                                        $typeClass = 'bg-danger';
+                                    }
+                            ?>
+
+                                    <div class="card mb-3 shadow-sm"
+                                        style="cursor:pointer;"
+                                        onclick="window.location.href='../transaction/?id=<?php echo $transfer['id']; ?>&type=<?php echo $transfer['type']; ?>'">
+
+                                        <div class="card-body">
+
+                                            <!-- Transaction Name -->
+
+                                            <h6 class="mb-1" style="text-transform:capitalize">
+                                                <?php
+                                                if ($transfer['type'] == 'transfer') {
+                                                    echo $transfer['state'] == 'to' ? 'Transfer to ' . $transfer['transaction_name'] : 'Transfer from '  . $transfer['transaction_name'];
+                                                } else if ($transfer['type'] == 'deposit') {
+                                                    echo  'Account Funded Via ' . $transfer['transaction_name'];
+                                                } else {
+                                                    echo $transfer['transaction_name'] ?? ucfirst($transfer['type']);
+                                                }
+
+                                                ?>
+
+                                            </h6>
+
+                                            <!-- Status -->
+                                            <?php
+                                            if (in_array($transfer['status'], ['completed', 'success', 'approved'])) {
+                                                $statusText = 'Successful';
+                                            } else {
+                                                $statusText = ucfirst($transfer['status']);
+                                            }
+                                            ?>
+
+                                            <span class="badge text-white <?php
+                                                                            echo ($transfer['status'] == 'pending') ? 'bg-warning' : (($transfer['status'] == 'completed' || $transfer['status'] == 'success' || $transfer['status'] == 'approved') ? 'bg-success' : 'bg-danger'); ?>">
+                                                <?php echo $statusText; ?>
+                                            </span>
+
+                                            <!-- Row: Details + Amount -->
+                                            <div class="d-flex justify-content-between align-items-center mt-2">
+
+                                                <!-- Left -->
+                                                <div>
+                                                    <small>
+                                                        <?php
+                                                        if ($transfer['type'] == 'deposit' || $transfer['state'] == 'from') {
+                                                            if ($transfer['status'] == 'declined' || $transfer['status'] == 'rejected') {
+                                                                echo 'Failed';
+                                                            } else {
+                                                                echo 'Credit';
+                                                            }
+                                                        } else {
+                                                            if ($transfer['status'] == 'declined' || $transfer['status'] == 'rejected') {
+                                                                echo 'Failed';
+                                                            } else {
+                                                                echo 'Debit';
+                                                            }
+                                                        }
+                                                        ?>
+                                                    </small>
+                                                </div>
+
+                                                <!-- Right -->
+                                                <div>
+                                                    <?php
+                                                    $type  = $transfer['type'] ?? '';
+                                                    $state = $transfer['state'] ?? '';
+
+                                                    $isCredit = ($type == 'deposit' || $state == 'from');
+
+                                                    $class = $isCredit ? 'text-success' : 'text-danger';
+                                                    $sign  = $isCredit ? '+' : '-';
+                                                    ?>
+
+                                                    <strong class="<?php echo $class; ?>">
+                                                        <?php echo $sign; ?>$<?php echo number_format($transfer['amount']); ?>
+                                                    </strong>
+                                                </div>
+
+                                            </div>
+
+                                            <!-- Date -->
+                                            <small class="text-muted d-block mt-2">
+                                                <?php echo date('d M Y, h:i A', strtotime($transfer['created_at'])); ?>
+                                            </small>
+
+                                        </div>
+                                    </div>
+
+                            <?php
+                                }
+                            } else {
+                                echo '<div class="text-center text-danger">No history found.</div>';
+                            }
+                            ?>
                         </div>
-<div class="d-block d-md-none">
-    <?php
-    if ($query->num_rows > 0) {
-        // reset pointer
-        $query->data_seek(0);
 
-        while ($transfer = $query->fetch_assoc()) {
-
-            if ($transfer['type'] == 'deposit') {
-                $displayType = 'Credited';
-                $typeClass = 'bg-success';
-            } else {
-                $displayType = 'Debited';
-                $typeClass = 'bg-danger';
-            }
-    ?>
-
-    <div class="card mb-3 shadow-sm" 
-     style="cursor:pointer;"
-     onclick="window.location.href='../transaction/?id=<?php echo $transfer['id']; ?>&type=<?php echo $transfer['type']; ?>'">
-
-    <div class="card-body">
-
-        <!-- Transaction Name -->
-         <h6 class="mb-1" style="text-transform:capitalize">
-                        <?php 
-                           if ($transfer['type'] == 'transfer'){
-                                echo $transfer['state'] == 'to' ? 'Transfer to ' . $transfer['transaction_name'] : 'Transfer from '  . $transfer['transaction_name'] ;
-                           }else if($transfer['type'] == 'deposit'){
-                               echo  'Transfer to ' . $transfer['transaction_name'];
-                           }
-                           else{
-                              echo $transfer['transaction_name'] ?? ucfirst($transfer['type']); 
-                           }
-                           
-                         ?>
-                         
-                    </h6>
-
-        <!-- Status -->
-        <?php
-        if (in_array($transfer['status'], ['completed', 'success', 'approved'])) {
-            $statusText = 'Successful';
-        } else {
-            $statusText = ucfirst($transfer['status']);
-        }
-        ?>
-
-        <span class="badge text-white <?php
-            echo ($transfer['status'] == 'pending') ? 'bg-warning' : 
-            (($transfer['status'] == 'completed' || $transfer['status'] == 'success' || $transfer['status'] == 'approved') ? 'bg-success' : 'bg-danger'); ?>">
-            <?php echo $statusText; ?>
-        </span>
-
-        <!-- Row: Details + Amount -->
-        <div class="d-flex justify-content-between align-items-center mt-2">
-
-            <!-- Left -->
-            <div>
-                <small>
-			<?php 
-			if ($transfer['type'] == 'deposit' || $transfer['state'] == 'from') {
-			    if($transfer['status'] == 'declined' || $transfer['status'] == 'rejected'){
-			      echo 'Failed';
-			    }else{
-			      echo 'Credit';
-			    }
-			} else {
-			    if($transfer['status'] == 'declined' || $transfer['status'] == 'rejected'){
-			      echo 'Failed';
-			    }else{
-			      echo 'Debit';
-			    }
-			}
-			?>
-	       </small>
-            </div>
-
-            <!-- Right -->
-            <div>
-                <?php
-$type  = $transfer['type'] ?? '';
-$state = $transfer['state'] ?? '';
-
-$isCredit = ($type == 'deposit' || $state == 'from');
-
-$class = $isCredit ? 'text-success' : 'text-danger';
-$sign  = $isCredit ? '+' : '-';
-?>
-
-<strong class="<?php echo $class; ?>">
-    <?php echo $sign; ?>$<?php echo number_format($transfer['amount']); ?>
-</strong>
-            </div>
-
-        </div>
-
-        <!-- Date -->
-        <small class="text-muted d-block mt-2">
-            <?php echo date('d M Y, h:i A', strtotime($transfer['created_at'])); ?>
-        </small>
-
-    </div>
-</div>
-
-    <?php
-        }
-    } else {
-        echo '<div class="text-center text-danger">No history found.</div>';
-    }
-    ?>
-</div>
-                       
                     </div>
                 </div>
 

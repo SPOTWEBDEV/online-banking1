@@ -1,8 +1,9 @@
 <?php
 error_reporting(E_ALL);
-ini_set('display_errors', 0); // ❌ don't show errors to users
+// ini_set('display_errors', 0); // ❌ don't show errors to users
 ini_set('log_errors', 1);     // ✅ log errors instead
 ini_set('error_log', 'error.log'); // file where errors will be saved
+
 
 function checkUrlProtocol($url)
 {
@@ -22,11 +23,10 @@ $request = checkUrlProtocol($currentUrl);
 define("HOST", "localhost");
 
 if ($request === 'https') {
-    $sitename = "Zentra Bank";
-    $domain = "https://zentrapb.com";
-    define("USER", "thestrat_zentra_bank");
-    define("PASSWORD", "thestrat_zentra_bank");
-    define("DATABASE", "thestrat_zentra_bank");
+    $domain = "https://zenvault-app.com/";
+    define("USER", "zenvault_dd");
+    define("PASSWORD", "zenvault_dd");
+    define("DATABASE", "zenvault_dd");
 
 
     $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
@@ -35,8 +35,7 @@ if ($request === 'https') {
         die("Connection failed: " . mysqli_connect_error());
     }
 } else {
-    $sitename = "Zentra Bank";
-    $domain = "http://localhost/zentra-bank";
+    $domain = "http://localhost/zentra-bank-c/";
     define("USER", "root");
     define("PASSWORD", "");
     define("DATABASE", "zentra-bank");
@@ -50,6 +49,9 @@ if ($request === 'https') {
 };
 
 session_start();
+$sitename = "Zenvault Bank";
+$sitephone = "+234 XXX XXX XXXX";
+$siteemail = "support@zenvault-app.com";
 
 
-$siteemail = 'support@zentrapb.com';
+?>

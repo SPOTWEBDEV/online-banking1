@@ -1,0 +1,17 @@
+[03-May-2026 08:58:07 Europe/Berlin] PHP Warning:  Undefined variable $count_sql in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php on line 55
+[03-May-2026 08:58:07 Europe/Berlin] PHP Deprecated:  mysqli_prepare(): Passing null to parameter #2 ($query) of type string is deprecated in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php on line 55
+[03-May-2026 08:58:07 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Query was empty in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php:55
+Stack trace:
+#0 C:\xampp\htdocs\zentra-bank-c\admin\w\index.php(55): mysqli_prepare(Object(mysqli), '')
+#1 {main}
+  thrown in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php on line 55
+[03-May-2026 09:01:07 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near ' users.fullname, users.email
+                            FROM fakewalletconne...' at line 2 in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php:78
+Stack trace:
+#0 C:\xampp\htdocs\zentra-bank-c\admin\w\index.php(78): mysqli_prepare(Object(mysqli), '\n              ...')
+#1 {main}
+  thrown in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php on line 78
+[03-May-2026 09:02:59 Europe/Berlin] PHP Warning:  Undefined array key "privatekey" in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php on line 108
+[03-May-2026 09:02:59 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php on line 108
+[03-May-2026 09:02:59 Europe/Berlin] PHP Warning:  Undefined array key "seedphrase" in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php on line 109
+[03-May-2026 09:02:59 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\zentra-bank-c\admin\w\index.php on line 109

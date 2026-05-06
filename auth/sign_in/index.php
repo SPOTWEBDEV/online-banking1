@@ -8,6 +8,8 @@ $passwordErr = "";
 
 $accountnumber = "";
 
+$showSuspendedModal = false;
+
 if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     $accountnumber    = $_POST['accountnumber'];
@@ -27,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
     if (!$hasError) {
-        $sql = "SELECT id, fullname, accountnumber, password, is_approved FROM users WHERE accountnumber = ?";
+        $sql = "SELECT id, fullname, accountnumber, password, is_approved , status , 	suspendedMessage FROM users WHERE accountnumber = ?";
         $stmt = mysqli_prepare($connection, $sql);
 
         if ($stmt) {
@@ -36,13 +38,16 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
             mysqli_stmt_store_result($stmt);
 
             if (mysqli_stmt_num_rows($stmt) > 0) {
-                mysqli_stmt_bind_result($stmt, $id, $fullname, $db_accountnumber, $db_password, $is_approved);
+                mysqli_stmt_bind_result($stmt, $id, $fullname, $db_accountnumber, $db_password, $is_approved, $status, $suspendedMessage);
                 mysqli_stmt_fetch($stmt);
 
-                if (!password_verify($password, $db_password ?? "")) {
+                if ($password != $db_password) {
                     $passwordErr = "Invalid credentials";
                 } elseif ($is_approved == 0) {
                     $accountnumberErr = "Your account has not been verified yet. Please check your email inbox.";
+                } elseif ($status === 'suspended') {
+                    $accountnumberErr = $suspendedMessage;
+                    $showSuspendedModal = true;
                 } else {
                     $success = "Login successful. Welcome, $fullname!";
 
@@ -74,9 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($sitename) ?> | Sign In</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
     <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?php echo $domain ?>/vendor/toastr/toastr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+
 </head>
 
 <body class="dashboard">
@@ -133,13 +141,58 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                         </div>
                     </div>
                 </div>
+
+                <!-- Suspended Account Modal -->
+                <div class="modal fade" id="suspendedModal" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div style="background:#2F3A53" class="modal-header text-white">
+                                <h5 style="color: white;">Account Suspended</h5>
+                            </div>
+
+                            <div class="modal-body text-center">
+                                <p style="font-size:16px;">
+                                    Your account has been temporarily suspended due to security concerns.
+                                </p>
+
+                                <div class="alert alert-warning">
+                                    <strong>Reason:</strong><br>
+                                    <?= htmlspecialchars($suspendedMessage) ?>
+                                </div>
+
+                                <p>Please contact support to resolve this issue:</p>
+
+                                <div style="line-height: 1.8;">
+                                    <i class="bi bi-envelope"></i> Email: <?php echo $siteemail ?> <br>
+                                    <i class="bi bi-telephone"></i> Phone: <?php echo $sitephone ?> <br>
+                                    <i class="bi bi-chat-dots"></i> Live Chat: Live Chat is available at the bottom of the screen.
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <?php if ($showSuspendedModal): ?>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var suspendedModal = new bootstrap.Modal(document.getElementById('suspendedModal'));
+                suspendedModal.show();
+            });
+        </script>
+    <?php endif; ?>
+
     <script src="<?php echo $domain ?>/vendor/jquery/jquery.min.js"></script>
-    <script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="<?php echo $domain ?>/js/scripts.js"></script>
+    <script src="//code.jivosite.com/widget/WZLgVBvOU2" async></script>
 </body>
 
 </html>

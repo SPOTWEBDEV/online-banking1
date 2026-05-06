@@ -2,71 +2,111 @@
 include("../server/connection.php");
 include("../server/auth/client.php");
 
-
-
 $user_balance = (float) $client['balance'];
 $errors = [];
-
+$success = null;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment'])) {
 
-    $plan_id = isset($_POST['plan_id']) ? trim($_POST['plan_id']) : '';
-    $amount_invested = isset($_POST['amount_invested']) ? trim($_POST['amount_invested']) : '';
+    // ✅ STEP 1: Get & sanitize input FIRST
+    $plan_id_int = (int) ($_POST['plan_id'] ?? 0);
+    $amount_decimal = (float) ($_POST['amount_invested'] ?? 0);
 
-    if ($plan_id === '' || !ctype_digit($plan_id)) $errors[] = "Plan ID missing.";
-    if ($amount_invested === '' || !is_numeric($amount_invested) || (float)$amount_invested <= 0) $errors[] = "Enter a valid amount.";
+    // Basic validation
+    if ($plan_id_int <= 0) {
+        $errors[] = "Invalid plan selected.";
+    }
 
+    if ($amount_decimal <= 0) {
+        $errors[] = "Enter a valid amount.";
+    }
+
+    // Continue only if no errors
     if (empty($errors)) {
 
-        $amount_decimal = (float) $amount_invested;
-        $plan_id_int = (int) $plan_id;
+        // ✅ STEP 2: Get plan safely (prepared statement)
+        $stmt = mysqli_prepare($connection, "
+            SELECT min_amount, max_amount 
+            FROM investment_plans 
+            WHERE id = ?
+            LIMIT 1
+        ");
 
+        mysqli_stmt_bind_param($stmt, "i", $plan_id_int);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $plan_data = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
 
-        if ($user_balance < $amount_decimal) {
-            $errors[] = "Insufficient balance";
+        if (!$plan_data) {
+            $errors[] = "Invalid investment plan.";
         } else {
+
+            // ✅ STEP 3: Validate plan limits
+            $min_amount = (float) $plan_data['min_amount'];
+            $max_amount = (float) $plan_data['max_amount'];
+
+            if ($amount_decimal < $min_amount || $amount_decimal > $max_amount) {
+                $errors[] = "Amount must be between $$min_amount and $$max_amount";
+            }
+
+            // ✅ STEP 4: Check user balance
+            if ($user_balance < $amount_decimal) {
+                $errors[] = "Insufficient balance.";
+            }
+        }
+
+        // ✅ STEP 5: ONLY RUN TRANSACTION IF NO ERRORS
+        if (empty($errors)) {
 
             mysqli_begin_transaction($connection);
 
             try {
 
+                // Insert investment
                 $insert_sql = "
                     INSERT INTO investments (user_id, plan_id, amount_invested)
                     VALUES (?, ?, ?)
                 ";
+
                 $stmt = mysqli_prepare($connection, $insert_sql);
+
                 if (!$stmt) {
-                    throw new Exception("Server error: failed to prepare investment insert.");
+                    throw new Exception("Failed to prepare investment insert.");
                 }
 
                 mysqli_stmt_bind_param($stmt, "iid", $user_id, $plan_id_int, $amount_decimal);
 
                 if (!mysqli_stmt_execute($stmt)) {
-                    $err = mysqli_stmt_error($stmt);
-                    mysqli_stmt_close($stmt);
-                    throw new Exception("Activation failed: " . $err);
+                    throw new Exception("Investment failed: " . mysqli_stmt_error($stmt));
                 }
+
                 mysqli_stmt_close($stmt);
 
+                // Deduct balance
+                $upd_stmt = mysqli_prepare($connection, "
+                    UPDATE users 
+                    SET balance = balance - ? 
+                    WHERE id = ? AND balance >= ?
+                ");
 
-                $upd_stmt = mysqli_prepare($connection, "UPDATE users SET balance = balance - ? WHERE id = ? AND balance >= ?");
                 if (!$upd_stmt) {
-                    throw new Exception("Server error: failed to update balance.");
+                    throw new Exception("Failed to prepare balance update.");
                 }
 
                 mysqli_stmt_bind_param($upd_stmt, "did", $amount_decimal, $user_id, $amount_decimal);
 
                 if (!mysqli_stmt_execute($upd_stmt) || mysqli_stmt_affected_rows($upd_stmt) < 1) {
-                    $err = mysqli_stmt_error($upd_stmt);
-                    mysqli_stmt_close($upd_stmt);
-                    throw new Exception("Balance update failed. " . ($err ? $err : "Please try again."));
+                    throw new Exception("Balance update failed or insufficient funds.");
                 }
+
                 mysqli_stmt_close($upd_stmt);
 
                 mysqli_commit($connection);
 
                 $success = "Investment activated successfully!";
-                $user_balance = $user_balance - $amount_decimal; // update local display balance
+                $user_balance -= $amount_decimal;
+
             } catch (Exception $e) {
                 mysqli_rollback($connection);
                 $errors[] = $e->getMessage();
@@ -76,9 +116,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment']
 }
 
 
+
 $plans = [];
 $plan_sql = "
-    SELECT id, plan_name, duration, profit_per_day, total_profit
+    SELECT id, plan_name, duration, profit_per_day, total_profit , min_amount, max_amount
     FROM investment_plans
     ORDER BY id DESC
 ";
@@ -109,6 +150,11 @@ if (!$plan_stmt) {
     <link rel="stylesheet" href="<?= $domain ?>/vendor/toastr/toastr.min.css">
 
     <style>
+        .invest-grid{
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 10px;
+        }
         .invest-card {
             border-radius: 18px;
             padding: 20px;
@@ -169,6 +215,13 @@ if (!$plan_stmt) {
 
         .invest-btn:hover {
             background: #1d4ed8;
+        }
+        @media (max-width:750px){
+            .invest-grid{
+            display: grid;
+            grid-template-columns: repeat(1,1fr);
+            gap: 10px;
+        }
         }
     </style>
 </head>
@@ -234,6 +287,8 @@ if (!$plan_stmt) {
                             $duration = (int) $p['duration'];
                             $profit_per_day = (float) $p['profit_per_day'];
                             $total_profit = (float) $p['total_profit'];
+                            $min_amount = (float) $p['min_amount'];
+                            $max_amount = (float) $p['max_amount'];
                         ?>
 
                             <div class="invest-card" style="margin-bottom: 15px;">
@@ -267,6 +322,15 @@ if (!$plan_stmt) {
                                     <div class="plan-row highlight">
                                         <span>Total Profit</span>
                                         <span>$<?= number_format($total_profit, 2) ?></span>
+                                    </div>
+                                    <div class="plan-row">
+                                        <span class="plan-label">Min Investment</span>
+                                        <span class="plan-value">$<?= number_format($min_amount, 2) ?></span>
+                                    </div>
+
+                                    <div class="plan-row">
+                                        <span class="plan-label">Max Investment</span>
+                                        <span class="plan-value">$<?= number_format($max_amount, 2) ?></span>
                                     </div>
                                 </div>
 

@@ -1,0 +1,97 @@
+[01-May-2026 14:13:20 Europe/Berlin] PHP Warning:  mysqli_connect(): (HY000/1049): Unknown database 'zentra-bank' in C:\xampp\htdocs\zentra-bank\server\connection.php on line 45
+[01-May-2026 14:15:59 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 14:30:18 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 14:34:22 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2321
+[01-May-2026 14:35:01 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 14:36:01 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 14:37:20 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 14:38:04 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 14:40:28 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 14:40:43 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 14:43:46 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 15:06:29 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 15:07:23 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2320
+[01-May-2026 15:13:53 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2322
+[01-May-2026 15:20:56 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2323
+[01-May-2026 15:21:44 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2323
+[01-May-2026 15:23:51 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2324
+[01-May-2026 15:29:00 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2327
+[01-May-2026 15:36:30 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2327
+[01-May-2026 15:36:46 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2327
+[01-May-2026 16:03:59 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2326
+[01-May-2026 16:14:47 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2326
+[01-May-2026 16:18:28 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2327
+[01-May-2026 16:26:39 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2327
+[01-May-2026 16:38:05 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2328
+[01-May-2026 16:38:18 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2328
+[02-May-2026 14:27:53 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2328
+[02-May-2026 14:30:12 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2328
+[02-May-2026 14:32:45 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2328
+[02-May-2026 14:56:34 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2328
+[02-May-2026 14:59:01 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2336
+[02-May-2026 14:59:18 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2336
+[02-May-2026 15:00:12 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2336
+[02-May-2026 15:02:55 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2336
+[02-May-2026 15:06:45 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2336
+[02-May-2026 15:07:01 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2336
+[02-May-2026 15:08:11 Europe/Berlin] PHP Warning:  Undefined variable $sitemail in C:\xampp\htdocs\zentra-bank\index.php on line 2336
+[02-May-2026 14:08:04 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/zenvault/public_html/server/connection.php:45
+Stack trace:
+#0 /home/zenvault/public_html/server/connection.php(45): mysqli_connect('localhost', 'root', Object(SensitiveParameterValue), 'zentra-bank')
+#1 /home/zenvault/public_html/index.php(1): include('/home/zenvault/...')
+#2 {main}
+  thrown in /home/zenvault/public_html/server/connection.php on line 45
+[02-May-2026 14:10:53 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/zenvault/public_html/server/connection.php:45
+Stack trace:
+#0 /home/zenvault/public_html/server/connection.php(45): mysqli_connect('localhost', 'root', Object(SensitiveParameterValue), 'zentra-bank')
+#1 /home/zenvault/public_html/index.php(1): include('/home/zenvault/...')
+#2 {main}
+  thrown in /home/zenvault/public_html/server/connection.php on line 45
+[02-May-2026 14:10:55 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/zenvault/public_html/server/connection.php:45
+Stack trace:
+#0 /home/zenvault/public_html/server/connection.php(45): mysqli_connect('localhost', 'root', Object(SensitiveParameterValue), 'zentra-bank')
+#1 /home/zenvault/public_html/index.php(1): include('/home/zenvault/...')
+#2 {main}
+  thrown in /home/zenvault/public_html/server/connection.php on line 45
+[02-May-2026 14:11:06 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/zenvault/public_html/server/connection.php:45
+Stack trace:
+#0 /home/zenvault/public_html/server/connection.php(45): mysqli_connect('localhost', 'root', Object(SensitiveParameterValue), 'zentra-bank')
+#1 /home/zenvault/public_html/index.php(1): include('/home/zenvault/...')
+#2 {main}
+  thrown in /home/zenvault/public_html/server/connection.php on line 45
+[02-May-2026 14:11:09 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/zenvault/public_html/server/connection.php:45
+Stack trace:
+#0 /home/zenvault/public_html/server/connection.php(45): mysqli_connect('localhost', 'root', Object(SensitiveParameterValue), 'zentra-bank')
+#1 /home/zenvault/public_html/index.php(1): include('/home/zenvault/...')
+#2 {main}
+  thrown in /home/zenvault/public_html/server/connection.php on line 45
+[02-May-2026 14:11:12 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/zenvault/public_html/server/connection.php:45
+Stack trace:
+#0 /home/zenvault/public_html/server/connection.php(45): mysqli_connect('localhost', 'root', Object(SensitiveParameterValue), 'zentra-bank')
+#1 /home/zenvault/public_html/index.php(1): include('/home/zenvault/...')
+#2 {main}
+  thrown in /home/zenvault/public_html/server/connection.php on line 45
+[02-May-2026 14:16:41 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/zenvault/public_html/server/connection.php:47
+Stack trace:
+#0 /home/zenvault/public_html/server/connection.php(47): mysqli_connect('localhost', 'root', Object(SensitiveParameterValue), 'zentra-bank')
+#1 /home/zenvault/public_html/index.php(1): include('/home/zenvault/...')
+#2 {main}
+  thrown in /home/zenvault/public_html/server/connection.php on line 47
+[02-May-2026 14:17:03 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'root'@'localhost' (using password: NO) in /home/zenvault/public_html/server/connection.php:47
+Stack trace:
+#0 /home/zenvault/public_html/server/connection.php(47): mysqli_connect('localhost', 'root', Object(SensitiveParameterValue), 'zentra-bank')
+#1 /home/zenvault/public_html/index.php(1): include('/home/zenvault/...')
+#2 {main}
+  thrown in /home/zenvault/public_html/server/connection.php on line 47
+[03-May-2026 07:30:56 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'zenvault_dd'@'localhost' (using password: YES) in C:\xampp\htdocs\zentra-bank-c\server\connection.php:47
+Stack trace:
+#0 C:\xampp\htdocs\zentra-bank-c\server\connection.php(47): mysqli_connect('localhost', 'zenvault_dd', Object(SensitiveParameterValue), 'zenvault_dd')
+#1 C:\xampp\htdocs\zentra-bank-c\index.php(1): include('C:\\xampp\\htdocs...')
+#2 {main}
+  thrown in C:\xampp\htdocs\zentra-bank-c\server\connection.php on line 47
+[03-May-2026 07:31:04 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: Access denied for user 'zenvault_dd'@'localhost' (using password: YES) in C:\xampp\htdocs\zentra-bank-c\server\connection.php:47
+Stack trace:
+#0 C:\xampp\htdocs\zentra-bank-c\server\connection.php(47): mysqli_connect('localhost', 'zenvault_dd', Object(SensitiveParameterValue), 'zenvault_dd')
+#1 C:\xampp\htdocs\zentra-bank-c\index.php(1): include('C:\\xampp\\htdocs...')
+#2 {main}
+  thrown in C:\xampp\htdocs\zentra-bank-c\server\connection.php on line 47

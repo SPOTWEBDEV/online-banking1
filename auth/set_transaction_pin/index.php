@@ -31,11 +31,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $confirm_pin = $_POST['confirm_pin'] ?? "";
 
         if ($entered_pin === $confirm_pin && strlen($entered_pin) === 4) {
-            $hashed_pin = password_hash($entered_pin, PASSWORD_DEFAULT);
+          
 
             $sql = "UPDATE users SET transaction_pin = ? WHERE id = ?";
             $stmt = mysqli_prepare($connection, $sql);
-            mysqli_stmt_bind_param($stmt, "si", $hashed_pin, $user_id);
+            mysqli_stmt_bind_param($stmt, "si", $entered_pin, $user_id);
             mysqli_stmt_execute($stmt);
             mysqli_stmt_close($stmt);
 
@@ -50,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     } else {
         // User verifies PIN
-        if ($db_pin !== null && password_verify($entered_pin, $db_pin)) {
+        if ($db_pin !== null && $entered_pin === $db_pin) {
 
             echo "<script>
                 window.location.href = '../../dashboard/';

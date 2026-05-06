@@ -115,12 +115,6 @@ if (empty($country)) {
     $hasError = true;
 }
 
-// SSN
-if (empty($ssn)) {
-    $ssnErr = "SSN is required";
-    $hasError = true;
-}
-
 
     // VALIDATION
     if (empty($fullname)) {
@@ -381,7 +375,7 @@ smtpmailer($email, "Your $sitename Account Details", $account_body);
                                     <div class="mini-logo">
                                         <a href="index.html"><img src="<?php echo $domain ?>/images/logo-white.png" alt="" width="30" /></a>
                                     </div>
-                                    <h3>Welcome to Zentra Bank</h3>
+                                    <h3>Welcome to <?php echo $sitename ?></h3>
                                 </div>
                                 <div class="privacy-social">
                                     <div class="privacy-link"><a href="#">Have an issue with 2-factor authentication?</a><br /><a href="#">Privacy Policy</a></div>
@@ -432,7 +426,7 @@ smtpmailer($email, "Your $sitename Account Details", $account_body);
 </div>
 <div class="col-12 mb-3">
     <label class="form-label">SSN</label>
-    <input type="text" name="ssn" class="form-control" maxlength="10">
+    <input type="text" name="ssn" class="form-control" >
     <small style="color:red"><?= $ssnErr ?></small>
 </div>
 

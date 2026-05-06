@@ -1,9 +1,6 @@
 <?php
 include("../../server/connection.php");
-if (!isset($_SESSION['user_id'])) {
-    header("location: {$domain}/auth/sign_in/");
-    exit;
-}
+include("../server/auth/client.php");
 ?>
 
 

@@ -11,16 +11,16 @@ function smtpmailer($to,$subject, $body)
          $mail->SMTPAuth = true;
 
          $mail->SMTPSecure = 'ssl'; // Using 'ssl' with port 465 as per your original configuration
-         $mail->Host = 'mail.zentrapb.com';
+         $mail->Host = 'mail.zenvault-app.com';
          $mail->Port = 465; // Or 587 if using 'tls'
-         $mail->Username = 'support@zentrapb.com';
-         $mail->Password = 'support@zentrapb.com'; // Use your actual email password
+         $mail->Username = 'support@zenvault-app.com';
+         $mail->Password = 'support@zenvault-app.com'; // Use your actual email password
 
          $mail->IsHTML(true);
-         $mail->From = 'support@zentrapb.com';
-         $mail->FromName = 'Zentra Bank';
-         $mail->Sender = 'support@zentrapb.com';
-         $mail->AddReplyTo('support@zentrapb.com', 'Zentra Bank');
+         $mail->From = 'support@zenvault-app.com';
+         $mail->FromName = 'Zenvault Bank';
+         $mail->Sender = 'support@zenvault-app.com';
+         $mail->AddReplyTo('support@zenvault-app.com', 'Zenvault Bank');
          $mail->Subject = $subject;
          $mail->Body = $body;
          $mail->AddAddress($to);
@@ -35,7 +35,7 @@ function smtpmailer($to,$subject, $body)
                   return false;
          }
 
-         return 'success';
+         return true;
 }
 
 

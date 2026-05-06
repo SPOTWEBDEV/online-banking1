@@ -9,42 +9,42 @@
     <div class="menu">
         <ul>
             <li>
-                <a href="<?php echo $domain ?>/dashboard/">
+                <a href="<?php echo $domain ?>dashboard/">
                     <span><i class="fi fi-rr-home"></i></span>
                     <span class="nav-text">Dashboard</span>
                 </a>
             </li>
 
             <li>
-                <a href="<?= $domain ?>/deposits/">
+                <a href="<?= $domain ?>deposits/">
                     <span><i class="fi fi-rr-bank"></i></span>
                     <span class="nav-text">Deposits</span>
                 </a>
             </li>
 
             <li>
-                <a href="<?= $domain ?>/transfer/">
+                <a href="<?= $domain ?>transfer/">
                     <span><i class="fi fi-rr-exchange"></i></span>
                     <span class="nav-text">International Money Transfers</span>
                 </a>
             </li>
 
             <li>
-                <a href="<?php echo $domain ?>/investment/">
+                <a href="<?php echo $domain ?>investment/">
                     <span><i class="fi fi-rr-chart-line-up"></i></span>
                     <span class="nav-text">Investment Plan</span>
                 </a>
             </li>
 
             <li>
-                <a href="<?= $domain ?>/withdrawal/">
+                <a href="<?= $domain ?>withdrawal/">
                     <span><i class="fi fi-rr-donate"></i></span>
                     <span class="nav-text">Withdrawals</span>
                 </a>
             </li>
 
             <li>
-                <a href="<?php echo $domain ?>/loan/">
+                <a href="<?php echo $domain ?>loan/">
                     <span><i class="fi fi-rr-hand-holding-usd"></i></span>
                     <span class="nav-text">Loan and Mortgage</span>
                 </a>
@@ -60,4 +60,6 @@
         </ul>
     </div>
 </div>
+
+<script src="//code.jivosite.com/widget/WZLgVBvOU2" async></script>
 

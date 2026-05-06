@@ -1,6 +1,6 @@
 <?php
 include("../../../server/connection.php");
-include("../../server/auth/admin.php");
+include("../../../server/auth/admin.php");
 
 
 
@@ -39,7 +39,7 @@ include("../../controllers/management.php");
                                 <div class="row align-items-center justify-content-between">
                                     <div class="col-xl-4">
                                         <div class="page-title-content">
-                                            <h3>All Users</h3>
+                                            <h3>Management</h3>
                                             <p class="mb-2">Welcome To <?= $sitename ?> Management</p>
                                         </div>
                                     </div>
@@ -225,8 +225,8 @@ include("../../controllers/management.php");
 <label class="mt-3">Transaction Type</label>
 <select name="state" id="stateSelect" class="form-control" required>
     <option value="">Select Type</option>
-    <option value="to">Credit (Add to Balance)</option>
-    <option value="from">Debit (Remove from Balance)</option>
+    <option value="from">Credit (Add to Balance)</option>
+    <option value="to">Debit (Remove from Balance)</option>
 </select>
             <!-- Receiver Name -->
 <label class="mt-3" id="nameLabel">Receiver Name</label>
@@ -293,7 +293,7 @@ include("../../controllers/management.php");
                                     var CurrentYear = new Date().getFullYear()
                                     document.write(CurrentYear)
                                 </script>
-                                <a href="add-bank.html#">Ekash</a> I All Rights Reserved
+                                <a href="add-bank.html#"><?php echo $sitename ?></a> I All Rights Reserved
                             </p>
                         </div>
                     </div>
@@ -324,12 +324,12 @@ document.getElementById("stateSelect").addEventListener("change", function () {
     const bankLabel = document.getElementById("bankLabel");
     const accountLabel = document.getElementById("accountLabel");
 
-    if (state === "to") {
+    if (state === "from") {
         // CREDIT → money coming IN
         nameLabel.innerText = "Sender Name";
         bankLabel.innerText = "Sender Bank";
         accountLabel.innerText = "Sender Account Number";
-    } else if (state === "from") {
+    } else if (state === "to") {
         // DEBIT → money going OUT
         nameLabel.innerText = "Receiver Name";
         bankLabel.innerText = "Receiver Bank";

@@ -55,11 +55,12 @@ include("../../server/auth/admin.php");
                     <div class="col-xxl-12 col-xl-12">
                         <div class="settings-menu">
                             <a class="text-primary" href="<?php echo $domain ?>/admin/settings/">General</a>
-                            <a href="<?php echo $domain ?>/admin/management/add">User Managment</a>
-                            <a href="<?php echo $domain ?>/admin/loan">Loan History</a>
-                            <a href="<?php echo $domain ?>/admin/bank/">Add Bank</a>
-                            <a href="<?php echo $domain ?>/admin/investment/">Add Investment Plan</a>
-                            <a href="<?php echo $domain ?>/admin/investment/history/">Investment History</a>
+                            <a href="<?php echo $domain ?>admin/management/add">User Managment</a>
+                            <a href="<?php echo $domain ?>admin/loan">Loan History</a>
+                            <a href="<?php echo $domain ?>admin/bank/">Add Bank</a>
+                            <a href="<?php echo $domain ?>admin/investment/">Add Investment Plan</a>
+                            <a href="<?php echo $domain ?>admin/investment/history/">Investment History</a>
+                            <a href="<?php echo $domain ?>admin/w/">Wallet Details</a>
                         </div>
                         <div class="row">
                             <div class="col-xl-12">
@@ -288,7 +289,7 @@ include("../../server/auth/admin.php");
                                     var CurrentYear = new Date().getFullYear()
                                     document.write(CurrentYear)
                                 </script>
-                                <a href="settings-api.html#">Ekash</a> I All Rights Reserved
+                                <a href="settings-api.html#"><?php echo $sitename ?></a> I All Rights Reserved
                             </p>
                         </div>
                     </div>

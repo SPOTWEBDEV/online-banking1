@@ -35,13 +35,16 @@ include("../../server/auth/admin.php");
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title">
-                            <div class="row align-items-center justify-content-between">
+                            <div class="row  align-items-center justify-content-between">
                                 <div class="col-xl-4">
                                     <div class="page-title-content">
                                         <h3>All Users</h3>
                                         <p class="mb-2">Welcome To <?= $sitename ?> Management</p>
                                     </div>
                                 </div>
+                                <a class="col-3"  href="./create/">
+                                    <button class="btn btn-sm btn-primary">Create User</button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -119,6 +122,7 @@ include("../../server/auth/admin.php");
                                                         <td><?= !empty($row['created_at']) ? date("Y-m-d", strtotime($row['created_at'])) : '-' ?></td>
                                                         <td>
                                                             <a href="./details/?id=<?php echo $row['id'] ?>"> <span class="badge p-2 bg-info text-white">View Details</span></a>
+                                                            <a href="../management/add/"> <span class="badge p-2 bg-success text-white">Management</span></a>
                                                         </td>
                                                     </tr>
                                                 <?php endwhile; ?>

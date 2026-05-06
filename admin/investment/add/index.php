@@ -17,7 +17,7 @@ include("../../controllers/add-investment.php");
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ekash : Personal Finance Management Admin Dashboard HTML Template</title>
+    <title><?php echo $sitename ?> || Admin Dashboard</title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
     <!-- Custom Stylesheet -->
@@ -75,6 +75,21 @@ include("../../controllers/add-investment.php");
                                                 <input type="number" step="0.01" name="total_profit" class="form-control" placeholder="75">
                                             </div>
                                         </div>
+                                        <!-- MIN AMOUNT -->
+                                        <div class="form-row">
+                                            <div class="mb-3 col-xl-12">
+                                                <label class="mr-sm-2">Minimum Amount (USD)</label>
+                                                <input type="number" step="0.01" name="min_amount" class="form-control" placeholder="10">
+                                            </div>
+                                        </div>
+
+                                        <!-- MAX AMOUNT -->
+                                        <div class="form-row">
+                                            <div class="mb-3 col-xl-12">
+                                                <label class="mr-sm-2">Maximum Amount (USD)</label>
+                                                <input type="number" step="0.01" name="max_amount" class="form-control" placeholder="1000">
+                                            </div>
+                                        </div>
 
                                         <!-- SAVE BUTTON -->
                                         <div class="col-12 mt-4">
@@ -103,7 +118,7 @@ include("../../controllers/add-investment.php");
                                     var CurrentYear = new Date().getFullYear()
                                     document.write(CurrentYear)
                                 </script>
-                                <a href="add-bank.html#">Ekash</a> I All Rights Reserved
+                                <a href="add-bank.html#"><?php echo $sitename ?></a> I All Rights Reserved
                             </p>
                         </div>
                     </div>

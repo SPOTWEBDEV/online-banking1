@@ -115,6 +115,8 @@ if (empty($userProfile)) {
                                          class="rounded-circle"
                                          width="55"
                                          height="55"
+                                        style="object-fit: cover; object-position: 50% 20%;"
+
                                          alt="Profile Image">
                                     </div>
                                     <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu dropdown-menu-end">
