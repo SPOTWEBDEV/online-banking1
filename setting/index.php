@@ -115,6 +115,9 @@ include("../server/auth/client.php");
 
                                             if (mysqli_stmt_execute($stmt)) {
                                                 $success = "Profile image uploaded successfully!";
+                                                echo "<script>setTimeout(() => { 
+                                                 toastr.success('Profile image updated!');
+                                                window.location.reload(); }, 1500);</script>";
                                             } else {
                                                 $errors[] = "Failed to update database.";
                                             }

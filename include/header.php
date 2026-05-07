@@ -36,7 +36,7 @@ if (empty($userProfile)) {
                     <div class="col-xxl-12">
                         <div class="header-content">
                             <div class="header-left">
-                                <div class="brand-logo"><a class="mini-logo" href="#"><img src="<?php echo $domain ?>/images/logoi.png" alt="" width="40"></a></div>
+                                <div class="brand-logo"><a class="mini-logo" href="#"><img src="<?php echo $domain ?>/images/favicon.png" alt="" width="40"></a></div>
                                 <div class="search">
 
                                     <!-- <form action="wallets.html#">
