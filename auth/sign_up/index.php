@@ -237,8 +237,8 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 				
 				    <p>If the button doesn't work, use this link:</p>
 				    <p>$verify_link</p>
-                        <p>Thank you for joining Zentra Bank, your trusted platform for secure online banking and smart investment solutions. We’re excited to welcome you to a digital banking experience designed for convenience, growth, and peace of mind.</p>
-                        <p>By choosing Zentra Bank, you gain access to seamless online banking tools alongside tailored investment opportunities. Our experienced team is dedicated to helping you manage your finances efficiently while working toward your long-term financial goals.</p>
+                        <p>Thank you for joining $sitename, your trusted platform for secure online banking and smart investment solutions. We’re excited to welcome you to a digital banking experience designed for convenience, growth, and peace of mind.</p>
+                        <p>By choosing $sitename, you gain access to seamless online banking tools alongside tailored investment opportunities. Our experienced team is dedicated to helping you manage your finances efficiently while working toward your long-term financial goals.</p>
                         <p>To get started, simply fund your account and explore our range of online banking features and investment plans. Enjoy secure transactions, real-time account access, and opportunities to grow your wealth—all in one place.</p>
                         <p>For any inquiries or assistance, feel free to reach out to our support team at <a href='mailto:$siteemail'>$siteemail</a>.</p>
                         <p>Best regards,</p>

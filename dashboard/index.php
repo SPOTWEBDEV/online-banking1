@@ -161,7 +161,7 @@ function money($amount)
                                 <!-- ================= BALANCE TAB ================= -->
                                 <div class="tab-pane show active" id="a1">
                                     <div class="wallet-tab-title">
-                                        <h3>Zentra Bank</h3>
+                                        <h3><?php echo $sitename; ?></h3>
                                     </div>
 
                                     <!--  Deposit / Withdraw / Transfer -->

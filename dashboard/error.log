@@ -1,7 +1,0 @@
-[06-May-2026 14:00:08 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\zentra-bank-c\server\auth\client.php on line 7
-[06-May-2026 14:00:08 Europe/Berlin] PHP Fatal error:  Uncaught mysqli_sql_exception: You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near '' at line 1 in C:\xampp\htdocs\zentra-bank-c\server\auth\client.php:8
-Stack trace:
-#0 C:\xampp\htdocs\zentra-bank-c\server\auth\client.php(8): mysqli_query(Object(mysqli), 'SELECT * FROM u...')
-#1 C:\xampp\htdocs\zentra-bank-c\dashboard\index.php(3): include('C:\\xampp\\htdocs...')
-#2 {main}
-  thrown in C:\xampp\htdocs\zentra-bank-c\server\auth\client.php on line 8
