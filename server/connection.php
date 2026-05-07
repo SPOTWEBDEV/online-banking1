@@ -23,7 +23,7 @@ $request = checkUrlProtocol($currentUrl);
 define("HOST", "localhost");
 
 if ($request === 'https') {
-    $domain = "https://zenvault-app.com/";
+    $domain = "https://heritagenbk.com/";
     define("USER", "herita37_db");
     define("PASSWORD", "herita37_db");
     define("DATABASE", "herita37_db");

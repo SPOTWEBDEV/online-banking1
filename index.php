@@ -2071,7 +2071,7 @@
                                     <div class="text">
                                         <p>Front Desk</p>
 
-                                        <h3><a href="mailto:yourmail@email.com">support@Zenvault.com</a></h3>
+                                        <h3><a href="mailto:<?php echo $siteemail; ?>"><?php echo $siteemail; ?></a></h3>
                                     </div>
                                 </li>
                             </ul>
