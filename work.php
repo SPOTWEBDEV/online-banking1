@@ -11,8 +11,8 @@
     <title><?php echo $sitename ?> || Mobile Services, Credit Cards, Mortgages, Auto Loan</title>
     <!-- Favicons Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets_h/images/favicons/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="images/logoi.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="images/logoi.png"" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png" />
     <link rel=" manifest" href="images/logoi.png" />
     <meta name="description" content="<?php echo $sitename ?> Bank HTML 5 Template " />
     <!-- fonts -->
@@ -67,31 +67,31 @@
                 <div class="animation-preloader">
                     <div class="spinner"></div>
                     <div class="txt-loading">
-                        <span data-text-preloader="Z" class="letters-loading">
-                            Z
+                        <span data-text-preloader="H" class="letters-loading">
+                            H
                         </span>
                         <span data-text-preloader="E" class="letters-loading">
                             E
                         </span>
-                        <span data-text-preloader="N" class="letters-loading">
-                            N
+                        <span data-text-preloader="R" class="letters-loading">
+                            R
                         </span>
-                        <span data-text-preloader="V" class="letters-loading">
-                            v
+                        <span data-text-preloader="I" class="letters-loading">
+                            I
+                        </span>
+                        <span data-text-preloader="T" class="letters-loading">
+                            T
                         </span>
                         <span data-text-preloader="A" class="letters-loading">
-                            a
-                        </span>
-                        <span data-text-preloader="U" class="letters-loading">
-                            u
+                            A
                         </span>
 
-                        <span data-text-preloader="L" class="letters-loading">
-                            l
+                        <span data-text-preloader="G" class="letters-loading">
+                            G
                         </span>
 
-                        <span data-text-preloader="T" class="letters-loading">
-                            t
+                        <span data-text-preloader="E" class="letters-loading">
+                            E
                         </span>
 
                     </div>

@@ -2,7 +2,7 @@
 <div class="sidebar" id="desktopSidebar">
     <div class="brand-logo">
         <a class="full-logo" href="<?php echo $domain ?>/dashboard/">
-            <img src="<?php echo $domain ?>/images/logoi.png" alt="" width="30">
+            <img src="<?php echo $domain ?>/images/favicon.png" alt="" width="30">
         </a>
     </div>
 

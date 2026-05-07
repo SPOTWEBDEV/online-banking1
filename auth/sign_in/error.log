@@ -28,3 +28,9 @@
 [06-May-2026 17:48:26 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\zentra-bank-c\auth\sign_in\index.php on line 161
 [06-May-2026 17:51:56 Europe/Berlin] PHP Warning:  Undefined variable $suspendedMessage in C:\xampp\htdocs\zentra-bank-c\auth\sign_in\index.php on line 161
 [06-May-2026 17:51:56 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\zentra-bank-c\auth\sign_in\index.php on line 161
+[07-May-2026 09:39:15 Europe/Berlin] PHP Warning:  Undefined variable $suspendedMessage in C:\xampp\htdocs\zentra-bank-c\auth\sign_in\index.php on line 161
+[07-May-2026 09:39:15 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\zentra-bank-c\auth\sign_in\index.php on line 161
+[07-May-2026 09:45:16 Europe/Berlin] PHP Warning:  Undefined variable $suspendedMessage in C:\xampp\htdocs\zentra-bank-c\auth\sign_in\index.php on line 161
+[07-May-2026 09:45:16 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\zentra-bank-c\auth\sign_in\index.php on line 161
+[07-May-2026 09:51:50 Europe/Berlin] PHP Warning:  Undefined variable $suspendedMessage in C:\xampp\htdocs\zentra-bank-c\auth\sign_in\index.php on line 161
+[07-May-2026 09:51:50 Europe/Berlin] PHP Deprecated:  htmlspecialchars(): Passing null to parameter #1 ($string) of type string is deprecated in C:\xampp\htdocs\zentra-bank-c\auth\sign_in\index.php on line 161

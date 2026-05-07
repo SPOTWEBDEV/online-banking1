@@ -1,7 +1,7 @@
 <div class="sidebar">
     <div class="brand-logo">
         <a class="full-logo" href="<?= $domain ?>admin/dashboard">
-            <img src="<?= $domain ?>/images/logoi.png" alt="" width="30">
+            <img src="<?= $domain ?>/images/favicon.png" alt="" width="30">
         </a>
     </div>
 
