@@ -8,13 +8,38 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?php echo $sitename ?> || Mobile Services, Credit Cards, Mortgages, Auto Loan</title>
-    <!-- Favicons Icons -->
-    <link rel="apple-touch-icon" sizes="180x180" href="assets_h/images/favicons/apple-touch-icon.png" />
+    <title><?php echo $sitename; ?> || Secure Online Banking & Financial Services</title>
+
+    <meta name="description" content="Bank securely with <?php echo $sitename; ?>. Access mobile banking, credit cards, mortgages, auto loans, transfers, savings, and digital financial services online." />
+
+    <meta name="keywords" content="<?php echo $sitename; ?>, online banking, mobile banking, credit cards, mortgages, auto loans, digital banking, savings account, secure banking" />
+
+    <meta name="author" content="<?php echo $sitename; ?>" />
+
+    <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png" />
-    <link rel=" manifest" href="images/logoi.png" />
-    <meta name="description" content="<?php echo $sitename ?> Bank HTML 5 Template " />
+
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="<?php echo $sitename; ?> || Secure Online Banking & Financial Services" />
+
+    <meta property="og:description" content="Access secure online banking with <?php echo $sitename; ?>. Manage transfers, cards, loans, savings, and financial services anytime." />
+
+    <meta property="og:image" content="<?php echo $domain; ?>images/logoi.png" />
+
+    <meta property="og:url" content="<?php echo $domain; ?>" />
+
+    <meta property="og:site_name" content="<?php echo $sitename; ?>" />
+
+    <!-- Twitter/X Preview -->
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <meta name="twitter:title" content="<?php echo $sitename; ?> || Secure Online Banking & Financial Services" />
+
+    <meta name="twitter:description" content="Secure digital banking, transfers, savings, loans, and card services with <?php echo $sitename; ?>." />
+
+    <meta name="twitter:image" content="<?php echo $domain; ?>images/logoi.png" />
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
         rel="stylesheet">
