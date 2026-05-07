@@ -24,9 +24,9 @@ define("HOST", "localhost");
 
 if ($request === 'https') {
     $domain = "https://zenvault-app.com/";
-    define("USER", "zenvault_dd");
-    define("PASSWORD", "zenvault_dd");
-    define("DATABASE", "zenvault_dd");
+    define("USER", "herita37_db");
+    define("PASSWORD", "herita37_db");
+    define("DATABASE", "herita37_db");
 
 
     $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
@@ -49,9 +49,9 @@ if ($request === 'https') {
 };
 
 session_start();
-$sitename = "Zenvault Bank";
-$sitephone = "+234 XXX XXX XXXX";
-$siteemail = "support@zenvault-app.com";
+$sitename = "Heritage National Bank";
+$sitephone = "+1 453 896 7563";
+$siteemail = "support@heritagenbk.com";
 
 
 ?>

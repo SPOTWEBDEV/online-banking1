@@ -11,16 +11,16 @@ function smtpmailer($to,$subject, $body)
          $mail->SMTPAuth = true;
 
          $mail->SMTPSecure = 'ssl'; // Using 'ssl' with port 465 as per your original configuration
-         $mail->Host = 'mail.zenvault-app.com';
+         $mail->Host = 'mail.heritagenbk.com';
          $mail->Port = 465; // Or 587 if using 'tls'
-         $mail->Username = 'support@zenvault-app.com';
-         $mail->Password = 'support@zenvault-app.com'; // Use your actual email password
+         $mail->Username = 'support@heritagenbk.com';
+         $mail->Password = 'support@heritagenbk.com'; // Use your actual email password
 
          $mail->IsHTML(true);
-         $mail->From = 'support@zenvault-app.com';
-         $mail->FromName = 'Zenvault Bank';
-         $mail->Sender = 'support@zenvault-app.com';
-         $mail->AddReplyTo('support@zenvault-app.com', 'Zenvault Bank');
+         $mail->From = 'support@heritagenbk.com';
+         $mail->FromName = 'Heritage National Bank';
+         $mail->Sender = 'support@heritagenbk.com';
+         $mail->AddReplyTo('support@heritagenbk.com', 'Heritage National Bank');
          $mail->Subject = $subject;
          $mail->Body = $body;
          $mail->AddAddress($to);

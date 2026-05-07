@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
 
     if (!$hasError) {
-        $sql = "SELECT id, fullname, accountnumber, password, is_approved , status , 	suspendedMessage FROM users WHERE accountnumber = ?";
+        $sql = "SELECT id, fullname, accountnumber, password, is_approved , status , suspendedMessage FROM users WHERE accountnumber = ?";
         $stmt = mysqli_prepare($connection, $sql);
 
         if ($stmt) {
