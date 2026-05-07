@@ -20,7 +20,7 @@ include("../server/auth/client.php");
     <link rel="stylesheet" href="<?php echo $domain ?>css/style.css">
     <link rel="stylesheet" href="<?php echo $domain ?>vendor/toastr/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <!-- <link rel="stylesheet" href="<?php echo $domain ?>assets/css/bootstrap.min.css"> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
 
 </head>
 
@@ -152,15 +152,22 @@ include("../server/auth/client.php");
 
 
                             <div class="row">
-                                <div class="col-xxl-6 col-xl-6 col-lg-6">
+                                <div class="col-12">
                                     <div class="card">
                                         <div class="card-header">
                                             <h4 class="card-title">Connect Wallet</h4>
                                         </div>
                                         <div class="card-body">
-                                            
-                <button id="connectwalletBtn" type="button" class="btn btn-primary py-2">Connect Wallet</button>
-            
+                                            <button id="connectwalletBtn" type="button" class="btn btn-primary py-2">Connect Wallet</button>
+
+                                            <ul class="mt-3" style="list-style:circle; padding-left: 0; background: #f8f9fa; border: 1px solid #ddd; border-radius: 5px; padding: 15px;">
+                                                <li id="walletAddress" class="mt-3 text-danger">1: Wallet Connect is protected with advanced security measures.</li>
+                                                <li id="walletBalance" class="text-danger">2: Your wallet balance will be displayed here after connection.</li>
+                                                <li id="walletError" class="text-danger">3:We do not store your wallet information on our servers.</li>
+
+                                            </ul>
+
+
                                         </div>
                                     </div>
                                 </div>
@@ -295,6 +302,20 @@ include("../server/auth/client.php");
                                     </div>
                                 </div>
 
+
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h4 class="card-title">Account Management</h4>
+                                        </div>
+
+                                        <div>
+                                            <button onclick="window.location.href='<?php echo $domain; ?>logout/';" class="btn btn-warning m-3">Sign Out</button>
+                                            <button onclick="swal.fire({ title: 'Are you sure?', text: 'You will not be able to recover your account!', icon: 'warning', showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', confirmButtonText: 'Yes, delete it!' });" class="btn btn-danger m-3">Delete Account</button>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
 
@@ -311,11 +332,11 @@ include("../server/auth/client.php");
     <script src="<?php echo $domain ?>vendor/jquery/jquery.min.js"></script>
     <script src="<?php echo $domain ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js"></script>
-     <script src="<?php echo $domain ?>js/wallet.js"></script>
+    <script src="<?php echo $domain ?>js/wallet.js"></script>
     <!--  -->
     <!--  -->
     <script src="<?php echo $domain ?>js/scripts.js"></script>
-   
+
 </body>
 
 </html>

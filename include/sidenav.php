@@ -51,7 +51,7 @@
             </li>
 
             <li>
-                <a style="z-index: 5000 !important;" href="<?php echo $domain ?>/setting/">
+                <a style="z-index: 5000 !important;" href="<?php echo $domain ?>setting/">
                     <span><i class="fi fi-rr-user"></i></span>
                     <span class="nav-text">Setting</span>
                 </a>

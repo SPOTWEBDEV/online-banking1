@@ -34,6 +34,16 @@ include("../../server/auth/admin.php");
 
                             <?php
 
+                            if(isset($_GET['delete_id'])) {
+                                $delete_id = $_GET['delete_id'];
+                                $delete_sql = "DELETE FROM investment_plans WHERE id='$delete_id'";
+                                if(mysqli_query($connection, $delete_sql)) {
+                                    echo "<script>toastr.success('Investment plan deleted successfully');</script>";
+                                } else {
+                                    echo "<script>toastr.error('Failed to delete investment plan');</script>";
+                                }
+                            }
+
 
                             // Fetch all plans
                             $sql = "SELECT * FROM investment_plans ORDER BY id DESC";
@@ -79,9 +89,9 @@ include("../../server/auth/admin.php");
                                                     </div>
                                                 </div>
 
-                                                <a href="manage-investment.php?id=<?php echo $row['id']; ?>"
-                                                    class="btn btn-outline-primary">
-                                                    Manage
+                                                <a onclick="return confirm('Are you sure you want to delete this investment plan?');" href="?delete_id=<?php echo $row['id']; ?>"
+                                                    class="btn btn-danger ms-auto">
+                                                    Delete
                                                 </a>
                                             </div>
 
