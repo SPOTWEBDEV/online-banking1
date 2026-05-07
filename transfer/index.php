@@ -1,15 +1,13 @@
 <?php
 include("../server/connection.php");
+include("../server/auth/client.php");
 
 
 
 $errors = [];
 $success = "";
 
-if (!isset($_SESSION['user_id']) || !is_numeric($_SESSION['user_id'])) {
-    header("location: {$domain}/auth/sign_in/");
-    exit;
-}
+
 
 $user_id = (int) $_SESSION['user_id'];
 
@@ -22,6 +20,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $swift_code              = isset($_POST["swift_code"]) ? trim($_POST["swift_code"]) : "";
     $amount                  = isset($_POST["amount"]) ? trim($_POST["amount"]) : "";
     $narration               = isset($_POST["narration"]) ? trim($_POST["narration"]) : "";
+
+
+    $pin = trim($_POST['pin'] ?? "");
+
+    if ($pin === '') {
+        $errors[] = "Transaction PIN is required.";
+    } elseif (!isset($client['transaction_pin']) || $pin !== $client['transaction_pin']) {
+        $errors[] = "Incorrect Transaction PIN.";
+    }
 
 
     if ($receiver_account_number === "") {
@@ -58,25 +65,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $errors[] = "Narration must not be more than 255 characters.";
     }
 
-            // Check user balance before allowing transfer
-        $bal_sql = "SELECT balance FROM users WHERE id = ? LIMIT 1";
-        $bal_stmt = mysqli_prepare($connection, $bal_sql);
+    // Check user balance before allowing transfer
+    $bal_sql = "SELECT balance FROM users WHERE id = ? LIMIT 1";
+    $bal_stmt = mysqli_prepare($connection, $bal_sql);
 
-        if (!$bal_stmt) {
-            $errors[] = "Server error.";
-        } else {
-            mysqli_stmt_bind_param($bal_stmt, "i", $user_id);
-            mysqli_stmt_execute($bal_stmt);
-            mysqli_stmt_bind_result($bal_stmt, $user_balance);
-            mysqli_stmt_fetch($bal_stmt);
-            mysqli_stmt_close($bal_stmt);
+    if (!$bal_stmt) {
+        $errors[] = "Server error.";
+    } else {
+        mysqli_stmt_bind_param($bal_stmt, "i", $user_id);
+        mysqli_stmt_execute($bal_stmt);
+        mysqli_stmt_bind_result($bal_stmt, $user_balance);
+        mysqli_stmt_fetch($bal_stmt);
+        mysqli_stmt_close($bal_stmt);
 
-            if ($user_balance < (float)$amount) {
-                $errors[] = "Insufficient balance for this transfer.";
-            }
+        if ($user_balance < (float)$amount) {
+            $errors[] = "Insufficient balance for this transfer.";
         }
+    }
 
-       
+
 
 
     if (empty($errors)) {
@@ -120,6 +127,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } else {
                 $transfer_id = mysqli_insert_id($connection);
                 $success = "Your transfer is being processed. You will receive a notification once it is successful.";
+
+                echo "<script>
+                     setTimeout(function() {
+                        window.location.href = './transfer_history/';
+                     }, 500);
+                </script>";
             }
 
             mysqli_stmt_close($stmt);
@@ -199,8 +212,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                             </div>
                                         <?php } ?>
 
-                                        <form action="" method="post">
+                                        <form action="" method="post" id="transferForm">
                                             <div class="row">
+                                                <input name="pin" type="hidden" class="form-control pin-input" required>
 
                                                 <!-- Receiver Account Number -->
                                                 <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
@@ -259,7 +273,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                             </div>
 
                                             <div class="mt-3">
-                                                <button type="submit" class="btn btn-primary mr-2">Transfer</button>
+                                                <button type="button" id="openPinModal" class="btn btn-primary mr-2">Transfer</button>
                                             </div>
                                         </form>
 
@@ -267,8 +281,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 </div>
                             </div>
 
-
-
+                            <?php include("../include/paymentModal.php") ?>
                         </div>
                     </div>
                 </div>

@@ -2,11 +2,6 @@
 include("../server/connection.php");
 include("../server/auth/client.php");
 
-if (!isset($_SESSION['user_id']) || !is_numeric($_SESSION['user_id'])) {
-    header("location: {$domain}/auth/sign_in/");
-    exit;
-}
-
 $user_id = (int) $_SESSION['user_id'];
 $errors = [];
 $success = "";
@@ -45,20 +40,27 @@ if ($bal_stmt) {
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $which_account = trim($_POST['which_account'] ?? "");
     $amount_raw     = trim($_POST['amount'] ?? "");
     $bank_name      = trim($_POST['bank_name'] ?? "");
     $account_number = trim($_POST['account_number'] ?? "");
     $account_name   = trim($_POST['account_name'] ?? "");
+    $pin = trim($_POST['pin'] ?? "");
 
-    
+    if ($pin === '') {
+        $errors[] = "Transaction PIN is required.";
+    } elseif (!isset($client['transaction_pin']) || $pin !== $client['transaction_pin']) {
+        $errors[] = "Incorrect Transaction PIN.";
+    }
+
+
     if ($which_account === "" || !array_key_exists($which_account, $allowedAccounts)) {
         $errors[] = "Select a valid withdrawal account.";
     }
 
-    
+
     if ($amount_raw === "" || !is_numeric($amount_raw)) {
         $errors[] = "Enter a valid amount.";
     } else {
@@ -175,13 +177,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['withdraw'])) {
 
             $userBalances[$which_account] = $currentBalance - $amount;
             echo "<script>
-    setTimeout(() => {
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
-        }
-        location.reload();
-    }, 1500);
-</script>";
+                    setTimeout(() => {
+                        window.location.href = './withdrawal_history/';
+                    }, 1500);
+                </script>";
         } catch (Exception $e) {
             mysqli_rollback($connection);
             $errors = [$e->getMessage()];
@@ -200,11 +199,13 @@ $selected_available_ui = (float) ($userBalances[$selected_account_ui] ?? 0.00);
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= htmlspecialchars($sitename) ?> | Withdrawal </title>
+
 
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
     <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
@@ -270,7 +271,8 @@ $selected_available_ui = (float) ($userBalances[$selected_account_ui] ?? 0.00);
                                     </div>
 
                                     <div class="card-body">
-                                        <form method="post">
+                                        <form method="post" id="withdrawalForm">
+                                            <input name="pin" type="hidden" class="form-control pin-input" required>
 
                                             <div class="mb-3">
                                                 <label class="form-label">Withdrawal From</label>
@@ -307,7 +309,7 @@ $selected_available_ui = (float) ($userBalances[$selected_account_ui] ?? 0.00);
                                                 <input name="account_name" type="text" class="form-control" placeholder="Account Name" required>
                                             </div>
 
-                                            <button type="submit" name="withdraw" class="btn btn-primary w-100">PLACE WITHDRAWAL</button>
+                                            <button type="button" id="openPinModal" class="btn btn-primary w-100">PLACE WITHDRAWAL</button>
 
                                         </form>
                                     </div>
@@ -317,13 +319,22 @@ $selected_available_ui = (float) ($userBalances[$selected_account_ui] ?? 0.00);
 
                         </div>
                     </div>
+
+
+
+
+
+                    <?php include("../include/paymentModal.php") ?>
                 </div>
 
             </div>
         </div>
 
     </div>
- 
+
+
+
+
 
     <script src="<?php echo $domain ?>/vendor/jquery/jquery.min.js"></script>
     <script src="<?php echo $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
