@@ -1,11 +1,7 @@
 <?php
-session_start();
-include("../../server/connection.php");
 
-if (!isset($_SESSION['user_id'])) {
-    header("location: {$domain}/auth/sign_in/");
-   exit;
-}
+include("../../server/connection.php");
+include("../../server/auth/client.php");
 
 $user_id = $_SESSION['user_id'];
 ?>

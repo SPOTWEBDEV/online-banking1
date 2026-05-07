@@ -1,6 +1,6 @@
 <?php
 include("../../server/connection.php");
-include("../server/auth/client.php");
+include("../../server/auth/client.php");
 ?>
 
 
