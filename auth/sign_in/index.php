@@ -192,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
     <script src="<?php echo $domain ?>/vendor/jquery/jquery.min.js"></script>
     <script src="<?php echo $domain ?>/js/scripts.js"></script>
-    <script src="//code.jivosite.com/widget/WZLgVBvOU2" async></script>
+    <script src="//code.jivosite.com/widget/ZBxHiUWlwL" async></script>
 </body>
 
 </html>
