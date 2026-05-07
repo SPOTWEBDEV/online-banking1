@@ -1,6 +1,6 @@
 <?php
 include("../../server/connection.php");
-include("../../mailer/index.php"); 
+include("../../mailer/index.php");
 
 
 
@@ -25,7 +25,8 @@ $country = "";
 $ssn = "";
 
 
-function generateUniqueCardNumber($connection) {
+function generateUniqueCardNumber($connection)
+{
     while (true) {
         // 16 digits, first digit 1-9 so it doesn't start with 0
         $card = strval(random_int(1, 9));
@@ -52,7 +53,8 @@ function generateUniqueCardNumber($connection) {
         }
     }
 }
-function generateUniqueAccountNumber($connection) {
+function generateUniqueAccountNumber($connection)
+{
     while (true) {
         // 12 digits, first digit 1–9
         $account = strval(random_int(1, 9));
@@ -88,32 +90,32 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     $accept_terms = isset($_POST['acceptTerms']) ? $_POST['acceptTerms'] : "";
     $confirmPassword = $_POST['confirmPassword'] ?? '';
     $date_of_birth = $_POST['date_of_birth'] ?? '';
-$country = $_POST['country'] ?? '';
-$ssn = $_POST['ssn'] ?? '';
+    $country = $_POST['country'] ?? '';
+    $ssn = $_POST['ssn'] ?? '';
 
 
     $hasError = false;
-    
-    // Date of birth
-if (empty($date_of_birth)) {
-    $dobErr = "Date of birth is required";
-    $hasError = true;
-} else {
-    $dob = new DateTime($date_of_birth);
-    $today = new DateTime();
-    $age = $today->diff($dob)->y;
 
-    if ($age < 18) {
-        $dobErr = "You must be at least 18 years old";
+    // Date of birth
+    if (empty($date_of_birth)) {
+        $dobErr = "Date of birth is required";
+        $hasError = true;
+    } else {
+        $dob = new DateTime($date_of_birth);
+        $today = new DateTime();
+        $age = $today->diff($dob)->y;
+
+        if ($age < 18) {
+            $dobErr = "You must be at least 18 years old";
+            $hasError = true;
+        }
+    }
+
+    // Country
+    if (empty($country)) {
+        $countryErr = "Country is required";
         $hasError = true;
     }
-}
-
-// Country
-if (empty($country)) {
-    $countryErr = "Country is required";
-    $hasError = true;
-}
 
 
     // VALIDATION
@@ -167,19 +169,19 @@ if (empty($country)) {
 
         // 1) Generate unique card number
         try {
-    $virtualCardNumber = generateUniqueCardNumber($connection);
-    $accountNumber = generateUniqueAccountNumber($connection);
-} catch (Exception $e) {
-    $success = $e->getMessage();
-    $hasError = true;
-}
+            $virtualCardNumber = generateUniqueCardNumber($connection);
+            $accountNumber = generateUniqueAccountNumber($connection);
+        } catch (Exception $e) {
+            $success = $e->getMessage();
+            $hasError = true;
+        }
 
 
         $virtualCardExpiry = (new DateTime())->modify('+4 years')->format('Y-m-d');
 
         if (!$hasError) {
-             $token = bin2hex(random_bytes(32));
-             
+            $token = bin2hex(random_bytes(32));
+
             $sql = "INSERT INTO users (
     fullname,
     email,
@@ -197,28 +199,28 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt = mysqli_prepare($connection, $sql);
 
             if ($stmt) {
-               mysqli_stmt_bind_param(
-    $stmt,
-    "ssssssssss",
-    $fullname,
-    $email,
-    $hashedPassword,
-    $accountNumber,
-    $virtualCardNumber,
-    $virtualCardExpiry,
-    $token,
-    $date_of_birth,
-    $country,
-    $ssn
-);
+                mysqli_stmt_bind_param(
+                    $stmt,
+                    "ssssssssss",
+                    $fullname,
+                    $email,
+                    $password,
+                    $accountNumber,
+                    $virtualCardNumber,
+                    $virtualCardExpiry,
+                    $token,
+                    $date_of_birth,
+                    $country,
+                    $ssn
+                );
 
 
 
                 mysqli_stmt_execute($stmt);
 
                 if (mysqli_stmt_affected_rows($stmt) > 0) {
-                  $verify_link = $domain. "/auth/verify/?token=" . $token;
-                
+                    $verify_link = $domain . "/auth/verify/?token=" . $token;
+
                     $body = "
                         <html>
                         <body style='margin: 0; padding: 0; font-family: Roboto, sans-serif; background: #131722;'>
@@ -252,11 +254,11 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                         </section>
                         </body>
                         </html>";
-                
+
                     $to = $email;
                     $subj = "Welcome to $sitename  ! ";
                     $result = smtpmailer($to, $subj, $body);
-                    
+
                     $account_body = "
 <html>
 <body style='font-family:Arial;background:#f4f6f8;padding:20px;'>
@@ -318,11 +320,11 @@ Need help? Contact us at <a href='mailto:$siteemail'>$siteemail</a>
 </html>
 ";
 
-smtpmailer($email, "Your $sitename Account Details", $account_body);
+                    smtpmailer($email, "Your $sitename Account Details", $account_body);
 
-                    
-                    
-                    
+
+
+
                     $success = "User registered successfully";
 
                     // clear form values
@@ -417,64 +419,148 @@ smtpmailer($email, "Your $sitename Account Details", $account_body);
                                             <input name="email" type="text" class="form-control" value="<?= htmlspecialchars($email) ?>" />
                                             <small style="color:red"><?= $emailErr ?></small>
                                         </div>
-                                        
+
                                         <div class="col-12 mb-3">
-    <label class="form-label">Date of Birth</label>
-    <input type="date" name="date_of_birth" class="form-control"
-           value="<?= htmlspecialchars($date_of_birth) ?>">
-    <small style="color:red"><?= $dobErr ?></small>
-</div>
-<div class="col-12 mb-3">
-    <label class="form-label">SSN</label>
-    <input type="text" name="ssn" class="form-control" >
-    <small style="color:red"><?= $ssnErr ?></small>
-</div>
+                                            <label class="form-label">Date of Birth</label>
+                                            <input type="date" name="date_of_birth" class="form-control"
+                                                value="<?= htmlspecialchars($date_of_birth) ?>">
+                                            <small style="color:red"><?= $dobErr ?></small>
+                                        </div>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">SSN</label>
+                                            <input type="text" name="ssn" class="form-control">
+                                            <small style="color:red"><?= $ssnErr ?></small>
+                                        </div>
 
-<div class="col-12 mb-3">
-    <label class="form-label">Country</label>
-    <select name="country" class="form-control">
-        <option value="">-- Select Country --</option>
+                                        <div class="col-12 mb-3">
+                                            <label class="form-label">Country</label>
+                                            <select name="country" class="form-control">
+                                                <option value="">-- Select Country --</option>
 
-        <?php
-        $countries = [
-            "Afghanistan","Albania","Algeria","Andorra","Angola",
-            "Argentina","Armenia","Australia","Austria","Azerbaijan",
-            "Bahamas","Bahrain","Bangladesh","Barbados","Belgium",
-            "Belize","Benin","Bolivia","Brazil","Bulgaria",
-            "Cambodia","Cameroon","Canada","Chile","China","Colombia",
-            "Costa Rica","Croatia","Cuba","Cyprus","Czech Republic",
-            "Denmark","Dominican Republic",
-            "Ecuador","Egypt","Estonia","Ethiopia",
-            "Finland","France",
-            "Georgia","Germany","Ghana","Greece",
-            "Haiti","Honduras","Hong Kong","Hungary",
-            "Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy",
-            "Jamaica","Japan","Jordan",
-            "Kazakhstan","Kenya","Kuwait",
-            "Latvia","Lebanon","Liberia","Lithuania","Luxembourg",
-            "Malaysia","Maldives","Mexico","Monaco","Morocco",
-            "Nepal","Netherlands","New Zealand","Nigeria","Norway",
-            "Oman",
-            "Pakistan","Panama","Peru","Philippines","Poland","Portugal",
-            "Qatar",
-            "Romania","Russia","Rwanda",
-            "Saudi Arabia","Senegal","Singapore","Slovakia","Slovenia","South Africa","South Korea","Spain","Sri Lanka","Sweden","Switzerland",
-            "Thailand","Tunisia","Turkey",
-            "Uganda","Ukraine","United Arab Emirates","United Kingdom","United States",
-            "Uruguay",
-            "Venezuela","Vietnam",
-            "Yemen",
-            "Zambia","Zimbabwe"
-        ];
+                                                <?php
+                                                $countries = [
+                                                    "Afghanistan",
+                                                    "Albania",
+                                                    "Algeria",
+                                                    "Andorra",
+                                                    "Angola",
+                                                    "Argentina",
+                                                    "Armenia",
+                                                    "Australia",
+                                                    "Austria",
+                                                    "Azerbaijan",
+                                                    "Bahamas",
+                                                    "Bahrain",
+                                                    "Bangladesh",
+                                                    "Barbados",
+                                                    "Belgium",
+                                                    "Belize",
+                                                    "Benin",
+                                                    "Bolivia",
+                                                    "Brazil",
+                                                    "Bulgaria",
+                                                    "Cambodia",
+                                                    "Cameroon",
+                                                    "Canada",
+                                                    "Chile",
+                                                    "China",
+                                                    "Colombia",
+                                                    "Costa Rica",
+                                                    "Croatia",
+                                                    "Cuba",
+                                                    "Cyprus",
+                                                    "Czech Republic",
+                                                    "Denmark",
+                                                    "Dominican Republic",
+                                                    "Ecuador",
+                                                    "Egypt",
+                                                    "Estonia",
+                                                    "Ethiopia",
+                                                    "Finland",
+                                                    "France",
+                                                    "Georgia",
+                                                    "Germany",
+                                                    "Ghana",
+                                                    "Greece",
+                                                    "Haiti",
+                                                    "Honduras",
+                                                    "Hong Kong",
+                                                    "Hungary",
+                                                    "Iceland",
+                                                    "India",
+                                                    "Indonesia",
+                                                    "Iran",
+                                                    "Iraq",
+                                                    "Ireland",
+                                                    "Israel",
+                                                    "Italy",
+                                                    "Jamaica",
+                                                    "Japan",
+                                                    "Jordan",
+                                                    "Kazakhstan",
+                                                    "Kenya",
+                                                    "Kuwait",
+                                                    "Latvia",
+                                                    "Lebanon",
+                                                    "Liberia",
+                                                    "Lithuania",
+                                                    "Luxembourg",
+                                                    "Malaysia",
+                                                    "Maldives",
+                                                    "Mexico",
+                                                    "Monaco",
+                                                    "Morocco",
+                                                    "Nepal",
+                                                    "Netherlands",
+                                                    "New Zealand",
+                                                    "Nigeria",
+                                                    "Norway",
+                                                    "Oman",
+                                                    "Pakistan",
+                                                    "Panama",
+                                                    "Peru",
+                                                    "Philippines",
+                                                    "Poland",
+                                                    "Portugal",
+                                                    "Qatar",
+                                                    "Romania",
+                                                    "Russia",
+                                                    "Rwanda",
+                                                    "Saudi Arabia",
+                                                    "Senegal",
+                                                    "Singapore",
+                                                    "Slovakia",
+                                                    "Slovenia",
+                                                    "South Africa",
+                                                    "South Korea",
+                                                    "Spain",
+                                                    "Sri Lanka",
+                                                    "Sweden",
+                                                    "Switzerland",
+                                                    "Thailand",
+                                                    "Tunisia",
+                                                    "Turkey",
+                                                    "Uganda",
+                                                    "Ukraine",
+                                                    "United Arab Emirates",
+                                                    "United Kingdom",
+                                                    "United States",
+                                                    "Uruguay",
+                                                    "Venezuela",
+                                                    "Vietnam",
+                                                    "Yemen",
+                                                    "Zambia",
+                                                    "Zimbabwe"
+                                                ];
 
-        foreach ($countries as $c) {
-            $selected = ($country === $c) ? 'selected' : '';
-            echo "<option value=\"$c\" $selected>$c</option>";
-        }
-        ?>
-    </select>
-    <small style="color:red"><?= $countryErr ?></small>
-</div>
+                                                foreach ($countries as $c) {
+                                                    $selected = ($country === $c) ? 'selected' : '';
+                                                    echo "<option value=\"$c\" $selected>$c</option>";
+                                                }
+                                                ?>
+                                            </select>
+                                            <small style="color:red"><?= $countryErr ?></small>
+                                        </div>
 
 
 
