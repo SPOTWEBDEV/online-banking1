@@ -105,108 +105,108 @@
         }
     }
 
-    
+
     if (isset($_POST['add_transfer'])) {
 
-    $user_id  = $_POST['user_id'];
-    $account  = $_POST['receiver_account_number'];
-    $bank     = $_POST['receiver_bank'];
-    $name     = $_POST['receiver_name'];
-    $routing  = $_POST['routing_number'];
-    $swift    = $_POST['swift_code'];
-    $amount   = $_POST['amount'];
-    $status   = $_POST['status'];
-    $date     = $_POST['created_at'];
-    $narration = $_POST['narration'];
-    $state = $_POST['state'] ; // 'to' or 'from'
+        $user_id   = $_POST['user_id'];
+        $account   = $_POST['receiver_account_number'];
+        $bank      = $_POST['receiver_bank'];
+        $name      = $_POST['receiver_name'];
+        $routing   = $_POST['routing_number'];
+        $swift     = $_POST['swift_code'];
+        $amount    = $_POST['amount'];
+        $status    = $_POST['status'];
+        $date      = $_POST['created_at'];
+        $narration = $_POST['narration'];
 
-    // Generate OTP (optional but good)
-    $otp_code = rand(100000, 999999);
-    $otp_expires = date('Y-m-d H:i:s', strtotime('+10 minutes'));
+        // 'from' = CREDIT (money coming in, e.g. from a sender)
+        // 'to'   = DEBIT  (money going out, to a receiver)
+        // This matches how state is interpreted everywhere else in the app
+        // (dashboard history, transaction details page, etc).
+        $state = $_POST['state'];
 
-   // Get user balance
-$check = $connection->prepare("SELECT balance FROM users WHERE id = ?");
-$check->bind_param("i", $user_id);
-$check->execute();
-$result = $check->get_result();
-$user = $result->fetch_assoc();
+        // Generate OTP (optional but good)
+        $otp_code    = rand(100000, 999999);
+        $otp_expires = date('Y-m-d H:i:s', strtotime('+10 minutes'));
 
-$current_balance = $user['balance'];
+        // Get user balance
+        $check = $connection->prepare("SELECT balance FROM users WHERE id = ?");
+        $check->bind_param("i", $user_id);
+        $check->execute();
+        $result = $check->get_result();
+        $user = $result->fetch_assoc();
 
-// Check if amount is greater than balance
-if ($state === 'from' && $amount > $current_balance) {
+        $current_balance = $user['balance'];
 
-    echo "<script>
-        Swal.fire({
-            icon: 'error',
-            title: 'Insufficient Balance',
-            html: 'Transfer amount ($$amount) is greater than user balance ($" . number_format($current_balance,2) . ")'
-        })
-    </script>";
+        // Balance is only relevant when the user is SENDING money (state = 'to' / debit).
+        // Crediting the account (state = 'from') never requires a balance check.
+        if ($state === 'to' && $amount > $current_balance) {
 
-    
-}else{
+            echo "<script>
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Insufficient Balance',
+                    html: 'Transfer amount ($" . $amount . ") is greater than user balance ($" . number_format($current_balance, 2) . ")'
+                })
+            </script>";
 
-// INSERT TRANSFER
-    $insert = $connection->prepare("
-        INSERT INTO bank_transfers 
-(user_id, receiver_account_number, receiver_bank, receiver_name, routing_number, swift_code, amount, otp_code, otp_expires_at, status, state, created_at, narration)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-    ");
+            // Stop here — do not insert the transfer or touch the balance.
+            echo "<script> setTimeout(()=> { window.location.href = '$url'},4500) </script>";
+        } else {
 
-    $insert->bind_param(
-    "isssssdssssss",
-    $user_id,
-    $account,
-    $bank,
-    $name,
-    $routing,
-    $swift,
-    $amount,
-    $otp_code,
-    $otp_expires,
-    $status,
-    $state,
-    $date,
-    $narration
-);
+            // INSERT TRANSFER
+            $insert = $connection->prepare("
+                INSERT INTO bank_transfers 
+                (user_id, receiver_account_number, receiver_bank, receiver_name, routing_number, swift_code, amount, otp_code, otp_expires_at, status, state, created_at, narration)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ");
 
-    if ($insert->execute()) {
+            $insert->bind_param(
+                "isssssdssssss",
+                $user_id,
+                $account,
+                $bank,
+                $name,
+                $routing,
+                $swift,
+                $amount,
+                $otp_code,
+                $otp_expires,
+                $status,
+                $state,
+                $date,
+                $narration
+            );
 
-        // ✅ Deduct balance ONLY if completed
-        if ($status == 'completed') {
+            if ($insert->execute()) {
 
-    if ($state === 'to') {
-        // ✅ CREDIT (add money)
-        $update = $connection->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
-        $update->bind_param("di", $amount, $user_id);
-        $update->execute();
+                // Only adjust balance if the transfer status is completed
+                if ($status == 'completed') {
+
+                    if ($state === 'from') {
+                        // CREDIT (add money) — no balance check needed
+                        $update = $connection->prepare("UPDATE users SET balance = balance + ? WHERE id = ?");
+                        $update->bind_param("di", $amount, $user_id);
+                        $update->execute();
+                    }
+
+                    if ($state === 'to') {
+                        // DEBIT (remove money) — already validated against balance above
+                        $update = $connection->prepare("UPDATE users SET balance = balance - ? WHERE id = ?");
+                        $update->bind_param("di", $amount, $user_id);
+                        $update->execute();
+                    }
+                }
+
+                echo "<script>Swal.fire('Transfer Added Successfully','','success')</script>";
+                echo "<script> setTimeout(()=> { window.location.href = '$domain/admin/management/add'},1000) </script>";
+
+            } else {
+                echo "<script>Swal.fire('Failed Request','Something went wrong','error')</script>";
+                echo "<script> setTimeout(()=> { window.location.href = '$url'},1000) </script>";
+            }
+        }
     }
-
-    if ($state === 'from') {
-        // ❌ DEBIT (remove money)
-        $update = $connection->prepare("UPDATE users SET balance = balance - ? WHERE id = ?");
-        $update->bind_param("di", $amount, $user_id);
-        $update->execute();
-    }
-}
-
-        echo "<script>Swal.fire('Transfer Added Successfully','','success')</script>";
-        echo "<script> setTimeout(()=> { window.location.href = '$domain/admin/management/add'},1000) </script>";
-
-    } else {
-        echo "<script>Swal.fire('Failed Request','Something went wrong','error')</script>";
-        echo "<script> setTimeout(()=> { window.location.href = '$url'},1000) </script>";
-    }
-
-
-}
-
-    
-}
-
-
-
 
     ?>
 
