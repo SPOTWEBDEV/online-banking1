@@ -1,6 +1,6 @@
 <?php
 error_reporting(E_ALL);
-// ini_set('display_errors', 0); // ❌ don't show errors to users
+ini_set('display_errors', 0); // ❌ don't show errors to users
 ini_set('log_errors', 1);     // ✅ log errors instead
 ini_set('error_log', 'error.log'); // file where errors will be saved
 

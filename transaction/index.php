@@ -1,7 +1,6 @@
 <?php
 include("../server/connection.php");
 
-
 $id = (int) $_GET['id'];
 $type = $_GET['type'];
 $user_id = $_SESSION['user_id'];
@@ -14,8 +13,10 @@ if ($type == 'transfer') {
             users.fullname
         FROM bank_transfers
         INNER JOIN users ON users.id = bank_transfers.user_id
-        WHERE bank_transfers.id = '$id'
+        WHERE bank_transfers.id = ?
     ";
+    $stmt = mysqli_prepare($connection, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id);
 
 } elseif ($type == 'withdrawal') {
 
@@ -25,8 +26,10 @@ if ($type == 'transfer') {
             users.fullname
         FROM withdrawals
         INNER JOIN users ON users.id = withdrawals.user_id
-        WHERE withdrawals.id = '$id'
+        WHERE withdrawals.id = ?
     ";
+    $stmt = mysqli_prepare($connection, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id);
 
 } elseif ($type == 'deposit') {
 
@@ -45,16 +48,42 @@ if ($type == 'transfer') {
         FROM deposits
         INNER JOIN users ON users.id = deposits.user_id
         LEFT JOIN payment_account ON payment_account.id = deposits.type_id
-        WHERE deposits.id = '$id'
+        WHERE deposits.id = ?
     ";
+    $stmt = mysqli_prepare($connection, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id);
 
 } else {
     die("Invalid transaction type");
 }
 
-$query = $connection->query($sql);
+mysqli_stmt_execute($stmt);
+$query = mysqli_stmt_get_result($stmt);
 
+// Build a clear, direction-aware page title
+$pageTitle = "Transaction Details";
 
+if ($query && $query->num_rows > 0) {
+    $transfer = $query->fetch_assoc();
+
+    if ($type == 'transfer') {
+        if ($transfer['state'] == 'from') {
+            $pageTitle = "You Received $" . number_format($transfer['amount'], 2) . " from " . htmlspecialchars($transfer['receiver_name']);
+        } else {
+            $pageTitle = "You Sent $" . number_format($transfer['amount'], 2) . " to " . htmlspecialchars($transfer['receiver_name']);
+        }
+    } elseif ($type == 'withdrawal') {
+        $pageTitle = "You Withdrew $" . number_format($transfer['amount'], 2);
+    } elseif ($type == 'deposit') {
+        $sourceLabel = ($transfer['payment_type'] == 'bank')
+            ? ($transfer['bank_name'] ?? 'Bank')
+            : ($transfer['network'] ?? 'Crypto');
+        $pageTitle = "You Received $" . number_format($transfer['amount'], 2) . " via " . htmlspecialchars($sourceLabel);
+    }
+
+    // Reset pointer so the display block below can fetch it again
+    $query->data_seek(0);
+}
 
 ?>
 
@@ -69,7 +98,7 @@ $query = $connection->query($sql);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?= $sitename ?> | Transfer-History </title>
+    <title><?= $sitename ?> | <?= $pageTitle ?></title>
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
     <!-- Custom Stylesheet -->
@@ -110,7 +139,7 @@ $query = $connection->query($sql);
 
 
                 <div class="row">
-                    <?php if ($query->num_rows > 0) {
+                    <?php if ($query && $query->num_rows > 0) {
                         $transfer = $query->fetch_assoc();
                        
                     ?>
@@ -119,7 +148,7 @@ $query = $connection->query($sql);
                             <div class="card">
                                 <div class="card-header">
                                     <h4 class="card-title">
-                                        Transaction Details for <?php echo $transfer['fullname']; ?>
+                                        <?php echo $pageTitle; ?>
                                     </h4>
                                 </div>
 
@@ -150,7 +179,7 @@ $query = $connection->query($sql);
 
     <tr>
         <td>Bank:</td>
-        <td><?php echo $transfer['receiver_bank']; ?></td>
+        <td><?php echo htmlspecialchars($transfer['receiver_bank']); ?></td>
     </tr>
     <tr>
     <td>
@@ -160,7 +189,7 @@ $query = $connection->query($sql);
             : 'Beneficiary Account Number:'; 
         ?>
     </td>
-    <td><?php echo $transfer['receiver_account_number']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['receiver_account_number']); ?></td>
 </tr>
 
 <tr>
@@ -171,19 +200,19 @@ $query = $connection->query($sql);
             : 'Beneficiary Account Name:'; 
         ?>
     </td>
-    <td><?php echo $transfer['receiver_name']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['receiver_name']); ?></td>
 </tr>
     <tr>
         <td>Routing Number:</td>
-        <td><?php echo $transfer['routing_number']; ?></td>
+        <td><?php echo htmlspecialchars($transfer['routing_number']); ?></td>
     </tr>
     <tr>
         <td>Swift Code:</td>
-        <td><?php echo $transfer['swift_code']; ?></td>
+        <td><?php echo htmlspecialchars($transfer['swift_code']); ?></td>
     </tr>
     <tr>
         <td>Narration:</td>
-        <td><?php echo $transfer['narration']; ?></td>
+        <td><?php echo htmlspecialchars($transfer['narration']); ?></td>
     </tr>
     <tr>
         <td>Date:</td>
@@ -193,15 +222,15 @@ $query = $connection->query($sql);
 <?php if (!empty($transfer['wallet_address'])) { ?>
 <tr>
     <td>Network:</td>
-    <td><?php echo $transfer['network']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['network']); ?></td>
 </tr>
 <tr>
     <td>Wallet Address:</td>
-    <td><?php echo $transfer['wallet_address']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['wallet_address']); ?></td>
 </tr>
 <tr>
     <td>Label:</td>
-    <td><?php echo $transfer['label']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['label']); ?></td>
 </tr>
 <?php } ?>
 
@@ -209,19 +238,19 @@ $query = $connection->query($sql);
 
     <tr>
         <td>Bank:</td>
-        <td><?php echo $transfer['bank_name']; ?></td>
+        <td><?php echo htmlspecialchars($transfer['bank_name']); ?></td>
     </tr>
     <tr>
         <td>Account Number:</td>
-        <td><?php echo $transfer['account_number']; ?></td>
+        <td><?php echo htmlspecialchars($transfer['account_number']); ?></td>
     </tr>
     <tr>
         <td>Account Name:</td>
-        <td><?php echo $transfer['account_name']; ?></td>
+        <td><?php echo htmlspecialchars($transfer['account_name']); ?></td>
     </tr>
     <tr>
         <td>Account Type:</td>
-        <td><?php echo $transfer['which_account']; ?></td>
+        <td><?php echo htmlspecialchars($transfer['which_account']); ?></td>
     </tr>
     <tr>
         <td>Date:</td>
@@ -239,34 +268,34 @@ $query = $connection->query($sql);
 
 <tr>
     <td>Bank Name:</td>
-    <td><?php echo $transfer['bank_name']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['bank_name']); ?></td>
 </tr>
 <tr>
     <td>Account Number:</td>
-    <td><?php echo $transfer['account_number']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['account_number']); ?></td>
 </tr>
 <tr>
     <td>Account Name:</td>
-    <td><?php echo $transfer['account_fullname']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['account_fullname']); ?></td>
 </tr>
 <tr>
     <td>Routing Number:</td>
-    <td><?php echo $transfer['routing_number']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['routing_number']); ?></td>
 </tr>
 
 <?php } elseif ($transfer['payment_type'] == 'crypto') { ?>
 
 <tr>
     <td>Network:</td>
-    <td><?php echo $transfer['network']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['network']); ?></td>
 </tr>
 <tr>
     <td>Wallet Address:</td>
-    <td><?php echo $transfer['wallet_address']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['wallet_address']); ?></td>
 </tr>
 <tr>
     <td>Label:</td>
-    <td><?php echo $transfer['label']; ?></td>
+    <td><?php echo htmlspecialchars($transfer['label']); ?></td>
 </tr>
 
 <?php } ?>
