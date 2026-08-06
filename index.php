@@ -8,38 +8,13 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?php echo $sitename; ?> || Secure Online Banking & Financial Services</title>
-
-    <meta name="description" content="Bank securely with <?php echo $sitename; ?>. Access mobile banking, credit cards, mortgages, auto loans, transfers, savings, and digital financial services online." />
-
-    <meta name="keywords" content="<?php echo $sitename; ?>, online banking, mobile banking, credit cards, mortgages, auto loans, digital banking, savings account, secure banking" />
-
-    <meta name="author" content="<?php echo $sitename; ?>" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png" />
-
-    <!-- Open Graph / Facebook / WhatsApp -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="<?php echo $sitename; ?> || Secure Online Banking & Financial Services" />
-
-    <meta property="og:description" content="Access secure online banking with <?php echo $sitename; ?>. Manage transfers, cards, loans, savings, and financial services anytime." />
-
-    <meta property="og:image" content="<?php echo $domain; ?>images/logoi.png" />
-
-    <meta property="og:url" content="<?php echo $domain; ?>" />
-
-    <meta property="og:site_name" content="<?php echo $sitename; ?>" />
-
-    <!-- Twitter/X Preview -->
-    <meta name="twitter:card" content="summary_large_image" />
-
-    <meta name="twitter:title" content="<?php echo $sitename; ?> || Secure Online Banking & Financial Services" />
-
-    <meta name="twitter:description" content="Secure digital banking, transfers, savings, loans, and card services with <?php echo $sitename; ?>." />
-
-    <meta name="twitter:image" content="<?php echo $domain; ?>images/logoi.png" />
+    <title><?php echo $sitename ?> || Mobile Services, Credit Cards, Mortgages, Auto Loan</title>
+    <!-- Favicons Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="assets_h/images/favicons/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/IMG_09099.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="images/IMG_09099.png"" />
+    <link rel=" manifest" href="images/IMG_09099.png" />
+    <meta name="description" content="<?php echo $sitename ?> Bank HTML 5 Template " />
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
         rel="stylesheet">
@@ -92,31 +67,23 @@
                 <div class="animation-preloader">
                     <div class="spinner"></div>
                     <div class="txt-loading">
-                        <span data-text-preloader="H" class="letters-loading">
-                            H
+                        <span data-text-preloader="Z" class="letters-loading">
+                            Z
                         </span>
                         <span data-text-preloader="E" class="letters-loading">
                             E
                         </span>
-                        <span data-text-preloader="R" class="letters-loading">
-                            R
-                        </span>
-                        <span data-text-preloader="I" class="letters-loading">
-                            I
+                        <span data-text-preloader="N" class="letters-loading">
+                            N
                         </span>
                         <span data-text-preloader="T" class="letters-loading">
                             T
                         </span>
+                        <span data-text-preloader="R" class="letters-loading">
+                            R
+                        </span>
                         <span data-text-preloader="A" class="letters-loading">
                             A
-                        </span>
-
-                        <span data-text-preloader="G" class="letters-loading">
-                            G
-                        </span>
-
-                        <span data-text-preloader="E" class="letters-loading">
-                            E
                         </span>
 
                     </div>
@@ -194,7 +161,7 @@
                             <div class="main-menu-style2-left">
                                 <div class="logo-box-style2">
                                     <a href="#">
-                                        <img style="width:200px !important;" src="images/logoi.png" alt="Awesome Logo" title="">
+                                        <img style="width:200px !important;" src="images/IMG_09099.png" alt="Awesome Logo" title="">
                                     </a>
                                 </div>
 
@@ -295,11 +262,10 @@
                             <div class="main-slider-content">
                                 <div class="main-slider-content__inner">
                                     <div class="big-title">
-                                        <h2> <?php echo $sitename ?> is Providing<br> the best future<br> for your best <br> living.</h2>
+                                        <h2>Providing<br> the best future<br> for your best <br> living.</h2>
                                     </div>
                                     <div class="text">
                                         <p>
-                                            As a brand concept, it's often used to explore ideas around secure,seameless,and highly personalized banking
                                             Don’t just make a deposit, make an investment today.
                                         </p>
                                     </div>
@@ -344,14 +310,11 @@
                             <div class="main-slider-content">
                                 <div class="main-slider-content__inner">
                                     <div class="big-title">
-                                        <h2><?php echo $sitename ?> <br> is a fictional <br> fintech company.</h2>
+                                        <h2><?php echo $sitename ?> bank<br> makes access to<br> savings fast & <br> simple.</h2>
                                     </div>
                                     <div class="text">
                                         <p>
-                                            Typically imagined as a fully digital, cloud native"neo-bank".it represents a next-generation
-                                            financial institution that replaces physical branches with mobile-first experience, automation,
-                                            and embedded finance.
-                                            As a brand concept, it's often used to explore ideas around secure,seameless,and highly personalized banking
+                                            We help businesses and customers achieve more.
                                         </p>
                                     </div>
                                     <div class="btns-box">
@@ -478,11 +441,12 @@
                     <div class="col-xl-6">
                         <div class="intro-style1-content-box">
                             <div class="sec-title">
-                                <h2>ABOUT <?PHP echo $sitename ?></h2>
+                                <h2>Known for Trust,<br> Honesty & Customer<br> Support</h2>
                             </div>
                             <div class="text">
-                                <p> <?PHP echo $sitename ?> is built to simplify banking and make investing accessible for everyone.
-                                    Our platform allows users to store funds securely, send and receive money instantly, and invest in carefully designed for social plans that promote steady growth</p>
+                                <p>Belongs to those who fail in their duty through weakness of will, which is
+                                    the same as saying through shrinking from toil and pain. These cases are
+                                    perfectly simple and easy to distinguish.</p>
 
                                 <p>Choice is untrammelled and when nothing prevents our being able to do
                                     what we like best every pleasure is to be welcomed. </p>
@@ -1142,7 +1106,7 @@
         <section class="wealth-secure-style2-area">
             <div class="container">
                 <div class="sec-title">
-                    <h2>INVESTMENT PLAN</h2>
+                    <h2>Grow Your Wealth Secure</h2>
                     <div class="sub-title">
                         <p>Don’t just make a deposit, make an investment today.</p>
                     </div>
@@ -1182,89 +1146,6 @@
                                         <img src="assets_h/images/resources/wealth-secure-v2-1.jpg" alt="">
                                     </div>
                                     <div class="inner-title">
-                                        <h3><a href="./#">STARTER PLAN</a></h3>
-                                    </div>
-                                </div>
-                                <div class="text-box">
-                                    <p>STARTER PLAN</p>
-                                    <ul>
-                                        <li>Minimum: $50</li>
-                                        <li>Duration: 7 days</li>
-                                        <li>Return: 10% – 15%</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!--End Single Wealth Secure Box Style2-->
-                            <!--Start Single Wealth Secure Box Style2-->
-                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
-                                <div class="img-box">
-                                    <div class="img-box-inner">
-                                        <img src="assets_h/images/resources/wealth-secure-v2-2.jpg" alt="">
-                                    </div>
-                                    <div class="inner-title">
-                                        <h3><a href="./#">GROWTH PLAN</a></h3>
-                                    </div>
-                                </div>
-                                <div class="text-box">
-                                    <p>GROWTH PLAN</p>
-                                    <ul>
-                                        <li>Return: 20% – 30'</li>
-                                        <li>Minimum: $200</li>
-                                        <li>Duration: 14 days</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!--End Single Wealth Secure Box Style2-->
-                            <!--Start Single Wealth Secure Box Style2-->
-                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
-                                <div class="img-box">
-                                    <div class="img-box-inner">
-                                        <img src="assets_h/images/resources/wealth-secure-v2-3.jpg" alt="">
-                                    </div>
-                                    <div class="inner-title">
-                                        <h3><a href="./#">PREMIUM PLAN</a></h3>
-                                    </div>
-                                </div>
-                                <div class="text-box">
-                                    <p>PREMIUM PLAN</p>
-                                    <ul>
-                                        <li>Minimum: $500</li>
-                                        <li>Duration: 30 days</li>
-                                        <li>Return: 35% - 60%</li>
-
-                                    </ul>
-                                </div>
-                            </div>
-                            <!--End Single Wealth Secure Box Style2-->
-                            <!--Start Single Wealth Secure Box Style2-->
-                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
-                                <div class="img-box">
-                                    <div class="img-box-inner">
-                                        <img src="assets_h/images/resources/wealth-secure-v2-4.jpg" alt="">
-                                    </div>
-                                    <div class="inner-title">
-                                        <h3><a href="./#">HOW IT WORKS</a></h3>
-                                    </div>
-                                </div>
-                                <div class="text-box">
-                                    <p>HOW IT WORKS</p>
-                                    <ul>
-                                        <li>Create an account</li>
-                                        <li>Fund your wallet</li>
-                                        <li>Choose an invest plan</li>
-                                        <li>Earn returns automatically</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!--End Single Wealth Secure Box Style2-->
-
-                            <!--Start Single Wealth Secure Box Style2-->
-                            <!-- <div class="single-wealth-secure-box single-wealth-secure-box--style2">
-                                <div class="img-box">
-                                    <div class="img-box-inner">
-                                        <img src="assets_h/images/resources/wealth-secure-v2-1.jpg" alt="">
-                                    </div>
-                                    <div class="inner-title">
                                         <h3><a href="./#">Trade FX</a></h3>
                                     </div>
                                 </div>
@@ -1276,10 +1157,10 @@
                                         <li>Swap Market</li>
                                     </ul>
                                 </div>
-                            </div> -->
+                            </div>
                             <!--End Single Wealth Secure Box Style2-->
                             <!--Start Single Wealth Secure Box Style2-->
-                            <!-- <div class="single-wealth-secure-box single-wealth-secure-box--style2">
+                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
                                 <div class="img-box">
                                     <div class="img-box-inner">
                                         <img src="assets_h/images/resources/wealth-secure-v2-2.jpg" alt="">
@@ -1295,10 +1176,10 @@
                                         <li>Transaction Costs</li>
                                     </ul>
                                 </div>
-                            </div> -->
+                            </div>
                             <!--End Single Wealth Secure Box Style2-->
                             <!--Start Single Wealth Secure Box Style2-->
-                            <!-- <div class="single-wealth-secure-box single-wealth-secure-box--style2">
+                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
                                 <div class="img-box">
                                     <div class="img-box-inner">
                                         <img src="assets_h/images/resources/wealth-secure-v2-3.jpg" alt="">
@@ -1316,10 +1197,10 @@
                                         <li>Monthly Income Plans</li>
                                     </ul>
                                 </div>
-                            </div> -->
+                            </div>
                             <!--End Single Wealth Secure Box Style2-->
                             <!--Start Single Wealth Secure Box Style2-->
-                            <!-- <div class="single-wealth-secure-box single-wealth-secure-box--style2">
+                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
                                 <div class="img-box">
                                     <div class="img-box-inner">
                                         <img src="assets_h/images/resources/wealth-secure-v2-4.jpg" alt="">
@@ -1336,7 +1217,88 @@
                                         <li>Employee PF</li>
                                     </ul>
                                 </div>
-                            </div> -->
+                            </div>
+                            <!--End Single Wealth Secure Box Style2-->
+
+                            <!--Start Single Wealth Secure Box Style2-->
+                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
+                                <div class="img-box">
+                                    <div class="img-box-inner">
+                                        <img src="assets_h/images/resources/wealth-secure-v2-1.jpg" alt="">
+                                    </div>
+                                    <div class="inner-title">
+                                        <h3><a href="./#">Trade FX</a></h3>
+                                    </div>
+                                </div>
+                                <div class="text-box">
+                                    <p>Beguiled & demoralized by pleasure of moment.</p>
+                                    <ul>
+                                        <li>Futures Market</li>
+                                        <li>Forward Market</li>
+                                        <li>Swap Market</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!--End Single Wealth Secure Box Style2-->
+                            <!--Start Single Wealth Secure Box Style2-->
+                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
+                                <div class="img-box">
+                                    <div class="img-box-inner">
+                                        <img src="assets_h/images/resources/wealth-secure-v2-2.jpg" alt="">
+                                    </div>
+                                    <div class="inner-title">
+                                        <h3><a href="./#">Multi Currency a/c</a></h3>
+                                    </div>
+                                </div>
+                                <div class="text-box">
+                                    <p>Perfectly simple distinguish our power of choice.</p>
+                                    <ul>
+                                        <li>10+ Currencies</li>
+                                        <li>Transaction Costs</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!--End Single Wealth Secure Box Style2-->
+                            <!--Start Single Wealth Secure Box Style2-->
+                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
+                                <div class="img-box">
+                                    <div class="img-box-inner">
+                                        <img src="assets_h/images/resources/wealth-secure-v2-3.jpg" alt="">
+                                    </div>
+                                    <div class="inner-title">
+                                        <h3><a href="./#">Mutual Funds</a></h3>
+                                    </div>
+                                </div>
+                                <div class="text-box">
+                                    <p>Duty obligations business it will frequently occur.</p>
+                                    <ul>
+                                        <li>Money Market Funds</li>
+                                        <li>Debt Mutual Funds</li>
+                                        <li>Balanced Funds</li>
+                                        <li>Monthly Income Plans</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <!--End Single Wealth Secure Box Style2-->
+                            <!--Start Single Wealth Secure Box Style2-->
+                            <div class="single-wealth-secure-box single-wealth-secure-box--style2">
+                                <div class="img-box">
+                                    <div class="img-box-inner">
+                                        <img src="assets_h/images/resources/wealth-secure-v2-4.jpg" alt="">
+                                    </div>
+                                    <div class="inner-title">
+                                        <h3><a href="./#">Pension Scheme</a></h3>
+                                    </div>
+                                </div>
+                                <div class="text-box">
+                                    <p>The wise therefore always holds matters this.</p>
+                                    <ul>
+                                        <li>NPS</li>
+                                        <li>Public PF</li>
+                                        <li>Employee PF</li>
+                                    </ul>
+                                </div>
+                            </div>
                             <!--End Single Wealth Secure Box Style2-->
 
                         </div>
@@ -1398,10 +1360,10 @@
                                 <h2>Best Locker<br> Facility For Your<br> Valuables</h2>
                             </div>
                             <div class="text-box">
-                                <p>Your funds and data are protected using
-                                    advanced security systems including SSL
-                                    encryption, two-factor authentication (2FA),
-                                    and continuous fraud monitoring systems.</p>
+                                <p>Perfectly simple and easy to distinguish. In a free
+                                    hour when our power off choices is untrammelled
+                                    best pleasure is to be welcomed every pleasures
+                                    to be welcomed every avoided.</p>
                             </div>
                             <div class="btns-box">
                                 <a class="btn-one" href="./#">
@@ -2071,7 +2033,7 @@
                                     <div class="text">
                                         <p>Front Desk</p>
 
-                                        <h3><a href="mailto:<?php echo $siteemail; ?>"><?php echo $siteemail; ?></a></h3>
+                                        <h3><a href="mailto:yourmail@email.com">support@zentrapb.com</a></h3>
                                     </div>
                                 </li>
                             </ul>
@@ -2186,17 +2148,14 @@
                                 <div class="our-company-info">
                                     <div class="footer-logo-style1">
                                         <a href="">
-                                            <img src="images/logoi.png" style="width:200px !important;" alt="Awesome Logo"
+                                            <img src="images/IMG_09099.png " style="width:200px !important;" alt="Awesome Logo"
                                                 title="">
                                         </a>
                                     </div>
                                     <div class="bottom-text2">
-                                        <p><?php echo $sitename ?> is a fictional fintech company,
-                                            Typically imagined as a fully digital, cloud native"neo-bank".it represents a next-generation
-                                            financial institution that replaces physical branches with mobile-first experience, automation,
-                                            and embedded finance.
-                                            As a brand concept, it's often used to explore ideas around secure,seameless,and highly personalized banking
-                                        </p>
+                                        <p>Simple and easy to distinguish. In a free hour when our power off best
+                                            pleasure is to be welcomed every pleasures business it frequently occur
+                                            that pleasures have to be repudiated.</p>
                                         <div class="btn-box">
                                             <a href="./#"><span class="icon-right-arrow"></span> More About Us</a>
                                         </div>
@@ -2267,7 +2226,7 @@
                                                 <p>230, Second Floor, Maplewood Plaza,
                                                     West 7th Street, Los Angeles <br>
                                                     United States 90017.
-                                                </p>
+                                                    </p>
                                             </div>
                                         </li>
                                         <li>
@@ -2277,7 +2236,7 @@
                                             <div class="text">
                                                 <h3>Help Desk</h3>
                                                 <p>Send a Mail: <a
-                                                        href="mailto:<?php echo $siteemail ?>"> <?php echo $siteemail ?> </a>
+                                                        href="mailto:<?php echo $siteemail ?>"><?php echo $siteemail ?></a>
                                                 </p>
                                             </div>
                                         </li>
@@ -2350,15 +2309,15 @@
                 <i class="fas fa-plus"></i>
             </span>
             <div class="logo-box">
-                <a href="images/logoi.png" aria-label="logo image">
-                    <img style="width: 80px;" src="images/logoi.png" alt="" />
+                <a href="images/IMG_09099.png" aria-label="logo image">
+                    <img style="width: 80px;" src="images/IMG_09099.png" alt="" />
                 </a>
             </div>
             <div class="mobile-nav__container"></div>
             <ul class="mobile-nav__contact list-unstyled">
                 <li>
                     <i class="fa fa-envelope"></i>
-                    <a href="mailto:<?php echo $siteemail ?>"><?php echo $siteemail ?></a>
+                    <a href="mailto:<?php echo $sitemail ?>"><?php echo $siteemail ?></a>
                 </li>
             </ul>
             <div class="mobile-nav__social">
@@ -2412,10 +2371,6 @@
 
     <!-- Template js -->
     <script src="assets_h/js/custom.js"></script>
-
-    <script src="//code.jivosite.com/widget/ZBxHiUWlwL" async></script>
-
-
 
 
 </body>

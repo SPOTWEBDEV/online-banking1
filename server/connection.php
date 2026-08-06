@@ -51,7 +51,7 @@ if ($request === 'https') {
 session_start();
 $sitename = "Zentra Bank";
 $sitephone = "+1 453 896 7563";
-$siteemail = "support@heritagenbk.com";
+$siteemail = "support@zentrapb.com";
 
 
 ?>
