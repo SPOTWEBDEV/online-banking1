@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
                                                 <label class="form-check-label" for="remember">Remember me</label>
                                             </div>
                                         </div>
-                                        <div class="col-6 text-end"><a href="reset.html">Forgot Password?</a></div>
+                                        <div class="col-6 text-end"><a href="../reset/">Forgot Password?</a></div>
                                     </div>
                                     <div class="mt-3 d-grid gap-2">
                                         <button type="submit" class="btn btn-primary me-8 text-white">Sign In</button>

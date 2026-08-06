@@ -23,10 +23,10 @@ $request = checkUrlProtocol($currentUrl);
 define("HOST", "localhost");
 
 if ($request === 'https') {
-    $domain = "https://heritagenbk.com/";
-    define("USER", "herita37_db");
-    define("PASSWORD", "herita37_db");
-    define("DATABASE", "herita37_db");
+    $domain = "https://zentrapb.com";
+    define("USER", "thestrat_zentra_bank");
+    define("PASSWORD", "thestrat_zentra_bank");
+    define("DATABASE", "thestrat_zentra_bank");
 
 
     $connection = mysqli_connect(HOST, USER, PASSWORD, DATABASE);
@@ -49,7 +49,7 @@ if ($request === 'https') {
 };
 
 session_start();
-$sitename = "Heritage National Bank";
+$sitename = "Zentra Bank";
 $sitephone = "+1 453 896 7563";
 $siteemail = "support@heritagenbk.com";
 

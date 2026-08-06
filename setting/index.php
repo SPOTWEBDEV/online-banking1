@@ -20,7 +20,7 @@ include("../server/auth/client.php");
     <link rel="stylesheet" href="<?php echo $domain ?>css/style.css">
     <link rel="stylesheet" href="<?php echo $domain ?>vendor/toastr/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>  
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
@@ -159,15 +159,6 @@ include("../server/auth/client.php");
                                         </div>
                                         <div class="card-body">
                                             <button id="connectwalletBtn" type="button" class="btn btn-primary py-2">Connect Wallet</button>
-
-                                            <ul class="mt-3" style="list-style:circle; padding-left: 0; background: #f8f9fa; border: 1px solid #ddd; border-radius: 5px; padding: 15px;">
-                                                <li id="walletAddress" class="mt-3 text-danger">1: Wallet Connect is protected with advanced security measures.</li>
-                                                <li id="walletBalance" class="text-danger">2: Your wallet balance will be displayed here after connection.</li>
-                                                <li id="walletError" class="text-danger">3:We do not store your wallet information on our servers.</li>
-
-                                            </ul>
-
-
                                         </div>
                                     </div>
                                 </div>

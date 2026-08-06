@@ -423,6 +423,11 @@ function money($amount)
                                                                 } else {
                                                                     $statusText = ucfirst($transfer['status']);
                                                                 }
+
+                                                                // Determine credit/debit for the sign on desktop table
+                                                                $isCredit = ($transfer['type'] == 'deposit' || $transfer['state'] == 'from');
+                                                                $amtClass = $isCredit ? 'text-success' : 'text-danger';
+                                                                $amtSign  = $isCredit ? '+' : '-';
                                                                 ?>
                                                                 <td>
                                                                     <h6 class="mb-1" style="text-transform:capitalize">
@@ -449,7 +454,9 @@ function money($amount)
                                                                         ?>
                                                                     </small>
                                                                 </td>
-                                                                <td>$<?php echo number_format($transfer['amount']); ?></td>
+                                                                <td>
+                                                                    <strong class="<?= $amtClass ?>"><?= $amtSign ?>$<?php echo number_format($transfer['amount']); ?></strong>
+                                                                </td>
                                                                 <td><?php echo date('d M Y, h:i A', strtotime($transfer['created_at'])); ?></td>
                                                                 <td>
                                                                     <span class="badge text-white <?php
