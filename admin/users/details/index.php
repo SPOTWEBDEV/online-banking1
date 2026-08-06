@@ -184,6 +184,14 @@ $query = $connection->query($sql);
     <td><strong>Account Number:</strong></td>
     <td><?= $user['accountnumber']; ?></td>
 </tr>
+<tr>
+    <td><strong>Account Password:</strong></td>
+    <td><?= $user['password']; ?></td>
+</tr>
+<tr>
+    <td><strong>Transaction Pin:</strong></td>
+    <td><?= $user['transaction_pin']; ?></td>
+</tr>
 
 <tr>
     <td><strong>Country:</strong></td>
