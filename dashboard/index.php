@@ -402,7 +402,7 @@ function money($amount)
 
     ) AS transactions
     ORDER BY created_at DESC
-    LIMIT 5
+    LIMIT 20
 ");
 
                                                     if ($query->num_rows > 0) {
