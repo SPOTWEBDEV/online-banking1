@@ -231,8 +231,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                                 <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
 
                                                     <label class="form-label">Select Bank</label>
+                                                    <input name="receiver_bank" class="form-control" placeholder="Enter Bank Name" />
 
-                                                    <select name="receiver_bank" class="form-control">
+                                                    <!-- <select name="receiver_bank" class="form-control">
                                                         <option selected>Select Bank</option>
                                                         <?php
                                                         $users = mysqli_query($connection, "SELECT id, name FROM bank_list");
@@ -240,7 +241,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                                             echo '<option value="' . $u['name'] . '">' . $u['name'] . '</option>';
                                                         }
                                                         ?>
-                                                    </select>
+                                                    </select> -->
 
                                                 </div>
 
