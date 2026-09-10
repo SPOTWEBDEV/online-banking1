@@ -229,19 +229,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                                 </div>
 
                                                 <div class="col-xxl-6 col-xl-6 col-lg-6 mb-3">
+    <label class="form-label" for="receiver_bank">Select or Enter Bank</label>
+    <input 
+        type="text" 
+        name="receiver_bank" 
+        id="receiver_bank" 
+        class="form-control" 
+        list="bank_list" 
+        placeholder="Select or type bank name" 
+    />
 
-                                                    <label class="form-label">Select Bank</label>
-                                                    <input name="receiver_bank" class="form-control" placeholder="Enter Bank Name" />
-
-                                                    <!-- <select name="receiver_bank" class="form-control">
-                                                        <option selected>Select Bank</option>
-                                                        <?php
-                                                        $users = mysqli_query($connection, "SELECT id, name FROM bank_list");
-                                                        while ($u = mysqli_fetch_assoc($users)) {
-                                                            echo '<option value="' . $u['name'] . '">' . $u['name'] . '</option>';
-                                                        }
-                                                        ?>
-                                                    </select> -->
+    <datalist id="bank_list">
+        <?php
+        $users = mysqli_query($connection, "SELECT id, name FROM bank_list");
+        while ($u = mysqli_fetch_assoc($users)) {
+            echo '<option value="' . htmlspecialchars($u['name']) . '">';
+        }
+        ?>
+    </datalist>
+</div>
 
                                                 </div>
 
