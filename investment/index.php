@@ -460,10 +460,6 @@ function amt($n)
                     </div>
                 <?php } ?>
 
-                <!-- Market snapshot -->
-                <?php cw_heading('Market snapshot'); ?>
-                <?php cw_minis(); ?>
-
                 <!-- Plans -->
                 <?php cw_heading('Investment plans', count($plans) . ' available'); ?>
 
