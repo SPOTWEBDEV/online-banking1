@@ -1,6 +1,7 @@
 <?php
 include("../server/connection.php");
 include("../server/auth/client.php");
+include("../include/crypto-widgets.php");
 
 $user_balance = (float) $client['balance'];
 $errors = [];
@@ -47,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment']
             $max_amount = (float) $plan_data['max_amount'];
 
             if ($amount_decimal < $min_amount || $amount_decimal > $max_amount) {
-                $errors[] = "Amount must be between $$min_amount and $$max_amount";
+                $errors[] = "Amount must be between $" . number_format($min_amount, 2) . " and $" . number_format($max_amount, 2);
             }
 
             // ✅ STEP 4: Check user balance
@@ -65,8 +66,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['activate_investment']
 
                 // Insert investment
                 $insert_sql = "
-                    INSERT INTO investments (user_id, plan_id, amount_invested)
-                    VALUES (?, ?, ?)
+                    INSERT INTO investments (user_id, plan_id, amount_invested, status, days_paid)
+                    VALUES (?, ?, ?, 'active', 0)
                 ";
 
                 $stmt = mysqli_prepare($connection, $insert_sql);
@@ -134,6 +135,13 @@ if (!$plan_stmt) {
     }
     mysqli_stmt_close($plan_stmt);
 }
+
+// Compact number for the price range (100, 25000, 1500.5)
+function amt($n)
+{
+    $n = (float) $n;
+    return rtrim(rtrim(number_format($n, 2, '.', ''), '0'), '.');
+}
 ?>
 
 <!DOCTYPE html>
@@ -149,79 +157,248 @@ if (!$plan_stmt) {
     <link rel="stylesheet" href="<?= $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?= $domain ?>/vendor/toastr/toastr.min.css">
 
+    <?php cw_styles(); ?>
+
     <style>
-        .invest-grid{
-            display: grid;
-            grid-template-columns: repeat(2,1fr);
-            gap: 10px;
+        /* Original investment-page palette: blue primary, green profit */
+        :root {
+            --inv-primary: #2563eb;
+            --inv-primary-dark: #1d4ed8;
+            --inv-primary-soft: #eff6ff;
+            --inv-grad: linear-gradient(90deg, #3b82f6 0%, #1d4ed8 100%);
+            --inv-shadow: rgba(37, 99, 235, .28);
+            --inv-green: #16a34a;
         }
+
+        /* Grid: 1 column on phones, 2 on tablets, 3 on desktop */
+        .invest-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
         .invest-card {
-            border-radius: 18px;
-            padding: 20px;
-            background: #ffffff;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            transition: all 0.25s ease;
-            border: 1px solid #eee;
+            background: #fff;
+            border-radius: 10px;
+            padding: 32px 26px 28px;
+            text-align: center;
+            box-shadow: 0 6px 24px rgba(15, 23, 42, .06);
+            border: 1px solid #eef0f4;
+            transition: transform .25s ease, box-shadow .25s ease;
+            display: flex;
+            flex-direction: column;
         }
 
         .invest-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+            transform: translateY(-5px);
+            box-shadow: 0 18px 40px rgba(15, 23, 42, .12);
         }
 
-        /* Header */
+        /* Gem icon in a soft circle */
+        .invest-icon {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background: var(--inv-primary-soft);
+            display: grid;
+            place-items: center;
+            color: var(--inv-primary);
+        }
+
         .invest-title {
             font-size: 18px;
             font-weight: 700;
             color: #111;
+            margin: 0 0 10px;
         }
 
-        /* Plan details */
-        .plan-details {
-            margin-top: 15px;
-            padding: 15px;
-            border-radius: 12px;
-            background: #f9fafb;
+        .invest-range {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--inv-primary);
+            letter-spacing: -.01em;
+            margin-bottom: 22px;
         }
 
-        .plan-row {
+        /* Checklist */
+        .invest-features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 26px;
+            text-align: left;
+            flex-grow: 1;
+        }
+
+        .invest-features li {
             display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            font-size: 14px;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14.5px;
+            color: #374151;
+            padding: 7px 0;
         }
 
-        /* Highlight profit */
-        .plan-row.highlight {
-            font-size: 16px;
-            font-weight: bold;
-            color: #16a34a;
+        .invest-features li svg {
+            flex-shrink: 0;
+            margin-top: 3px;
+            color: var(--inv-green);
         }
 
-        /* Input */
-        .invest-input {
-            border: 1px solid #ddd;
-            height: 50px;
+        .invest-features li strong {
+            color: #111;
+            font-weight: 600;
         }
 
         /* Button */
         .invest-btn {
-            background: #2563eb;
-            color: white;
+            display: block;
+            width: 100%;
+            border: 0;
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: #fff;
             font-weight: 600;
-            border-radius: 10px;
-            height: 50px;
+            font-size: 15px;
+            background: var(--inv-grad);
+            box-shadow: 0 8px 18px var(--inv-shadow);
+            transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+            cursor: pointer;
         }
 
         .invest-btn:hover {
-            background: #1d4ed8;
+            transform: translateY(-1px);
+            filter: brightness(1.06);
+            box-shadow: 0 12px 24px var(--inv-shadow);
         }
-        @media (max-width:750px){
-            .invest-grid{
-            display: grid;
-            grid-template-columns: repeat(1,1fr);
-            gap: 10px;
+
+        /* Shared tab bar (same on both pages) */
+        .inv-tabs {
+            display: inline-flex;
+            gap: 4px;
+            padding: 4px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, .05);
+            margin: 16px 0 4px;
         }
+
+        .inv-tab {
+            padding: 9px 18px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #6b7280;
+            text-decoration: none;
+            transition: color .15s;
+        }
+
+        .inv-tab:hover {
+            color: var(--inv-primary);
+        }
+
+        .inv-tab.active {
+            color: #fff;
+            background: var(--inv-grad);
+            box-shadow: 0 6px 14px var(--inv-shadow);
+        }
+
+        /* Modal (plain JS, no Bootstrap needed) */
+        .invest-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: rgba(15, 23, 42, .55);
+            overflow-y: auto;
+        }
+
+        .invest-modal.open {
+            display: flex;
+        }
+
+        .invest-modal .inv-dialog {
+            width: 100%;
+            max-width: 420px;
+            margin: auto;
+        }
+
+        .invest-modal .inv-content {
+            background: #fff;
+            border: 0;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, .25);
+        }
+
+        .invest-modal .modal-top {
+            text-align: center;
+            padding: 28px 24px 8px;
+        }
+
+        .invest-modal .modal-top .invest-icon {
+            margin-bottom: 12px;
+        }
+
+        .invest-modal .modal-top h5 {
+            font-weight: 700;
+            margin: 0 0 6px;
+        }
+
+        .invest-modal .modal-top .range {
+            color: var(--inv-primary);
+            font-weight: 700;
+        }
+
+        .invest-modal .modal-body {
+            padding: 16px 24px 28px;
+        }
+
+        .invest-modal label {
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .invest-modal .input-group-text {
+            background: transparent;
+            border-radius: 10px 0 0 10px;
+        }
+
+        .invest-modal .form-control {
+            height: 50px;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .invest-modal .form-control:focus {
+            border-color: var(--inv-primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
+        }
+
+        .invest-modal .meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: #6b7280;
+            margin: 10px 0 20px;
+        }
+
+        .invest-modal .meta strong {
+            color: #111;
+        }
+
+        .invest-modal .close-link {
+            display: block;
+            text-align: center;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #6b7280;
+            background: none;
+            border: 0;
+            width: 100%;
         }
     </style>
 </head>
@@ -239,6 +416,9 @@ if (!$plan_stmt) {
         <div class="content-body">
             <div class="container">
 
+                <!-- Live crypto price bar -->
+                <?php cw_ticker(); ?>
+
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title">
@@ -249,23 +429,26 @@ if (!$plan_stmt) {
                                         <p class="mb-2">Welcome To <?= htmlspecialchars($sitename) ?> Management</p>
                                         <div class="balance-chip mt-2">
                                             <small>Your Balance:</small>
-                                            <span>$<?= number_format($client['balance'], 2) ?></span>
+                                            <span>$<?= number_format($user_balance, 2) ?></span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-auto mt-2">
-                                    <a href="./investment_history/"><button class="btn btn-primary mr-2">View Investment History</button></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- Tabs: connects this page with the history page -->
+                <div class="inv-tabs">
+                    <a href="./" class="inv-tab active">Plans</a>
+                    <a href="./investment_history/" class="inv-tab">My Investments</a>
+                </div>
+
                 <!-- Alerts -->
                 <?php if (!empty($errors)) { ?>
                     <div class="alert alert-danger mt-3">
                         <?php foreach ($errors as $error) { ?>
-                            <p><?= htmlspecialchars($error) ?></p>
+                            <p class="mb-1"><?= htmlspecialchars($error) ?></p>
                         <?php } ?>
                     </div>
                 <?php } ?>
@@ -273,11 +456,18 @@ if (!$plan_stmt) {
                 <?php if (!empty($success)) { ?>
                     <div class="alert alert-success mt-3">
                         <?= htmlspecialchars($success) ?>
+                        <a href="./investment_history/" class="fw-bold ms-1">View your investments &rarr;</a>
                     </div>
                 <?php } ?>
 
+                <!-- Market snapshot -->
+                <?php cw_heading('Market snapshot'); ?>
+                <?php cw_minis(); ?>
 
-                <div class="invest-grid mt-3">
+                <!-- Plans -->
+                <?php cw_heading('Investment plans', count($plans) . ' available'); ?>
+
+                <div class="invest-grid">
 
                     <?php if (!empty($plans)) : ?>
                         <?php foreach ($plans as $p) :
@@ -291,58 +481,50 @@ if (!$plan_stmt) {
                             $max_amount = (float) $p['max_amount'];
                         ?>
 
-                            <div class="invest-card" style="margin-bottom: 15px;">
-                                <div class="invest-top">
-                                    <div class="invest-icon">
-                                        <i class="fi fi-rr-chart-histogram"></i>
-                                    </div>
-                                    <div>
-                                        <h4 class="invest-title"><?= htmlspecialchars($plan_name) ?></h4>
+                            <div class="invest-card">
 
-                                    </div>
+                                <div class="invest-icon">
+                                    <!-- gem -->
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M6 3h12l4 6-10 12L2 9z" />
+                                        <path d="M11 3 8 9l4 12 4-12-3-6" />
+                                        <path d="M2 9h20" />
+                                    </svg>
                                 </div>
 
+                                <h4 class="invest-title"><?= htmlspecialchars($plan_name) ?></h4>
 
-                                <div class="plan-details">
-                                    <div class="plan-row">
-                                        <span class="plan-label">Plan Name</span>
-                                        <span class="plan-value"><?= htmlspecialchars($plan_name) ?></span>
-                                    </div>
-
-                                    <div class="plan-row">
-                                        <span class="plan-label">Duration</span>
-                                        <span class="plan-value"><?= $duration ?> days</span>
-                                    </div>
-
-                                    <div class="plan-row">
-                                        <span class="plan-label">Profit Per Day</span>
-                                        <span class="plan-value">$<?= number_format($profit_per_day, 2) ?></span>
-                                    </div>
-
-                                    <div class="plan-row highlight">
-                                        <span>Total Profit</span>
-                                        <span>$<?= number_format($total_profit, 2) ?></span>
-                                    </div>
-                                    <div class="plan-row">
-                                        <span class="plan-label">Min Investment</span>
-                                        <span class="plan-value">$<?= number_format($min_amount, 2) ?></span>
-                                    </div>
-
-                                    <div class="plan-row">
-                                        <span class="plan-label">Max Investment</span>
-                                        <span class="plan-value">$<?= number_format($max_amount, 2) ?></span>
-                                    </div>
+                                <div class="invest-range">
+                                    <?= amt($min_amount) ?>$ - <?= amt($max_amount) ?>$
                                 </div>
 
-                                <form class="invest-form mt-4 d-flex flex-wrap gap-2" method="post">
-                                    <input type="hidden" name="plan_id" value="<?= $plan_id ?>">
-                                    <input style="width:400px !important ; min-width: 100%;" class="invest-input px-2 " type="number" name="amount_invested" placeholder="Enter Amount" required>
-                                    <button style="border: none;" class="invest-btn b-none" type="submit" name="activate_investment">ACTIVATE</button>
-                                </form>
+                                <ul class="invest-features">
+                                    <li>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                                        <span><strong><?= $duration ?> days</strong> investment duration</span>
+                                    </li>
+                                    <li>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                                        <span><strong>$<?= number_format($profit_per_day, 2) ?></strong> profit per day</span>
+                                    </li>
+                                    <li>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                                        <span><strong>$<?= number_format($total_profit, 2) ?></strong> total profit</span>
+                                    </li>
+                                    <li>
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                                        <span>Activates instantly from your balance</span>
+                                    </li>
+                                </ul>
 
-                                <!-- <div class="plan-note">
-                                    * Your balance will be checked automatically before activation.
-                                </div> -->
+                                <button type="button" class="invest-btn"
+                                    data-open-invest="1"
+                                    data-id="<?= $plan_id ?>"
+                                    data-name="<?= htmlspecialchars($plan_name) ?>"
+                                    data-min="<?= $min_amount ?>"
+                                    data-max="<?= $max_amount ?>">
+                                    Get Started
+                                </button>
                             </div>
 
                         <?php endforeach; ?>
@@ -351,15 +533,103 @@ if (!$plan_stmt) {
                     <?php endif; ?>
 
                 </div>
+
+                <!-- Live crypto market -->
+                <?php cw_heading('Live crypto market'); ?>
+                <?php cw_market_overview(); ?>
+
             </div>
+        </div>
 
+        <!-- Activate modal (one modal shared by all plans) -->
+        <div class="invest-modal" id="investModal" aria-hidden="true">
+            <div class="inv-dialog">
+                <div class="inv-content">
 
+                    <div class="modal-top">
+                        <div class="invest-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 3h12l4 6-10 12L2 9z" />
+                                <path d="M11 3 8 9l4 12 4-12-3-6" />
+                                <path d="M2 9h20" />
+                            </svg>
+                        </div>
+                        <h5 id="mName">Plan</h5>
+                        <div class="range" id="mRange"></div>
+                    </div>
 
+                    <div class="modal-body">
+                        <form method="post">
+                            <input type="hidden" name="plan_id" id="mPlanId">
+
+                            <label for="mAmount">Amount to invest</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" step="0.01" class="form-control" id="mAmount" name="amount_invested" placeholder="Enter amount" required>
+                            </div>
+
+                            <div class="meta">
+                                <span>Your balance: <strong>$<?= number_format($user_balance, 2) ?></strong></span>
+                                <span id="mLimits"></span>
+                            </div>
+
+                            <button type="submit" name="activate_investment" class="invest-btn">Activate Investment</button>
+                            <button type="button" class="close-link" data-close-invest="1">Cancel</button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <script src="<?= $domain ?>/vendor/jquery/jquery.min.js"></script>
         <script src="<?= $domain ?>/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
         <script src="<?= $domain ?>/js/scripts.js"></script>
+
+        <script>
+            // Fill the shared modal with the clicked plan's details
+            function openInvest(b) {
+                var min = parseFloat(b.getAttribute('data-min'));
+                var max = parseFloat(b.getAttribute('data-max'));
+                var fmt = function (n) { return n.toLocaleString(undefined, { maximumFractionDigits: 2 }); };
+
+                document.getElementById('mPlanId').value = b.getAttribute('data-id');
+                document.getElementById('mName').textContent = b.getAttribute('data-name');
+                document.getElementById('mRange').textContent = fmt(min) + '$ - ' + fmt(max) + '$';
+                document.getElementById('mLimits').textContent = 'Min ' + fmt(min) + ' · Max ' + fmt(max);
+
+                var input = document.getElementById('mAmount');
+                input.min = min;
+                input.max = max;
+                input.value = '';
+
+                document.getElementById('investModal').classList.add('open');
+                document.body.style.overflow = 'hidden';
+                setTimeout(function () { input.focus(); }, 50);
+            }
+
+            function closeInvest() {
+                document.getElementById('investModal').classList.remove('open');
+                document.body.style.overflow = '';
+            }
+
+            document.querySelectorAll('[data-open-invest]').forEach(function (btn) {
+                btn.addEventListener('click', function () { openInvest(btn); });
+            });
+
+            document.querySelectorAll('[data-close-invest]').forEach(function (btn) {
+                btn.addEventListener('click', closeInvest);
+            });
+
+            // Click on the dark backdrop closes it
+            document.getElementById('investModal').addEventListener('click', function (e) {
+                if (e.target === this) closeInvest();
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') closeInvest();
+            });
+        </script>
 </body>
 
 </html>
