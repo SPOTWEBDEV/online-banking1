@@ -1,155 +1,423 @@
-  <?php
-  
-  $user_id = $_SESSION['user_id'];
-  
-  /* =========================
+<?php
+
+$user_id = $_SESSION['user_id'];
+
+/* =========================
    FETCH USER DATA
+   (fetched here, after any POST on the page, so the balance is always fresh)
    ========================= */
-$sql2 = "SELECT fullname, user_profile FROM users WHERE id = ?";
+$sql2 = "SELECT * FROM users WHERE id = ? LIMIT 1";
 $stmt2 = mysqli_prepare($connection, $sql2);
 mysqli_stmt_bind_param($stmt2, "i", $user_id);
 mysqli_stmt_execute($stmt2);
 $result = mysqli_stmt_get_result($stmt2);
-$user   = mysqli_fetch_assoc($result);
+$user   = mysqli_fetch_assoc($result) ?: [];
 mysqli_stmt_close($stmt2);
 
-$userName    = $user['fullname'];
-$userProfile = $user['user_profile'];
+// Works whether $domain ends with "/" or not
+$base = rtrim($domain, '/') . '/';
+
+$userName    = $user['fullname'] ?? 'User';
+$userEmail   = $user['email'] ?? '';
+$userProfile = $user['user_profile'] ?? '';
+$firstName   = explode(' ', trim($userName))[0] ?: 'there';
+$headerBal   = isset($user['balance']) ? number_format((float) $user['balance'], 2) : null;
 
 // ✅ Default avatar fallback
-$defaultAvatar = $domain . "images/avatar/avatar.svg";
-
 if (empty($userProfile)) {
-    $userProfile = $defaultAvatar;
-}else{
-  $userProfile = $domain . '/' . $userProfile ; 
+    $userProfile = $base . "images/avatar/avatar.svg";
+} else {
+    $userProfile = $base . ltrim($userProfile, '/');
 }
-  
-  
-  
-  ?>
-  
-  
-  <div class="header">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xxl-12">
-                        <div class="header-content">
-                            <div class="header-left">
-                                <div class="brand-logo"><a class="mini-logo" href="#"><img src="<?php echo $domain ?>/images/favicon.png" alt="" width="40"></a></div>
-                                <div class="search">
 
-                                    <!-- <form action="wallets.html#">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control" placeholder="Search Here">
-                                            <span class="input-group-text"><i class="fi fi-br-search"></i></span>
-                                        </div>
-                                    </form> -->
+// ⚠️ Change this to your real logout route
+$logoutUrl = $base . 'logout/';
+?>
 
-                                </div>
-                            </div>
-                            <div class="header-right">
-                                <div class="dark-light-toggle" onclick="themeToggle()">
-                                    <!-- <span class="dark"><i class="fi fi-rr-eclipse-alt"></i></span> -->
-                                    <!-- <span class="light"><i class="fi fi-rr-eclipse-alt"></i></span> -->
-                                </div>
-                                <div class="nav-item dropdown notification">
-                                    <div data-bs-toggle="dropdown">
-                                        <div class="notify-bell icon-menu">
-                                            <!-- <span><i class="fi fi-rs-bells"></i></span> -->
-                                        </div>
-                                    </div>
+<style>
+    :root {
+        --sb-w: 264px;
+        --hd-h: 68px;
+        --app-primary: #2563eb;
+        --app-primary-soft: #eff6ff;
+        --app-text: #111827;
+        --app-muted: #6b7280;
+        --app-border: #e5e7eb;
+    }
 
-                                    <!-- <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-end">
+    /* Make room for the fixed sidebar + header (overrides the template's own offsets) */
+    body.dashboard #main-wrapper {
+        padding: 0 !important;
+    }
 
-                                        <h4>Recent Notification</h4>
-                                        <div class="lists">
-                                            <a class="" href="index.html#">
-                                                <div class="d-flex align-items-center">
-                                                    <span class="me-3 icon success"><i class="fi fi-bs-check"></i></span>
-                                                    <div>
-                                                        <p>Account created successfully</p>
-                                                        <span>2024-11-04 12:00:23</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a class="" href="index.html#">
-                                                <div class="d-flex align-items-center">
-                                                    <span class="me-3 icon fail"><i class="fi fi-sr-cross-small"></i></span>
-                                                    <div>
-                                                        <p>2FA verification failed</p>
-                                                        <span>2024-11-04 12:00:23</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a class="" href="index.html#">
-                                                <div class="d-flex align-items-center">
-                                                    <span class="me-3 icon success"><i class="fi fi-bs-check"></i></span>
-                                                    <div>
-                                                        <p>Device confirmation completed</p>
-                                                        <span>2024-11-04 12:00:23</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                            <a class="" href="index.html#">
-                                                <div class="d-flex align-items-center">
-                                                    <span class="me-3 icon pending"><i class="fi fi-rr-triangle-warning"></i></span>
-                                                    <div>
-                                                        <p>Phone verification pending</p>
-                                                        <span>2024-11-04 12:00:23</span>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div> -->
-                                        
+    body.dashboard .content-body {
+        margin-left: var(--sb-w) !important;
+    }
 
-                                        <!-- <div class="more">
-                                            <a href="notifications.html">More<i class="fi fi-bs-angle-right"></i></a>
-                                        </div> -->
-                                    </div>
-                                </div>
-                                
-                                <div class="dropdown profile_log dropdown">
-                                    <div data-bs-toggle="dropdown">
-                                        <img src="<?= htmlspecialchars($userProfile) ?>"
-                                         class="rounded-circle"
-                                         width="55"
-                                         height="55"
-                                        style="object-fit: cover; object-position: 50% 20%;"
+    /* ---------- Header ---------- */
+    .app-header {
+        position: fixed;
+        top: 0;
+        left: var(--sb-w);
+        right: 0;
+        height: var(--hd-h);
+        z-index: 1000;
+        background: rgba(255, 255, 255, .92);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid var(--app-border);
+    }
 
-                                         alt="Profile Image">
-                                    </div>
-                                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu dropdown-menu-end">
-                                        <div class="user-email">
-                                            <div class="user">
-                                                <span class="thumb"><img class="rounded-full" src="<?php echo $domain ?>/images/avatar/3.jpg" alt=""></span>
-                                                <div class="user-info">
-                                                    <h5>Hafsa Humaira</h5>
-                                                    <span>hello@email.com</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!-- <a class="dropdown-item" href="profile.html">
-                                            <span><i class="fi fi-rr-user"></i></span>
-                                            Profile
-                                        </a> -->
-                                        <!-- <a class="dropdown-item" href="wallets.html">
-                                            <span><i class="fi fi-rr-wallet"></i></span>
-                                            Wallets
-                                        </a> -->
-                                        <a class="dropdown-item" href="<?php echo $domain ?>/setting/">
-                                            <span><i class="fi fi-rr-settings"></i></span>
-                                            Settings
-                                        </a>
-                                        <a class="dropdown-item logout" href="signin.html">
-                                            <span><i class="fi fi-bs-sign-out-alt"></i></span>
-                                            Logout
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    .app-header .hd-inner {
+        height: 100%;
+        padding: 0 28px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .app-header .hd-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        min-width: 0;
+    }
+
+    .app-header .menu-toggle {
+        display: none;
+        width: 40px;
+        height: 40px;
+        border: 1px solid var(--app-border);
+        background: #fff;
+        border-radius: 10px;
+        align-items: center;
+        justify-content: center;
+        color: var(--app-text);
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .app-header .menu-toggle:hover {
+        border-color: var(--app-primary);
+        color: var(--app-primary);
+    }
+
+    .app-header .hd-brand {
+        display: none;
+    }
+
+    .app-header .hd-welcome small {
+        display: block;
+        font-size: 12px;
+        color: var(--app-muted);
+        line-height: 1.2;
+    }
+
+    .app-header .hd-welcome strong {
+        display: block;
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--app-text);
+        line-height: 1.3;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 38vw;
+    }
+
+    .app-header .hd-right {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    /* Balance pill */
+    .app-header .bal-pill {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: var(--app-primary-soft);
+        color: var(--app-primary);
+        font-size: 13px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .app-header .bal-pill span {
+        color: var(--app-muted);
+        font-weight: 500;
+    }
+
+    .app-header .bal-pill b {
+        font-weight: 800;
+    }
+
+    /* Profile dropdown (plain JS - no Bootstrap needed) */
+    .app-header .profile {
+        position: relative;
+    }
+
+    .app-header .profile-btn {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 4px 10px 4px 4px;
+        border: 1px solid var(--app-border);
+        background: #fff;
+        border-radius: 999px;
+        cursor: pointer;
+        transition: border-color .15s, box-shadow .15s;
+    }
+
+    .app-header .profile-btn:hover,
+    .app-header .profile-btn[aria-expanded="true"] {
+        border-color: var(--app-primary);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, .12);
+    }
+
+    .app-header .profile-btn img {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: 50% 20%;
+        display: block;
+    }
+
+    .app-header .profile-btn .pname {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--app-text);
+        max-width: 120px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .app-header .profile-btn svg {
+        color: var(--app-muted);
+        transition: transform .2s;
+    }
+
+    .app-header .profile-btn[aria-expanded="true"] svg {
+        transform: rotate(180deg);
+    }
+
+    .app-header .profile-menu {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 10px);
+        width: 260px;
+        background: #fff;
+        border: 1px solid var(--app-border);
+        border-radius: 14px;
+        box-shadow: 0 20px 45px rgba(15, 23, 42, .14);
+        padding: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-6px);
+        transition: opacity .15s, transform .15s, visibility .15s;
+        z-index: 1200;
+    }
+
+    .app-header .profile-menu.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .app-header .pm-user {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px;
+        border-bottom: 1px solid var(--app-border);
+        margin-bottom: 6px;
+    }
+
+    .app-header .pm-user img {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: 50% 20%;
+    }
+
+    .app-header .pm-user div {
+        min-width: 0;
+    }
+
+    .app-header .pm-user h6 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--app-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .app-header .pm-user span {
+        display: block;
+        font-size: 12px;
+        color: var(--app-muted);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .app-header .pm-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 12px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #374151;
+        text-decoration: none;
+        transition: background .15s, color .15s;
+    }
+
+    .app-header .pm-item i {
+        font-size: 16px;
+        line-height: 1;
+        display: inline-flex;
+    }
+
+    .app-header .pm-item:hover {
+        background: #f3f4f6;
+        color: var(--app-text);
+    }
+
+    .app-header .pm-item.logout {
+        color: #dc2626;
+    }
+
+    .app-header .pm-item.logout:hover {
+        background: rgba(220, 38, 38, .08);
+        color: #b91c1c;
+    }
+
+    /* ---------- Tablet / mobile ---------- */
+    @media (max-width: 991px) {
+        body.dashboard .content-body {
+            margin-left: 0 !important;
+        }
+
+        .app-header {
+            left: 0;
+        }
+
+        .app-header .hd-inner {
+            padding: 0 16px;
+        }
+
+        .app-header .menu-toggle {
+            display: inline-flex;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .app-header .profile-btn .pname,
+        .app-header .profile-btn svg {
+            display: none;
+        }
+
+        .app-header .profile-btn {
+            padding: 3px;
+        }
+
+        .app-header .bal-pill span {
+            display: none;
+        }
+
+        .app-header .hd-welcome strong {
+            max-width: 30vw;
+        }
+    }
+</style>
+
+<div class="app-header">
+    <div class="hd-inner">
+
+        <div class="hd-left">
+            <!-- opens the sidebar on mobile (handled in sidenav.php) -->
+            <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10" /></svg>
+            </button>
+
+            <div class="hd-welcome">
+                <small>Welcome back</small>
+                <strong><?= htmlspecialchars($firstName) ?></strong>
             </div>
         </div>
+
+        <div class="hd-right">
+
+            <?php if ($headerBal !== null): ?>
+                <div class="bal-pill">
+                    <span>Balance</span>
+                    <b>$<?= $headerBal ?></b>
+                </div>
+            <?php endif; ?>
+
+            <div class="profile">
+                <button type="button" class="profile-btn" id="profileBtn" aria-haspopup="true" aria-expanded="false">
+                    <img src="<?= htmlspecialchars($userProfile) ?>" alt="Profile image">
+                    <span class="pname"><?= htmlspecialchars($userName) ?></span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+                </button>
+
+                <div class="profile-menu" id="profileMenu" role="menu">
+                    <div class="pm-user">
+                        <img src="<?= htmlspecialchars($userProfile) ?>" alt="">
+                        <div>
+                            <h6><?= htmlspecialchars($userName) ?></h6>
+                            <?php if ($userEmail !== ''): ?><span><?= htmlspecialchars($userEmail) ?></span><?php endif; ?>
+                        </div>
+                    </div>
+
+                    <a class="pm-item" href="<?= $base ?>setting/" role="menuitem">
+                        <i class="fi fi-rr-settings"></i> Settings
+                    </a>
+                    <a class="pm-item logout" href="<?= htmlspecialchars($logoutUrl) ?>" role="menuitem">
+                        <i class="fi fi-bs-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    // Avatar dropdown - plain JS so it works regardless of the Bootstrap version
+    (function () {
+        var btn = document.getElementById('profileBtn');
+        var menu = document.getElementById('profileMenu');
+        if (!btn || !menu) return;
+
+        function closeMenu() {
+            menu.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+        }
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var isOpen = menu.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        document.addEventListener('click', function (e) {
+            if (!menu.contains(e.target)) closeMenu();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closeMenu();
+        });
+    })();
+</script>
