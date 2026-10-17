@@ -11,10 +11,10 @@
     <title><?php echo $sitename ?> || Mobile Services, Credit Cards, Mortgages, Auto Loan</title>
     <!-- Favicons Icons -->
     <link rel="apple-touch-icon" sizes="180x180" href="assets_h/images/favicons/apple-touch-icon.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="images/IMG_09099.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="images/IMG_09099.png"" />
-    <link rel=" manifest" href="images/IMG_09099.png" />
-    <meta name="description" content="<?php echo $sitename ?> Bank HTML 5 Template " />
+    <link rel="icon" type="image/png" sizes="32x32" href="images/logo.jpeg" />
+    <link rel="icon" type="image/png" sizes="16x16" href="images/logo.jpeg"" />
+    <link rel=" manifest" href="images/logo.jpeg" />
+    <meta name="description" content="<?php echo $sitename ?>" />
     <!-- fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"
         rel="stylesheet">
@@ -67,24 +67,19 @@
                 <div class="animation-preloader">
                     <div class="spinner"></div>
                     <div class="txt-loading">
-                        <span data-text-preloader="Z" class="letters-loading">
-                            Z
+                        <span data-text-preloader="C" class="letters-loading">
+                            C
                         </span>
-                        <span data-text-preloader="E" class="letters-loading">
-                            E
+                        <span data-text-preloader="I" class="letters-loading">
+                            I
                         </span>
-                        <span data-text-preloader="N" class="letters-loading">
-                            N
+                        <span data-text-preloader="B" class="letters-loading">
+                            B
                         </span>
-                        <span data-text-preloader="T" class="letters-loading">
-                            T
+                        <span data-text-preloader="C" class="letters-loading">
+                            C
                         </span>
-                        <span data-text-preloader="R" class="letters-loading">
-                            R
-                        </span>
-                        <span data-text-preloader="A" class="letters-loading">
-                            A
-                        </span>
+                        
 
                     </div>
                 </div>
@@ -161,7 +156,7 @@
                             <div class="main-menu-style2-left">
                                 <div class="logo-box-style2">
                                     <a href="#">
-                                        <img style="width:200px !important;" src="images/IMG_09099.png" alt="Awesome Logo" title="">
+                                        <img style="width:200px !important;" src="images/logo.jpeg" alt="Awesome Logo" title="">
                                     </a>
                                 </div>
 
@@ -2148,7 +2143,7 @@
                                 <div class="our-company-info">
                                     <div class="footer-logo-style1">
                                         <a href="">
-                                            <img src="images/IMG_09099.png " style="width:200px !important;" alt="Awesome Logo"
+                                            <img src="images/logo.jpeg " style="width:200px !important;" alt="Awesome Logo"
                                                 title="">
                                         </a>
                                     </div>
@@ -2309,8 +2304,8 @@
                 <i class="fas fa-plus"></i>
             </span>
             <div class="logo-box">
-                <a href="images/IMG_09099.png" aria-label="logo image">
-                    <img style="width: 80px;" src="images/IMG_09099.png" alt="" />
+                <a href="images/logo.jpeg" aria-label="logo image">
+                    <img style="width: 80px;" src="images/logo.jpeg" alt="" />
                 </a>
             </div>
             <div class="mobile-nav__container"></div>

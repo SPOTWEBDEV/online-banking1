@@ -395,7 +395,7 @@ $logoutUrl = $base . 'logout/';
 
             <!-- shown on phones only -->
             <a class="hd-brand" href="<?= $base ?>dashboard/">
-                <img src="<?= $base ?>images/favicon.png" alt="">
+                <img src="<?= $base ?>images/logo.png" alt="">
                 <span><?= htmlspecialchars($sitename ?? '') ?></span>
             </a>
 

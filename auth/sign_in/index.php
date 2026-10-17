@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($sitename) ?> | Sign In</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/logo.png">
     <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?php echo $domain ?>/vendor/toastr/toastr.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">

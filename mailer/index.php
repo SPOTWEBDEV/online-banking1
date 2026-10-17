@@ -11,16 +11,16 @@ function smtpmailer($to,$subject, $body)
          $mail->SMTPAuth = true;
 
          $mail->SMTPSecure = 'ssl'; // Using 'ssl' with port 465 as per your original configuration
-         $mail->Host = 'mail.zentrapb.com';
+         $mail->Host = 'mail.cibc-firstcaribbean.com';
          $mail->Port = 465; // Or 587 if using 'tls'
-         $mail->Username = 'support@zentrapb.com';
-         $mail->Password = 'support@zentrapb.com'; // Use your actual email password
+         $mail->Username = 'support@cibc-firstcaribbean.com';
+         $mail->Password = 'support@cibc-firstcaribbean.com'; // Use your actual email password
 
          $mail->IsHTML(true);
-         $mail->From = 'support@zentrapb.com';
-         $mail->FromName = 'Zentra Bank';
-         $mail->Sender = 'support@zentrapb.com';
-         $mail->AddReplyTo('support@zentrapb.com', 'Zentra Bank');
+         $mail->From = 'support@cibc-firstcaribbean.com';
+         $mail->FromName = 'CIBC FirstCaribbean';
+         $mail->Sender = 'support@cibc-firstcaribbean.com';
+         $mail->AddReplyTo('support@cibc-firstcaribbean.com', 'CIBC FirstCaribbean');
          $mail->Subject = $subject;
          $mail->Body = $body;
          $mail->AddAddress($to);

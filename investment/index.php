@@ -153,7 +153,7 @@ function amt($n)
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= htmlspecialchars($sitename) ?> | Investment</title>
 
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= $domain ?>/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= $domain ?>/images/logo.png">
     <link rel="stylesheet" href="<?= $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?= $domain ?>/vendor/toastr/toastr.min.css">
 

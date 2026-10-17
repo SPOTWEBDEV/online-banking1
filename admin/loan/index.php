@@ -21,7 +21,7 @@ $success = "";
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= $sitename ?> | loan </title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/logo.png">
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?php echo $domain ?>/vendor/toastr/toastr.min.css">

@@ -14,7 +14,7 @@ include("../../server/auth/admin.php");
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title><?= $sitename ?> | Withdrawal-History </title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="<?= $domain ?>/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?= $domain ?>/images/logo.png">
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="<?= $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?= $domain ?>/vendor/toastr/toastr.min.css">

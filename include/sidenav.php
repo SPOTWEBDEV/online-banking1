@@ -276,7 +276,7 @@ $nav_groups = [
 
     <div class="sb-brand">
         <a href="<?= $base ?>dashboard/">
-            <img src="<?= $base ?>images/favicon.png" alt="">
+            <img src="<?= $base ?>images/logo.png" alt="">
             <span class="name"><?= htmlspecialchars($sitename ?? '') ?></span>
         </a>
         <button type="button" class="sb-close" id="sbClose" aria-label="Close menu">

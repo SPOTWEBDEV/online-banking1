@@ -207,7 +207,7 @@ $selected_available_ui = (float) ($userBalances[$selected_account_ui] ?? 0.00);
     <title><?= htmlspecialchars($sitename) ?> | Withdrawal </title>
 
 
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo $domain ?>/images/logo.png">
     <link rel="stylesheet" href="<?php echo $domain ?>/css/style.css">
     <link rel="stylesheet" href="<?php echo $domain ?>/vendor/toastr/toastr.min.css">
 </head>

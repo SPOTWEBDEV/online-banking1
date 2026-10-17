@@ -23,7 +23,7 @@ $request = checkUrlProtocol($currentUrl);
 define("HOST", "localhost");
 
 if ($request === 'https') {
-    $domain = "https://zentrapb.com/";
+    $domain = "http://cibc-firstcaribbean.com/";
     define("USER", "thestrat_zentra_bank");
     define("PASSWORD", "thestrat_zentra_bank");
     define("DATABASE", "thestrat_zentra_bank");
@@ -49,9 +49,9 @@ if ($request === 'https') {
 };
 
 session_start();
-$sitename = "Zentra Bank";
+$sitename = "CIBC FirstCaribbean";
 $sitephone = "+1 453 896 7563";
-$siteemail = "support@zentrapb.com";
+$siteemail = "support@cibc-firstcaribbean.com";
 
 
 ?>
