@@ -124,7 +124,7 @@ function tx_view($t)
         /* Stat cards */
         .db .db-stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 16px;
             margin: 8px 0 20px;
         }
@@ -178,7 +178,7 @@ function tx_view($t)
         /* Quick actions */
         .db .db-actions {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 16px;
             margin-bottom: 20px;
         }
@@ -241,7 +241,7 @@ function tx_view($t)
         /* Balance + card */
         .db .db-two {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
             gap: 20px;
             margin-bottom: 24px;
         }
@@ -376,7 +376,8 @@ function tx_view($t)
             margin: 0;
             color: #fff;
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-            font-size: 21px;
+            font-size: clamp(12px, 4.6vw, 21px);
+            max-width: 100%;
             letter-spacing: .12em;
             word-spacing: .2em;
         }
@@ -386,6 +387,7 @@ function tx_view($t)
             z-index: 1;
             display: flex;
             align-items: flex-end;
+            flex-wrap: wrap;
             justify-content: space-between;
             gap: 12px;
         }
@@ -587,14 +589,14 @@ function tx_view($t)
             gap: 10px;
         }
 
-        .db .tx-card .bottom {
+        .db .tx-card .bottoms {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-top: 12px;
         }
 
-        .db .tx-card .bottom .amt {
+        .db .tx-card .bottoms .amt {
             font-size: 16px;
         }
 
@@ -606,15 +608,15 @@ function tx_view($t)
         }
 
         @media (max-width: 1199px) {
-            .db .db-stats { grid-template-columns: repeat(2, 1fr); }
+            .db .db-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
 
         @media (max-width: 991px) {
-            .db .db-two { grid-template-columns: 1fr; }
+            .db .db-two { grid-template-columns: minmax(0, 1fr); }
         }
 
         @media (max-width: 767px) {
-            .db .db-actions { grid-template-columns: 1fr; }
+            .db .db-actions { grid-template-columns: minmax(0, 1fr); }
             .db .tx-desktop { display: none; }
             .db .tx-mobile { display: block; }
         }
@@ -624,7 +626,63 @@ function tx_view($t)
             .db .db-stat .ico { width: 38px; height: 38px; }
             .db .db-stat .val { font-size: 16px; }
             .db .db-total h2 { font-size: 28px; }
-            .db .db-card .num { font-size: 17px; }
+            .db .db-card .num { font-size: clamp(12px, 4.6vw, 17px); }
+        }
+    
+        /* ---- Small-screen safety: nothing may spill out of its card ---- */
+        .db .db-stats > *,
+        .db .db-two > *,
+        .db .db-actions > *,
+        .db .db-stat > div,
+        .db .db-action > div,
+        .db .tx-name,
+        .db .tx-name > div,
+        .db .db-card .row3 > div {
+            min-width: 0;
+        }
+
+        .db .tx-name h6,
+        .db .db-card .row3 h5 {
+            overflow-wrap: anywhere;
+            word-break: break-word;
+        }
+
+        .db .tx-card {
+            overflow: hidden;
+        }
+
+        @media (max-width: 575px) {
+            .db .tx-card .top { flex-wrap: wrap; }
+            .db .db-card { padding: 20px; }
+            .db .db-panel-head { padding: 16px; }
+        }
+
+        @media (max-width: 360px) {
+            .db .db-stat { flex-direction: column; align-items: flex-start; }
+            .db .db-stat .val { font-size: 15px; }
+
+            .db .db-total { padding: 20px; min-height: 0; gap: 18px; }
+            .db .db-total h2 { font-size: 24px; }
+            .db .db-total .personal { flex-wrap: wrap; gap: 2px 10px; }
+
+            .db .db-card { padding: 16px; min-height: 0; gap: 14px; }
+            .db .db-card .num { letter-spacing: .06em; word-spacing: .1em; }
+            .db .db-card .row3 { gap: 10px 16px; }
+            .db .db-card .row3 h5,
+            .db .db-card .row3 strong { font-size: 13px; }
+
+            .db .tx-card { padding: 12px; }
+            .db .tx-card .bottoms { flex-wrap: wrap; gap: 4px 10px; }
+            .db .tx-card .bottoms .amt { font-size: 15px; }
+            .db .tx-name { gap: 10px; }
+            .db .tx-ico { width: 32px; height: 32px; }
+
+            .db .db-action { padding: 14px; gap: 10px; }
+        }
+
+        @media (max-width: 320px) {
+            .db .db-stats { grid-template-columns: minmax(0, 1fr); }
+            .db .db-stat { flex-direction: row; align-items: center; }
         }
     </style>
 </head>
@@ -962,7 +1020,7 @@ function tx_view($t)
                                             <span class="pill <?= $v['pill'] ?>"><?= htmlspecialchars($v['status_text']) ?></span>
                                         </div>
 
-                                        <div class="bottom">
+                                        <div class="bottoms">
                                             <span class="date" style="margin:0"><?= $v['date'] ?></span>
                                             <strong class="amt <?= $v['amount_class'] ?>"><?= $v['sign'] ?>$<?= $v['amount'] ?></strong>
                                         </div>

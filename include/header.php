@@ -52,6 +52,7 @@ $logoutUrl = $base . 'logout/';
 
     body.dashboard .content-body {
         margin-left: var(--sb-w) !important;
+        padding-top: calc(var(--hd-h) + 16px) !important;
     }
 
     /* ---------- Header ---------- */
@@ -101,6 +102,14 @@ $logoutUrl = $base . 'logout/';
     .app-header .menu-toggle:hover {
         border-color: var(--app-primary);
         color: var(--app-primary);
+    }
+
+    .app-header .menu-toggle svg,
+    .app-header .pm-item svg {
+        display: block;
+        fill: none;
+        stroke: currentColor;
+        flex-shrink: 0;
     }
 
     .app-header .hd-brand {
@@ -321,6 +330,40 @@ $logoutUrl = $base . 'logout/';
         }
     }
 
+    /* Phones: drop the greeting and balance, show the logo instead */
+    @media (max-width: 767px) {
+        .app-header .hd-welcome,
+        .app-header .bal-pill {
+            display: none;
+        }
+
+        .app-header .hd-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            min-width: 0;
+        }
+
+        .app-header .hd-brand img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            border-radius: 8px;
+            flex-shrink: 0;
+        }
+
+        .app-header .hd-brand span {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--app-text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 45vw;
+        }
+    }
+
     @media (max-width: 575px) {
         .app-header .profile-btn .pname,
         .app-header .profile-btn svg {
@@ -349,6 +392,12 @@ $logoutUrl = $base . 'logout/';
             <button type="button" class="menu-toggle" id="menuToggle" aria-label="Open menu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h10" /></svg>
             </button>
+
+            <!-- shown on phones only -->
+            <a class="hd-brand" href="<?= $base ?>dashboard/">
+                <img src="<?= $base ?>images/favicon.png" alt="">
+                <span><?= htmlspecialchars($sitename ?? '') ?></span>
+            </a>
 
             <div class="hd-welcome">
                 <small>Welcome back</small>
@@ -382,10 +431,10 @@ $logoutUrl = $base . 'logout/';
                     </div>
 
                     <a class="pm-item" href="<?= $base ?>setting/" role="menuitem">
-                        <i class="fi fi-rr-settings"></i> Settings
+                        <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg> Settings
                     </a>
                     <a class="pm-item logout" href="<?= htmlspecialchars($logoutUrl) ?>" role="menuitem">
-                        <i class="fi fi-bs-sign-out-alt"></i> Logout
+                        <svg width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg> Logout
                     </a>
                 </div>
             </div>

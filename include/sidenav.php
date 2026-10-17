@@ -12,22 +12,34 @@ if (!function_exists('nav_active')) {
     }
 }
 
-// [folder, label, icon]
+// Inline SVG icons (no icon font needed)
+$svg_open = '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
+$nav_icons = [
+    'home'     => $svg_open . '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M10 21v-6h4v6"/></svg>',
+    'bank'     => $svg_open . '<path d="M3 21h18"/><path d="M5 21V10"/><path d="M19 21V10"/><path d="M9 21v-8"/><path d="M15 21v-8"/><path d="m2 10 10-7 10 7z"/></svg>',
+    'exchange' => $svg_open . '<path d="M7 7h13l-4-4"/><path d="M17 17H4l4 4"/></svg>',
+    'donate'   => $svg_open . '<path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>',
+    'chart'    => $svg_open . '<path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg>',
+    'loan'     => $svg_open . '<rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/><path d="M6 12h.01M18 12h.01"/></svg>',
+    'settings' => $svg_open . '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>',
+];
+
+// [folder, label, icon key]
 $nav_groups = [
     'Overview' => [
-        ['dashboard', 'Dashboard', 'fi fi-rr-home'],
+        ['dashboard', 'Dashboard', 'home'],
     ],
     'Money' => [
-        ['deposits', 'Deposits', 'fi fi-rr-bank'],
-        ['transfer', 'International Money Transfers', 'fi fi-rr-exchange'],
-        ['withdrawal', 'Withdrawals', 'fi fi-rr-donate'],
+        ['deposits', 'Deposits', 'bank'],
+        ['transfer', 'International Money Transfers', 'exchange'],
+        ['withdrawal', 'Withdrawals', 'donate'],
     ],
     'Grow' => [
-        ['investment', 'Investment Plan', 'fi fi-rr-chart-line-up'],
-        ['loan', 'Loan and Mortgage', 'fi fi-rr-hand-holding-usd'],
+        ['investment', 'Investment Plan', 'chart'],
+        ['loan', 'Loan and Mortgage', 'loan'],
     ],
     'Account' => [
-        ['setting', 'Settings', 'fi fi-rr-user'],
+        ['setting', 'Settings', 'settings'],
     ],
 ];
 ?>
@@ -157,6 +169,16 @@ $nav_groups = [
         transition: color .15s;
     }
 
+    .app-sidebar .sb-link .ic svg,
+    .app-sidebar .sb-close svg {
+        display: block;
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        flex-shrink: 0;
+    }
+
     .app-sidebar .sb-link:hover {
         background: #f3f4f6;
         color: var(--app-text, #111827);
@@ -268,7 +290,7 @@ $nav_groups = [
             <?php foreach ($items as [$slug, $text, $icon]): ?>
                 <li>
                     <a class="sb-link<?= nav_active($slug, $nav_path) ?>" href="<?= $base . $slug ?>/">
-                        <span class="ic"><i class="<?= $icon ?>"></i></span>
+                        <span class="ic"><?= $nav_icons[$icon] ?? '' ?></span>
                         <span class="nav-text"><?= htmlspecialchars($text) ?></span>
                     </a>
                 </li>
