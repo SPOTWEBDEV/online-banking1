@@ -23,7 +23,7 @@ $request = checkUrlProtocol($currentUrl);
 define("HOST", "localhost");
 
 if ($request === 'https') {
-    $domain = "http://cibc-firstcaribbean.com/";
+    $domain = "https://cibc-firstcaribbean.com/";
     define("USER", "thestrat_zentra_bank");
     define("PASSWORD", "thestrat_zentra_bank");
     define("DATABASE", "thestrat_zentra_bank");
