@@ -2312,7 +2312,7 @@
             <ul class="mobile-nav__contact list-unstyled">
                 <li>
                     <i class="fa fa-envelope"></i>
-                    <a href="mailto:<?php echo $sitemail ?>"><?php echo $siteemail ?></a>
+                    <a href="mailto:<?php echo $siteemail ?>"><?php echo $siteemail ?></a>
                 </li>
             </ul>
             <div class="mobile-nav__social">
